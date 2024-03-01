@@ -10,19 +10,19 @@ export const signupProducer = async (data: User) => {
         topic: String(process.env.NOTIFIICATION_SERVICE_TOPIC),
         messages: [
           {
-            key: "signup_user",
+            key: String(process.env.SEND_OTP_KEY),
             value: JSON.stringify(data),
           },
         ],
       },
     ];
 
-    producer.sendBatch({topicMessages:messages})
+    producer.sendBatch({ topicMessages: messages });
   } catch (error) {
     console.log(` _Error in auth Signup producer_ `);
-    
+
     throw error;
-  }finally{
-    producer.disconnect()
+  } finally {
+    producer.disconnect();
   }
 };

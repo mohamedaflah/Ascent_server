@@ -25,10 +25,6 @@ const OtpModel = new mongoose.Schema({
     password: {
       type: String,
       required: [true, "provide password"],
-      // validate: {
-      //   validator: (value:string) => /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(value),
-      //   message: 'Password must be at least 8 characters, contain at least one letter, one number, and one special character.',
-      // },
     },
     role: {
       type: String,

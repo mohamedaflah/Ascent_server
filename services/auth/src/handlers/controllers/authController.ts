@@ -11,17 +11,17 @@ export class AuthController {
   async signup(req: Request, res: Response, next: NextFunction) {
     try {
       const body = req.body;
-      const user = await this.interactor.signup(body);
-      const token = generateToken({ id: String(user._id), role: user.role as "user"|"admin"|"company" });
-      await signupProducer(user)
-      res.cookie("access_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 15 * 24 * 60 * 60 * 1000,
-      });
-      res.status(200).json({ status: true, user });
+      await signupProducer(body);
+      // const user = await this.interactor.signup(body);
+      // const token = generateToken({ id: String(user._id), role: user.role as "user"|"admin"|"company" });
+      // res.cookie("access_token", token, {
+      //   httpOnly: true,
+      //   secure: process.env.NODE_ENV === "production",
+      //   maxAge: 15 * 24 * 60 * 60 * 1000,
+      // });
+      res.status(200).json({ status: true, message: "Otp  sended" });
     } catch (error) {
-        // console.log(error)
+      // console.log(error)
       next(error);
     }
   }
@@ -29,7 +29,10 @@ export class AuthController {
     try {
       const body = req.body;
       const user = await this.interactor.login(body);
-      const token = generateToken({ id: String(user._id), role: user.role as "user"|"admin"|"company" });
+      const token = generateToken({
+        id: String(user._id),
+        role: user.role as "user" | "admin" | "company",
+      });
       res.cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -43,8 +46,8 @@ export class AuthController {
 
   async logout(_: Request, res: Response, next: NextFunction) {
     try {
-        res.clearCookie("access_token")
-        res.status(200).json({status:true,message:"Session cleared"})
+      res.clearCookie("access_token");
+      res.status(200).json({ status: true, message: "Session cleared" });
     } catch (error) {
       next(error);
     }

@@ -13,14 +13,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-(async()=>{
-  runConsumer()
-  process.on("SIGTERM",()=>{
-    stopConsumer()
-  })
-})()
+(async () => {
+  await runConsumer();
+  process.on("SIGTERM", async () => {
+    console.log(` ^^^ stoping ^^^`);
+    await stopConsumer();
+  });
+})();
 app.use("/", authRouter);
-app.use(errorHandler)
+app.use(errorHandler);
 app.listen(process.env.AUTH_SERVICE_PORT, () =>
-  console.log(` Authentication service started ${process.env.AUTH_SERVICE_PORT} `)
+  console.log(
+    ` Authentication service started ${process.env.AUTH_SERVICE_PORT} `
+  )
 );
