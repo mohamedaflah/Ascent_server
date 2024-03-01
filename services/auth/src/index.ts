@@ -12,7 +12,11 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: [String(process.env.CLIENT_URL)],
+  })
+);
 (async () => {
   await runConsumer();
   process.on("SIGTERM", async () => {
@@ -22,7 +26,7 @@ app.use(cors());
 })();
 
 app.use("/", authRouter);
-app.use('/otp',otpRouter)
+app.use("/otp", otpRouter);
 app.use(errorHandler);
 app.listen(process.env.AUTH_SERVICE_PORT, () =>
   console.log(

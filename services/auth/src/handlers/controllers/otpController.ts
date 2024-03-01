@@ -8,27 +8,27 @@ export class OtpController {
   constructor(otpInteractor: IOtpInteractor) {
     this.otpInteractor = otpInteractor;
   }
-  async checkOtp(req: Request, res: Response, next: NextFunction) {
-    try {
-        const {email,otpcode}=req.body
-        const {status,user}=await this.otpInteractor.checkOtp(otpcode,email)
+  // async checkOtp(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //       const {email,otpcode}=req.body
+  //       const {status,user}=await this.otpInteractor.checkOtp(otpcode,email)
         
-        if(status){
-            console.log("🚀 ~ OtpController ~ checkOtp ~ user:", user.userData)
+  //       if(status){
+  //           console.log("🚀 ~ OtpController ~ checkOtp ~ user:", user.userData)
             
-            let newUser=await new AuthSchema(user.userData).save()
-            const token = generateToken({ id: String(newUser._id), role: newUser.role as "user"|"admin"|"company" });
-            res.cookie("access_token", token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                maxAge: 15 * 24 * 60 * 60 * 1000,
-            });
-            res.status(200).json({status:true,user:newUser??user})
-        }else{
-            throw new Error(" Something  went wrong ")
-        }
-    } catch (error) {
-      next(error);
-    }
-  }
+  //           let newUser=await new AuthSchema(user.userData).save()
+  //           const token = generateToken({ id: String(newUser._id), role: newUser.role as "user"|"admin"|"company" });
+  //           res.cookie("access_token", token, {
+  //               httpOnly: true,
+  //               secure: process.env.NODE_ENV === "production",
+  //               maxAge: 15 * 24 * 60 * 60 * 1000,
+  //           });
+  //           res.status(200).json({status:true,user:newUser??user})
+  //       }else{
+  //           throw new Error(" Something  went wrong ")
+  //       }
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 }

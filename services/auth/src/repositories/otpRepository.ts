@@ -1,5 +1,5 @@
 import { Otp } from "../entities/OtpEntity";
-import OtpSchema from "../infra/database/mongodb/Schema/OtpSchema";
+import OtpSchema from "../infra/database/mongodb/Schema/linkSchema";
 import { IOtpRepositotry } from "../interfaces/repository_interface/IotpRepository";
 
 export class OtpRepository implements IOtpRepositotry {
@@ -7,7 +7,7 @@ export class OtpRepository implements IOtpRepositotry {
     console.log("🚀 ~ OtpRepository ~ createOtp ~ otp: !1", data);
     const useExistInOtp = await OtpSchema.findOne({ email: data.email });
     if (useExistInOtp) {
-      useExistInOtp.otp = data.otp;
+      useExistInOtp.link = data.link;
       await useExistInOtp.save();
       return useExistInOtp.toObject();
     } else {
@@ -16,15 +16,14 @@ export class OtpRepository implements IOtpRepositotry {
       return otp.toObject();
     }
   }
-  async checkOtp(
-    code: string,
+  async checkExpiryofLink(
     email: string
-  ): Promise<{ status: boolean; user: Otp }> {
+  ): Promise<{ status: boolean; data: Otp }> {
     // throw new Error("Method not implemented.");
     const otpData = await OtpSchema.findOne({ email: email });
-    if (otpData?.otp !== code) {
-      throw new Error(" Invalid Otp ");
+    if(!otpData){
+      throw new Error(" Your Link was Expired")
     }
-    return { status: true, user: otpData.toObject() };
+    return { status: true, data: otpData.toObject() };
   }
 }

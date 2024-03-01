@@ -8,7 +8,7 @@ interface UserData {
   role: "user" | "admin" | "company";
 }
 
-type SubscriberFunction = (verificationLink: string) => Promise<void>;
+type SubscriberFunction = (verificatioData: string) => Promise<void>;
 
 interface SubscriberActions {
   [key: string]: SubscriberFunction | undefined;

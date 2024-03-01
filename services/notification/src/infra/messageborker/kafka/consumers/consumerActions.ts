@@ -2,6 +2,7 @@ import { generateOtp } from "../../../../utils/generateOtp";
 import { sendPayloadType } from "../../../../utils/types/otpSender";
 import { getPaylaod } from "../../../../utils/verifyEmail";
 import { transporter } from "../../../mailer/config";
+import { sendOtpProducer } from "../producers/sendOtpproducer";
 // import { sendOtpProducer } from "../producers/sendOtpproducer";
 // // {
 // //   firstname: string;
@@ -46,11 +47,8 @@ export class NotificaionConsumerActions {
         // console.log(userData,'  *******')
 
 
-        // const sendingData: sendPayloadType = {
-        //   email: userData.email,
-        //   otp: sixDigitOtp,
-        //   userData: userData,
-        // };
+        const sendingData: {link:string,email:string}={link:verificationLink,email:userData.email}
+        await sendOtpProducer(sendingData)
         console.log(` Email sended ${info}`);
       }
     });

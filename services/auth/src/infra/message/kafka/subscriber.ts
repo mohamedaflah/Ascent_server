@@ -1,7 +1,7 @@
 import { Otp } from "../../../entities/OtpEntity";
 import { AuthServiceConsumerActions } from "./consumers/consumerAction";
 
-type SubscriberFunction = (otp: Otp) => Promise<any | void>;
+type SubscriberFunction = (verificationLink: Otp) => Promise<any | void>;
 
 interface SubscriberActions {
   [key: string]: SubscriberFunction | undefined;

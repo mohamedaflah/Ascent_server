@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { generateToken } from "../../utils/lib/generateToken";
 import { signupProducer } from "../../infra/message/kafka/producers/userSignupProducer";
 import { validateSignupData } from "../../utils/helper/signupValidation";
+import OtpSchema from '../../infra/database/mongodb/Schema/linkSchema'
 import {
   generateEmailValidationToken,
   getPaylaod,
@@ -30,7 +31,7 @@ export class AuthController {
 
       res
         .status(200)
-        .json({ status: true, message: "Otp  sended", link: verificationLink });
+        .json({ status: true, message: " Verification Link sended you mail" });
     } catch (error) {
       next(error);
     }
@@ -65,7 +66,12 @@ export class AuthController {
 
   async verifyEmail(req: Request, res: Response, next: NextFunction) {
     try {
+      
       const userData: payload = getPaylaod(req.params.token);
+      const linkExpiry=await OtpSchema.findOne({email:userData.email})
+      if(!linkExpiry){
+        return res.status(400).json({status:false,message:"You Link is Expired"})
+      }
       const user = await this.interactor.signup({
         email: userData.email,
         firstname: userData.firstname,

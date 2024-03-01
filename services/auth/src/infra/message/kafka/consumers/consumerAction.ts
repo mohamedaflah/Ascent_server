@@ -10,11 +10,11 @@ interface UserData {
   role: "user" | "admin" | "company";
 }
 export class AuthServiceConsumerActions {
-  async signupConsumer(otpData: Otp) {
-    console.log(` Otp consumer called ${JSON.stringify(otpData)}`);
+  async signupConsumer(verificationLink: Otp) {
+    console.log(` Otp consumer called ${JSON.stringify(verificationLink)}`);
     
     const otpRepo = new OtpRepository();
     const otpInteractor = new OtpInteractor(otpRepo);
-    await otpInteractor.addOtp(otpData);
+    await otpInteractor.addOtp(verificationLink);
   }
 }
