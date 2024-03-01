@@ -2,6 +2,12 @@ import { IAuthInteractor } from "../../interfaces/interactor_interface/IauthInte
 import { Request, Response, NextFunction } from "express";
 import { generateToken } from "../../utils/lib/generateToken";
 import { signupProducer } from "../../infra/message/kafka/producers/userSignupProducer";
+import { validateSignupData } from "../../utils/helper/signupValidation";
+import {
+  generateEmailValidationToken,
+  getPaylaod,
+} from "../../utils/helper/emailVerifications";
+import { payload } from "../../utils/types/loginType";
 export class AuthController {
   private interactor: IAuthInteractor;
   constructor(authInteractor: IAuthInteractor) {
@@ -11,17 +17,21 @@ export class AuthController {
   async signup(req: Request, res: Response, next: NextFunction) {
     try {
       const body = req.body;
-      await signupProducer(body);
-      // const user = await this.interactor.signup(body);
-      // const token = generateToken({ id: String(user._id), role: user.role as "user"|"admin"|"company" });
-      // res.cookie("access_token", token, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === "production",
-      //   maxAge: 15 * 24 * 60 * 60 * 1000,
-      // });
-      res.status(200).json({ status: true, message: "Otp  sended" });
+
+      const signupValidation = validateSignupData(body);
+      if (signupValidation.status) {
+        return res
+          .status(400)
+          .json({ status: false, message: signupValidation.message });
+      }
+      const token = generateEmailValidationToken(body);
+      const verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}`;
+      await signupProducer(verificationLink);
+
+      res
+        .status(200)
+        .json({ status: true, message: "Otp  sended", link: verificationLink });
     } catch (error) {
-      // console.log(error)
       next(error);
     }
   }
@@ -48,6 +58,28 @@ export class AuthController {
     try {
       res.clearCookie("access_token");
       res.status(200).json({ status: true, message: "Session cleared" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async verifyEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userData: payload = getPaylaod(req.params.token);
+      const user = await this.interactor.signup({
+        email: userData.email,
+        firstname: userData.firstname,
+        lastname: userData.lastname,
+        password: userData.password,
+        role: userData.role,
+      });
+      const token = generateToken({ id: String(user._id), role: user.role });
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+      });
+      res.status(200).json({ status: true, user: user });
     } catch (error) {
       next(error);
     }

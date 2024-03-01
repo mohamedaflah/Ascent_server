@@ -1,9 +1,10 @@
 import { producer } from "..";
 import { User } from "../../../../entities/UserEntity";
 
-export const signupProducer = async (data: User) => {
+export const signupProducer = async (data: string) => {
   try {
     console.log(` __ User signup producer __ `);
+    // console.log("🚀 ~ signupProducer ~ data:", data)
     await producer.connect();
     const messages = [
       {

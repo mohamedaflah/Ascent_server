@@ -11,4 +11,8 @@ export class OtpInteractor implements IOtpInteractor {
     const otp = await this.otpRepo.createOtp(data);
     return otp;
   }
+  async checkOtp(code: string,email:string): Promise<{ status: boolean; user: Otp; }> {
+    const {user,status}=await this.otpRepo.checkOtp(code,email)
+    return {user,status}
+  }
 }

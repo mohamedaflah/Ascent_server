@@ -7,24 +7,15 @@ const OtpModel = new mongoose.Schema({
   userData: {
     firstname: {
       type: String,
-      required: [true, "Please provide firstname "],
     },
     lastname: {
       type: String,
-      required: [true, "Please provide lastname"],
     },
     email: {
       type: String,
-      unique: [true, "Email alrady taken!!"],
-      required: [true, "Please Provide email"],
-      validate: {
-        validator: isEmail,
-        message: "Invalid email format",
-      },
     },
     password: {
       type: String,
-      required: [true, "provide password"],
     },
     role: {
       type: String,

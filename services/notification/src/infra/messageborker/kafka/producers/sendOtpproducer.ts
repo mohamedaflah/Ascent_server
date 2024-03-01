@@ -3,8 +3,9 @@ import { sendPayloadType } from "../../../../utils/types/otpSender";
 
 export const sendOtpProducer = async (otpData: sendPayloadType) => {
   try {
+    // AUTH_SERVICE_TOPIC=auth-service-topic
     await producer.connect();
-    console.log(` Send otp succesfull producer called__`);
+    console.log(` Send otp succesfull producer called__ ${JSON.stringify(otpData)}`);
 
     const messages = [
       {

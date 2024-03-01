@@ -11,6 +11,8 @@ interface UserData {
 }
 export class AuthServiceConsumerActions {
   async signupConsumer(otpData: Otp) {
+    console.log(` Otp consumer called ${JSON.stringify(otpData)}`);
+    
     const otpRepo = new OtpRepository();
     const otpInteractor = new OtpInteractor(otpRepo);
     await otpInteractor.addOtp(otpData);
