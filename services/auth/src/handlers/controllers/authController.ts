@@ -1,6 +1,7 @@
 import { IAuthInteractor } from "../../interfaces/interactor_interface/IauthInterface";
 import { Request, Response, NextFunction } from "express";
 import { generateToken } from "../../utils/lib/generateToken";
+import { signupProducer } from "../../infra/message/kafka/producers/userSignupProducer";
 export class AuthController {
   private interactor: IAuthInteractor;
   constructor(authInteractor: IAuthInteractor) {
@@ -11,7 +12,8 @@ export class AuthController {
     try {
       const body = req.body;
       const user = await this.interactor.signup(body);
-      const token = generateToken({ id: String(user._id), role: user.role });
+      const token = generateToken({ id: String(user._id), role: user.role as "user"|"admin"|"company" });
+      await signupProducer(user)
       res.cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -19,6 +21,7 @@ export class AuthController {
       });
       res.status(200).json({ status: true, user });
     } catch (error) {
+        // console.log(error)
       next(error);
     }
   }
@@ -26,7 +29,7 @@ export class AuthController {
     try {
       const body = req.body;
       const user = await this.interactor.login(body);
-      const token = generateToken({ id: String(user._id), role: user.role });
+      const token = generateToken({ id: String(user._id), role: user.role as "user"|"admin"|"company" });
       res.cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -38,7 +41,7 @@ export class AuthController {
     }
   }
 
-  async logout(req: Request, res: Response, next: NextFunction) {
+  async logout(_: Request, res: Response, next: NextFunction) {
     try {
         res.clearCookie("access_token")
         res.status(200).json({status:true,message:"Session cleared"})

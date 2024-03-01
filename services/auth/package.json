@@ -22,13 +22,17 @@
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",
+    "@types/validator": "^13.11.9",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
+    "kafkajs": "^2.2.4",
     "mongoose": "^8.2.0",
-    "ts-node": "^10.9.2"
+    "password-validator": "^5.3.0",
+    "ts-node": "^10.9.2",
+    "validator": "^13.11.0"
   }
 }

@@ -1,7 +1,10 @@
-import mongoose, { mongo } from "mongoose";
-import {isEmail} from 'validator'
-const AuthModel = new mongoose.Schema(
-  {
+import mongoose from "mongoose";
+import { isEmail } from "validator";
+
+const OtpModel = new mongoose.Schema({
+  email: String,
+  otp: String,
+  userData: {
     firstname: {
       type: String,
       required: [true, "Please provide firstname "],
@@ -12,13 +15,12 @@ const AuthModel = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique:[true,'Email alrady taken!!'],
+      unique: [true, "Email alrady taken!!"],
       required: [true, "Please Provide email"],
       validate: {
         validator: isEmail,
-        message: 'Invalid email format',
+        message: "Invalid email format",
       },
-
     },
     password: {
       type: String,
@@ -41,7 +43,11 @@ const AuthModel = new mongoose.Schema(
       default: true,
     },
   },
-  { timestamps: true }
-)
+  createdAt: {
+    type: Date,
+    expires: "5m",
+    default: Date.now(),
+  },
+});
 
-export default mongoose.model(String(process.env.AUTH_MODEL), AuthModel);
+export default mongoose.model(String(process.env.OTP_MODEL), OtpModel);
