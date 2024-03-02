@@ -28,10 +28,6 @@ export const runConsumer = async () => {
     console.log(` Consumer run Err ${error}`);
     throw error;
   }
-  console.log(
-    "🚀 ~ runConsumer ~ process.env.NOTIFIICATION_SERVICE_TOPIC:",
-    process.env.NOTIFIICATION_SERVICE_TOPIC
-  );
 };
 
 export const stopConsumer = async () => {

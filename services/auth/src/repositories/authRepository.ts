@@ -8,11 +8,13 @@ export class AuthRepository implements IAuthRepository {
   async signup(body: User): Promise<User> {
     const password = bcrypt.hashSync(body.password, 10);
     const useExist = await AuthSchema.findOne({ email: body.email });
-    if(useExist){
-      throw new Error("Email already taken !!")
+    if (useExist) {
+      throw new Error("Email already taken !!");
     }
-    if(!checkValidPassword(body.password)){
-      throw new Error("Password must be at least 8 characters, contain at least one letter, one number, and one special character.")
+    if (!checkValidPassword(body.password)) {
+      throw new Error(
+        "Password must be at least 8 characters, contain at least one letter, one number, and one special character."
+      );
     }
     const newUser = new AuthSchema({
       firstname: body.firstname,
@@ -37,5 +39,12 @@ export class AuthRepository implements IAuthRepository {
       throw new Error("Incorrect Email or password");
     }
     return userData.toObject();
+  }
+  async validateUserData(body: User): Promise<{ status: boolean }> {
+    const emailExist = await AuthSchema.findOne({ email: body.email });
+    if (emailExist) {
+      throw new Error("Email already taken!!");
+    }
+    return { status: true };
   }
 }

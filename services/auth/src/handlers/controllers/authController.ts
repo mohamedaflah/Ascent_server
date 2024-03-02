@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { generateToken } from "../../utils/lib/generateToken";
 import { signupProducer } from "../../infra/message/kafka/producers/userSignupProducer";
 import { validateSignupData } from "../../utils/helper/signupValidation";
-import OtpSchema from '../../infra/database/mongodb/Schema/linkSchema'
+import OtpSchema from "../../infra/database/mongodb/Schema/linkSchema";
 import {
   generateEmailValidationToken,
   getPaylaod,
@@ -18,7 +18,7 @@ export class AuthController {
   async signup(req: Request, res: Response, next: NextFunction) {
     try {
       const body = req.body;
-
+      await this.interactor.validateUserData(body);
       const signupValidation = validateSignupData(body);
       if (signupValidation.status) {
         return res
@@ -31,7 +31,11 @@ export class AuthController {
 
       res
         .status(200)
-        .json({ status: true, message: " Verification Link sended you mail" });
+        .json({
+          status: true,
+          message: "Verification link sended",
+          user: null,
+        });
     } catch (error) {
       next(error);
     }
@@ -66,11 +70,15 @@ export class AuthController {
 
   async verifyEmail(req: Request, res: Response, next: NextFunction) {
     try {
-      
       const userData: payload = getPaylaod(req.params.token);
-      const linkExpiry=await OtpSchema.findOne({email:userData.email})
-      if(!linkExpiry){
-        return res.status(400).json({status:false,message:"You Link is Expired"})
+      const linkExpiry = await OtpSchema.findOne({ email: userData.email });
+      if (!linkExpiry) {
+        return res
+          .status(400)
+          .json({
+            status: false,
+            message: "Your verification link is Expired",
+          });
       }
       const user = await this.interactor.signup({
         email: userData.email,
@@ -79,13 +87,16 @@ export class AuthController {
         password: userData.password,
         role: userData.role,
       });
+      await OtpSchema.deleteOne({email:user.email})
       const token = generateToken({ id: String(user._id), role: user.role });
       res.cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         maxAge: 15 * 24 * 60 * 60 * 1000,
       });
-      res.status(200).json({ status: true, user: user });
+      res
+        .status(200)
+        .json({ status: true, user: user, message: "User signup successfull" });
     } catch (error) {
       next(error);
     }

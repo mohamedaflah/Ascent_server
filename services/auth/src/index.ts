@@ -15,6 +15,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: [String(process.env.CLIENT_URL)],
+    credentials:true
   })
 );
 (async () => {
