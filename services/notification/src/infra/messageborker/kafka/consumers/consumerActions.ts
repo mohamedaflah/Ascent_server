@@ -15,7 +15,7 @@ export class NotificaionConsumerActions {
   async sendOtpforUser(verificationLink:string ) {
     console.log(` ()        Send Otp consumer called 🛺        ()`);
 
-    const sixDigitOtp = generateOtp();
+    // const sixDigitOtp = generateOtp();
     const splited=verificationLink.split('/')
     const userData=getPaylaod(splited[splited.length-1])
     const mailOptions = {

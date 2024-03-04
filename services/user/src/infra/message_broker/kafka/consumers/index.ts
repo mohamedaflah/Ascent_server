@@ -1,4 +1,5 @@
 import { consumer } from "..";
+import { subscriber } from "../subscriber";
 
 export const runConsumer = async () => {
   try {
@@ -12,6 +13,15 @@ export const runConsumer = async () => {
       eachMessage: async ({ message }) => {
         console.log(` User service consumer `);
         const { key, value } = message;
+        console.log(key?.toString('utf8'), ' <--- Key');
+        console.log(JSON.parse(value?.toString("utf-8") ?? ""), " <-- Value");
+        const subscriberKey:string=String(key?.toString('utf8'))
+        const action=subscriber()[subscriberKey]
+        if(action){
+          await action(JSON.parse(value?.toString('utf8')??"{}"))
+        }else{
+          console.log(` No action found `);
+        }
       },
     });
   } catch (error) {

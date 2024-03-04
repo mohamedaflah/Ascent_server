@@ -1,14 +1,16 @@
 import { IAuthInteractor } from "../../interfaces/interactor_interface/IauthInterface";
 import { Request, Response, NextFunction } from "express";
 import { generateToken } from "../../utils/lib/generateToken";
-import { signupProducer } from "../../infra/message/kafka/producers/userSignupProducer";
+import { signupProducer } from "../../infra/message/kafka/producers/userVerifying";
 import { validateSignupData } from "../../utils/helper/signupValidation";
 import OtpSchema from "../../infra/database/mongodb/Schema/linkSchema";
+import jwt from "jsonwebtoken";
 import {
   generateEmailValidationToken,
   getPaylaod,
 } from "../../utils/helper/emailVerifications";
 import { payload } from "../../utils/types/loginType";
+import { userAddProducer } from "../../infra/message/kafka/producers/userAddProducer";
 export class AuthController {
   private interactor: IAuthInteractor;
   constructor(authInteractor: IAuthInteractor) {
@@ -29,13 +31,11 @@ export class AuthController {
       const verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}`;
       await signupProducer(verificationLink);
 
-      res
-        .status(200)
-        .json({
-          status: true,
-          message: "Verification link sended",
-          user: null,
-        });
+      res.status(200).json({
+        status: true,
+        message: "Verification link sended",
+        user: null,
+      });
     } catch (error) {
       next(error);
     }
@@ -73,13 +73,12 @@ export class AuthController {
       const userData: payload = getPaylaod(req.params.token);
       const linkExpiry = await OtpSchema.findOne({ email: userData.email });
       if (!linkExpiry) {
-        return res
-          .status(400)
-          .json({
-            status: false,
-            message: "Your verification link is Expired",
-          });
+        return res.status(400).json({
+          status: false,
+          message: "Your verification link is Expired",
+        });
       }
+
       const user = await this.interactor.signup({
         email: userData.email,
         firstname: userData.firstname,
@@ -87,7 +86,8 @@ export class AuthController {
         password: userData.password,
         role: userData.role,
       });
-      await OtpSchema.deleteOne({email:user.email})
+      await userAddProducer(user);
+      await OtpSchema.deleteOne({ email: user.email });
       const token = generateToken({ id: String(user._id), role: user.role });
       res.cookie("access_token", token, {
         httpOnly: true,
@@ -97,6 +97,18 @@ export class AuthController {
       res
         .status(200)
         .json({ status: true, user: user, message: "User signup successfull" });
+    } catch (error) {
+      next(error);
+    }
+  }
+  checkRole(req: Request, res: Response, next: NextFunction) {
+    try {
+      const token = req.cookies.access_token;
+      if (!token) {
+        throw new Error("Not Autherized");
+      }
+      const payload:{id:string,role:"admin"|"user"|"company"} = jwt.verify(token, String(process.env.JWT_KEY)) as {id:string,role:"admin"|"user"|"company"}
+      res.status(200).json({status:true,role:payload?.role})
     } catch (error) {
       next(error);
     }

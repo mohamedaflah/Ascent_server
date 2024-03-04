@@ -9,6 +9,7 @@ import {
   runConsumer,
   stopConsumer,
 } from "./infra/message_broker/kafka/consumers";
+import userRouter from "./handlers/routers/userRouter";
 const app = express();
 
 (async() => {
@@ -25,7 +26,7 @@ app.use(
   })
 );
 
-app.use("/user");
+app.use("/user",userRouter);
 app.use(errorHandler);
 
 app.listen(process.env.USER_SERVICE_PORT, () =>

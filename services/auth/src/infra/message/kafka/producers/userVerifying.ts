@@ -1,10 +1,9 @@
 import { producer } from "..";
-import { User } from "../../../../entities/UserEntity";
+
 
 export const signupProducer = async (data: string) => {
   try {
     console.log(` __ User signup producer __ `);
-    // console.log("🚀 ~ signupProducer ~ data:", data)
     await producer.connect();
     const messages = [
       {
@@ -18,6 +17,7 @@ export const signupProducer = async (data: string) => {
       },
     ];
 
+  
     producer.sendBatch({ topicMessages: messages });
   } catch (error) {
     console.log(` _Error in auth Signup producer_ `);
