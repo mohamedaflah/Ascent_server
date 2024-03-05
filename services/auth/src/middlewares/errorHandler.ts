@@ -8,5 +8,5 @@ export const errorHandler = (
 ) => {
   console.log(err.message, " ERR");
 
-  res.status(500).json({ message: err.message, status: false });
+  res.status(500).json({ message: err.message, status: false,user:null });
 };

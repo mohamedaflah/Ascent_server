@@ -42,6 +42,8 @@ export class AuthController {
   }
   async login(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log("calling");
+      
       const body = req.body;
       const user = await this.interactor.login(body);
       const token = generateToken({
@@ -53,7 +55,7 @@ export class AuthController {
         secure: process.env.NODE_ENV === "production",
         maxAge: 15 * 24 * 60 * 60 * 1000,
       });
-      res.status(200).json({ status: true, user });
+      res.status(200).json({ status: true, user,role:user.role });
     } catch (error) {
       next(error);
     }
@@ -62,7 +64,7 @@ export class AuthController {
   async logout(_: Request, res: Response, next: NextFunction) {
     try {
       res.clearCookie("access_token");
-      res.status(200).json({ status: true, message: "Session cleared" });
+      res.status(200).json({ status: true, message: "Session cleared",user:null });
     } catch (error) {
       next(error);
     }
@@ -104,7 +106,10 @@ export class AuthController {
   checkRole(req: Request, res: Response, next: NextFunction) {
     try {
       const token = req.cookies.access_token;
+      console.log("🚀 ~ AuthController ~ checkRole ~ token:", token)
+      console.log(req.cookies.access_token)
       if (!token) {
+        
         throw new Error("Not Autherized");
       }
       const payload:{id:string,role:"admin"|"user"|"company"} = jwt.verify(token, String(process.env.JWT_KEY)) as {id:string,role:"admin"|"user"|"company"}

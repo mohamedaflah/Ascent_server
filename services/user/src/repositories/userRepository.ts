@@ -7,7 +7,7 @@ export class UserRepository implements IUserRepository {
   async addUserData(data: User): Promise<User> {
     const enuserId = await UserSchema.findById(data._id);
     if (!enuserId) {
-      const newUser = new UserSchema({
+      const newUser = await UserSchema.create({
         _id: new mongoose.Types.ObjectId(data._id),
         firstname: data.firstname,
         lastname: data.lastname,
@@ -15,7 +15,6 @@ export class UserRepository implements IUserRepository {
         password: data.password,
         role: data.role,
       });
-      await newUser.save();
       return newUser.toObject();
     }else{
       throw new Error(" duplicate id ")

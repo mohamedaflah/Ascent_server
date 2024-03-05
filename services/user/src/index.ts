@@ -10,25 +10,27 @@ import {
   stopConsumer,
 } from "./infra/message_broker/kafka/consumers";
 import userRouter from "./handlers/routers/userRouter";
+import { checkAuthentication } from "./middlewares/checkAuthentication";
 const app = express();
-
-(async() => {
-  await runConsumer();
-  process.on("SIGTERM", async () => {
-    await stopConsumer();
-  });
-})();
-app.use(cookieParser());
 app.use(
   cors({
     origin: [String(process.env.CLIENT_URL)],
     credentials: true,
   })
 );
+app.use(express.json())
+app.use(cookieParser());
+app.use(checkAuthentication);
+(async() => {
+  await runConsumer();
+  process.on("SIGTERM", async () => {
+    await stopConsumer();
+  });
+})();
 
 app.use("/user",userRouter);
 app.use(errorHandler);
 
 app.listen(process.env.USER_SERVICE_PORT, () =>
-  console.log(`user service started on  port ${process.env.USER_SERVICE_PORT}`)
+  console.log(`user service started on  port  ${process.env.USER_SERVICE_PORT}`)
 );

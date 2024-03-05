@@ -6,8 +6,8 @@ const linkModel = new mongoose.Schema({
   link: String,
   createdAt: {
     type: Date,
-    expires: "5m",
-    default: Date.now(),
+    default: Date.now,
+    expires: 60 * 5, //Expire in 5 minute
   },
 });
 
