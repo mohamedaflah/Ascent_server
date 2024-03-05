@@ -11,6 +11,7 @@ import {
 } from "../../utils/helper/emailVerifications";
 import { payload } from "../../utils/types/loginType";
 import { userAddProducer } from "../../infra/message/kafka/producers/userAddProducer";
+import { companyAddProducer } from "../../infra/message/kafka/producers/companyAddProducer";
 export class AuthController {
   private interactor: IAuthInteractor;
   constructor(authInteractor: IAuthInteractor) {
@@ -80,15 +81,39 @@ export class AuthController {
           message: "Your verification link is Expired",
         });
       }
-
-      const user = await this.interactor.signup({
-        email: userData.email,
-        firstname: userData.firstname,
-        lastname: userData.lastname,
-        password: userData.password,
-        role: userData.role,
-      });
-      await userAddProducer(user);
+      
+      // const user = await this.interactor.signup({
+      //   email: userData.email,
+      //   firstname: userData.firstname,
+      //   lastname: userData.lastname,
+      //   password: userData.password,
+      //   role: userData.role,
+      // });
+      let user;
+      if (userData.role === "user" || userData.role === "admin") {
+        user = await this.interactor.signup({
+          email: userData.email,
+          firstname: userData.firstname,
+          lastname: userData.lastname,
+          password: userData.password,
+          role: userData.role,
+        });
+        await userAddProducer(user);
+      } else if (userData.role === "company") {
+        user = await this.interactor.signup({
+          email: userData.email,
+          name: userData.name, 
+          password: userData.password,
+          role: userData.role,
+        });
+        await companyAddProducer(user)
+      } else { 
+        return res.status(400).json({
+          status: false,
+          message: "Invalid user role",
+        });
+      }
+      
       await OtpSchema.deleteOne({ email: user.email });
       const token = generateToken({ id: String(user._id), role: user.role });
       res.cookie("access_token", token, {

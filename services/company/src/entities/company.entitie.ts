@@ -1,3 +1,5 @@
+import { publicDecrypt } from "crypto";
+
 export class Company{
     constructor(
         public readonly email:string,
@@ -14,6 +16,7 @@ export class Company{
         public readonly teams?:{name:string,profile:string,designation:string}[],
         public readonly techStack?:{name:string,icon:string}[],
         public readonly website?:string,
-        public readonly coverImage?:string
+        public readonly coverImage?:string,
+        public readonly approvelStatus?:{status:"Accepted"|"Rejected"|"Pending",description:string}
     ){}
 }

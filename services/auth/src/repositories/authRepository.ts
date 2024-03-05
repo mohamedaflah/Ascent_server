@@ -16,13 +16,23 @@ export class AuthRepository implements IAuthRepository {
         "Password must be at least 8 characters, contain at least one letter, one number, and one special character."
       );
     }
-    const newUser = new AuthSchema({
-      firstname: body.firstname,
-      lastname: body.lastname,
-      email: body.email,
-      password,
-      role: body.role,
-    });
+    let newUser;
+    if (body.role == "user" || body.role == "admin") {
+      newUser = new AuthSchema({
+        firstname: body.firstname,
+        lastname: body.lastname,
+        email: body.email,
+        password,
+        role: body.role,
+      });
+    } else {
+      newUser = new AuthSchema({
+        name: body.name,
+        email: body.email,
+        password,
+        role: body.role,
+      });
+    }
     await newUser.save();
     return newUser.toObject();
   }

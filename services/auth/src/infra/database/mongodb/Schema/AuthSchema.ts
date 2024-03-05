@@ -4,11 +4,12 @@ const AuthModel = new mongoose.Schema(
   {
     firstname: {
       type: String,
-      required: [true, "Please provide firstname "],
     },
     lastname: {
       type: String,
-      required: [true, "Please provide lastname"],
+    },
+    name:{
+      type:String
     },
     email: {
       type: String,

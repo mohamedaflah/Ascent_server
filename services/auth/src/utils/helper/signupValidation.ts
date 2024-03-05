@@ -1,17 +1,15 @@
 import { checkValidPassword } from "./validate";
 import {isEmail} from 'validator'
 export const validateSignupData = (body: {
-  firstname: string;
-  lastname: string;
+  firstname?: string;
+  lastname?: string;
   email:string;
   password: string;
+  name?:string
   role: "admin" | "user" | "company";
 }): { status: boolean; message: string } => {
-  if (!body.firstname) {
+  if (!body.firstname && !body.lastname && !body.name) {
     return {status:true,message:"Please Provide firstname"}
-  }
-  if(!body.lastname){
-    return {status:true,message:"Please provide lastname"}
   }
   if(!body.password){
     return {status:true,message:"Please provide password"}

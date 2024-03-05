@@ -1,8 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+import "./intfrastructure/database/config";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-dotenv.config();
+import companyRoute from "./handlers/router/companyRoute";
+import {
+  runConsumer,
+  stopConsumer,
+} from "./intfrastructure/messagebrokers/kafka/consumers";
 const app = express();
 
 app.use(cookieParser());
@@ -13,7 +19,13 @@ app.use(
   })
 );
 
-app.use()
+(async () => {
+  await runConsumer();
+  process.on("SIGTERM", async () => {
+    stopConsumer();
+  });
+})();
+app.use("/", companyRoute);
 
 app.listen(process.env.COMPANY_SERVICE_PORT, () =>
   console.log(
