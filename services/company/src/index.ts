@@ -13,6 +13,7 @@ import { errorHandler } from "./handlers/middlewares/errHandler";
 const app = express();
 
 app.use(cookieParser());
+app.use(express.json())
 app.use(
   cors({
     origin: [process.env.CLIENT_URL as string],

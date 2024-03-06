@@ -9,13 +9,15 @@ interface UserData {
 }
 
 type SubscriberFunction = (verificatioData: string) => Promise<void>;
-
+type SubscriberFunction2=(data:{email:string,description:string})=>Promise<void>
+type GeneralSubscriberFunction = SubscriberFunction | SubscriberFunction2;
 interface SubscriberActions {
-  [key: string]: SubscriberFunction | undefined;
+  [key: string]: GeneralSubscriberFunction | undefined;
 }
 export const subscriber = ():SubscriberActions => {
   const consumerActions = new NotificaionConsumerActions();
   return {
     sendOtp: consumerActions.sendOtpforUser,
+    sendRejectmailforCompany:consumerActions.sendRejectmailforCompany
   };
 };

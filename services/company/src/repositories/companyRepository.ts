@@ -29,4 +29,17 @@ export class CompanyRepository implements ICompanyRepository {
       throw new Error(" Company not found ")
     }
   }
+  async changeStatus(id: string, status: "Accepted" | "Rejected" | "Pending", description: string): Promise<Company> {
+    const company = await companyModel.findOne({_id: id});
+    if (!company) {
+      throw new Error("Company not found");
+    }
+    if (!company.approvelStatus) {
+      company.approvelStatus = {};
+    }
+    company.approvelStatus.status = status;
+    company.approvelStatus.description = description;
+    await company.save();
+    return company.toObject();
+  }
 }

@@ -15,4 +15,12 @@ export class CompanyInteractor implements ICompanyInteractor {
     const company = await this.repository.getCompany(id);
     return company;
   }
+  async changeStatus(
+    id: string,
+    status: "Accepted" | "Rejected" | "Pending",
+    description: string
+  ): Promise<Company> {
+    const company = await this.repository.changeStatus(id, status, description);
+    return company;
+  }
 }

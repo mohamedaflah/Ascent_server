@@ -10,11 +10,12 @@ const repository = new CompanyRepository();
 const interactor = new CompanyInteractor(repository);
 const companyController = new CompanyController(interactor);
 companyRoute
-  .route("/get-company")
+  .route("/company")
   .get(
     checkAuth,
     checkStatus,
     companyController.getCompanyData.bind(companyController)
-  );
+  )
+  .post(companyController.changeStatus.bind(companyController));
 
 export default companyRoute;
