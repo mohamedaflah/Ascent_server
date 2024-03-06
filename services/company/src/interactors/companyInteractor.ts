@@ -9,6 +9,10 @@ export class CompanyInteractor implements ICompanyInteractor {
   }
   async addCompany(data: Company): Promise<Company> {
     const newCompany = await this.repository.addCompany(data);
-    return newCompany
+    return newCompany;
+  }
+  async getCompany(id: string): Promise<Company> {
+    const company = await this.repository.getCompany(id);
+    return company;
   }
 }

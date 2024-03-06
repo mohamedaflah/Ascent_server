@@ -9,6 +9,7 @@ import {
   runConsumer,
   stopConsumer,
 } from "./intfrastructure/messagebrokers/kafka/consumers";
+import { errorHandler } from "./handlers/middlewares/errHandler";
 const app = express();
 
 app.use(cookieParser());
@@ -26,6 +27,7 @@ app.use(
   });
 })();
 app.use("/", companyRoute);
+app.use(errorHandler)
 
 app.listen(process.env.COMPANY_SERVICE_PORT, () =>
   console.log(

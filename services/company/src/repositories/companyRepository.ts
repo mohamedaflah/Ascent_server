@@ -15,4 +15,18 @@ export class CompanyRepository implements ICompanyRepository {
     });
     return newCompany.toObject();
   }
+  async getCompany(id: string): Promise<Company> {
+    const company = await companyModel.findOne({ _id: id });
+    if(company?.approvelStatus?.status==="Pending"){
+      throw new Error("Admin not responded of your request wait for approvel")
+    }
+    if(company?.approvelStatus?.status==="Rejected"){
+      throw new Error("Admin rejected your request")
+    }
+    if(company){
+      return company.toObject()
+    }else{
+      throw new Error(" Company not found ")
+    }
+  }
 }
