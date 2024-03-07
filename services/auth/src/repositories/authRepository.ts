@@ -8,6 +8,7 @@ export class AuthRepository implements IAuthRepository {
   async signup(body: User): Promise<User> {
     const password = bcrypt.hashSync(body.password, 10);
     const useExist = await AuthSchema.findOne({ email: body.email });
+    console.log(' called -- useExist 999')
     if (useExist) {
       throw new Error("Email already taken !!");
     }

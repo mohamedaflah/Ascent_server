@@ -19,17 +19,20 @@ export const checkStatus = async (
         throw new Error(" company not found ");
       }
       if (companyData.approvelStatus?.status === "Pending") {
-        return res.status(400).json({
+        return res.status(200).json({
           status: true,
           role: "company",
           message: " Your request not responed admin wait ",
+          approvelStatus:"Pending",
+          user:companyData
         });
       }
       if (companyData.approvelStatus?.status === "Rejected") {
-        return res.status(400).json({
+        return res.status(200).json({
           status: true,
           role: "company",
           message: " Your request has been rejected admin ",
+          user:companyData
         });
       }
       next();

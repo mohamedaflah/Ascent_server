@@ -29,7 +29,7 @@ export class AuthController {
           .json({ status: false, message: signupValidation.message });
       }
       const token = generateEmailValidationToken(body);
-      const verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}`;
+      let verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}/role=${body.role}`;
       await signupProducer(verificationLink);
 
       res.status(200).json({
@@ -46,6 +46,9 @@ export class AuthController {
       console.log("calling");
       
       const body = req.body;
+      if(req.body.email==="admin@gmail.com"){
+
+      }
       const user = await this.interactor.login(body);
       const token = generateToken({
         id: String(user._id),
@@ -114,7 +117,7 @@ export class AuthController {
         });
       }
       
-      await OtpSchema.deleteOne({ email: user.email });
+      // await OtpSchema.deleteOne({ email: user.email });
       const token = generateToken({ id: String(user._id), role: user.role });
       res.cookie("access_token", token, {
         httpOnly: true,
@@ -125,16 +128,18 @@ export class AuthController {
         .status(200)
         .json({ status: true, user: user, message: "User signup successfull" });
     } catch (error) {
+      console.log(error, ' )')
       next(error);
     }
   }
   checkRole(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log(req.cookies,'  **(');
+      
       const token = req.cookies.access_token;
       console.log("🚀 ~ AuthController ~ checkRole ~ token:", token)
       console.log(req.cookies.access_token)
       if (!token) {
-        
         throw new Error("Not Autherized");
       }
       const payload:{id:string,role:"admin"|"user"|"company"} = jwt.verify(token, String(process.env.JWT_KEY)) as {id:string,role:"admin"|"user"|"company"}

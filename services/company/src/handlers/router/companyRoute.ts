@@ -15,7 +15,16 @@ companyRoute
     checkAuth,
     checkStatus,
     companyController.getCompanyData.bind(companyController)
-  )
-  .post(companyController.changeStatus.bind(companyController));
+  );
+companyRoute.post(
+  "/change-approvel",
+  companyController.changeStatus.bind(companyController)
+);
 
+companyRoute.get(
+  "/get-approvelcompanies",
+  companyController.getApprovelCompanies.bind(companyController)
+);
+
+// companyRoute.post('/update-profile')
 export default companyRoute;

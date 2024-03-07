@@ -8,6 +8,7 @@ import authRouter from "./handlers/routers/authRouter";
 import { errorHandler } from "./middlewares/errorHandler";
 import { runConsumer, stopConsumer } from "./infra/message/kafka/consumers";
 import otpRouter from "./handlers/routers/otpRouter";
+import AuthSchema from "./infra/database/mongodb/Schema/AuthSchema";
 const app = express();
 
 app.use(express.json());
@@ -15,7 +16,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: [String(process.env.CLIENT_URL)],
-    credentials:true
+    credentials: true,
   })
 );
 (async () => {
@@ -29,8 +30,8 @@ app.use(
 app.use("/", authRouter);
 app.use("/otp", otpRouter);
 app.use(errorHandler);
-app.listen(process.env.AUTH_SERVICE_PORT, () =>
+app.listen(process.env.AUTH_SERVICE_PORT, async () => {
   console.log(
     ` Authentication service started ${process.env.AUTH_SERVICE_PORT} `
-  )
-);
+  );
+});

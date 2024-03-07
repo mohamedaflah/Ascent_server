@@ -17,6 +17,9 @@ export class Company{
         public readonly techStack?:{name:string,icon:string}[],
         public readonly website?:string,
         public readonly coverImage?:string,
-        public readonly approvelStatus?:{status:"Accepted"|"Rejected"|"Pending",description:string}
+        public readonly approvelStatus?:{status:"Accepted"|"Rejected"|"Pending",description:string},
+        public readonly profileCompleted?:boolean,
+        public readonly profileCompletionStatus?:"0%"|"25%"|"50%"|"75%"|"100%",
+        public readonly socialLinks?:string[]
     ){}
 }

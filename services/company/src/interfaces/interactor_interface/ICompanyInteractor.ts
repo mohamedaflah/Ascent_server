@@ -8,4 +8,6 @@ export interface ICompanyInteractor {
     status: "Accepted" | "Rejected" | "Pending",
     description: string
   ): Promise<Company>;
+  getApprovelCompanies(): Promise<Company[]>;
+  updateProfile(data: Company): Promise<Company>;
 }

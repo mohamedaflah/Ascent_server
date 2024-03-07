@@ -17,6 +17,7 @@ export const checkAuth = async (
     token,
     String(process.env.JWT_KEY),
     (err: Error | any, decoded: any) => {
+     
       if (err) throw err;
       if (decoded) {
         if (decoded?.role == "company") {

@@ -3,6 +3,9 @@ import { ICompanyRepository } from "../interfaces/repository_interface/ICompanyR
 import companyModel from "../intfrastructure/database/models/companyModel";
 import bcrypt from "bcrypt";
 export class CompanyRepository implements ICompanyRepository {
+  updateProfile(data: Company): Promise<Company> {
+    throw new Error("Method not implemented.");
+  }
   async addCompany(data: Company): Promise<Company> {
     const password = bcrypt.hashSync(data.password, 10);
     const newCompany = await companyModel.create({
@@ -12,25 +15,30 @@ export class CompanyRepository implements ICompanyRepository {
         status: "Pending",
         description: "Waiting for approval",
       },
+      profileCompleted: false,
     });
     return newCompany.toObject();
   }
   async getCompany(id: string): Promise<Company> {
     const company = await companyModel.findOne({ _id: id });
-    if(company?.approvelStatus?.status==="Pending"){
-      throw new Error("Admin not responded of your request wait for approvel")
+    if (company?.approvelStatus?.status === "Pending") {
+      throw new Error("Admin not responded of your request wait for approvel");
     }
-    if(company?.approvelStatus?.status==="Rejected"){
-      throw new Error("Admin rejected your request")
+    if (company?.approvelStatus?.status === "Rejected") {
+      throw new Error("Admin rejected your request");
     }
-    if(company){
-      return company.toObject()
-    }else{
-      throw new Error(" Company not found ")
+    if (company) {
+      return company.toObject();
+    } else {
+      throw new Error(" Company not found ");
     }
   }
-  async changeStatus(id: string, status: "Accepted" | "Rejected" | "Pending", description: string): Promise<Company> {
-    const company = await companyModel.findOne({_id: id});
+  async changeStatus(
+    id: string,
+    status: "Accepted" | "Rejected" | "Pending",
+    description: string
+  ): Promise<Company> {
+    const company = await companyModel.findOne({ _id: id });
     if (!company) {
       throw new Error("Company not found");
     }
@@ -41,5 +49,11 @@ export class CompanyRepository implements ICompanyRepository {
     company.approvelStatus.description = description;
     await company.save();
     return company.toObject();
+  }
+  async getApprovelCompanies(): Promise<Company[] | any[]> {
+    const companies = await companyModel.find({
+      "approvelStatus.status": "Pending",
+    }).sort({createdAt:-1})
+    return companies;
   }
 }

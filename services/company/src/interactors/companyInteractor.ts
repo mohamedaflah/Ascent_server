@@ -7,6 +7,10 @@ export class CompanyInteractor implements ICompanyInteractor {
   constructor(reository: ICompanyRepository) {
     this.repository = reository;
   }
+  async updateProfile(data: Company): Promise<Company> {
+    const updated = await this.repository.updateProfile(data);
+    return updated;
+  }
   async addCompany(data: Company): Promise<Company> {
     const newCompany = await this.repository.addCompany(data);
     return newCompany;
@@ -22,5 +26,9 @@ export class CompanyInteractor implements ICompanyInteractor {
   ): Promise<Company> {
     const company = await this.repository.changeStatus(id, status, description);
     return company;
+  }
+  async getApprovelCompanies(): Promise<Company[]> {
+    const companies = this.repository.getApprovelCompanies();
+    return companies;
   }
 }

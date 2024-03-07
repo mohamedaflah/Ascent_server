@@ -41,6 +41,14 @@ const CompanyModel = new mongoose.Schema(
       },
       description: String,
     },
+    profileCompleted: Boolean,
+    profileCompletionStatus: {
+      type: String,
+      enum: ["0%", "25%", "50%", "75%", "100%"],
+    },
+    socialLinks: {
+      type: [String],
+    },
   },
   { timestamps: true }
 );

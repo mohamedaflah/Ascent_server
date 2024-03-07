@@ -11,12 +11,14 @@ export class CompanyController {
 
   async getCompanyData(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log('Called (()()');
+      
       const data = getPayload(req.cookies?.access_token);
       const company = await this.companyInteractor.getCompany(data.id);
 
       res
         .status(200)
-        .json({ status: true, message: "Successfull!!", user: company });
+        .json({ status: true, message: "Successfull!!", user: company,role:"company",approvelStatus:company.approvelStatus?.status });
     } catch (error) {
       next(error);
     }
@@ -24,19 +26,37 @@ export class CompanyController {
 
   async changeStatus(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log(req.body);
+      console.log(req.body,' Body');
       const { id, status, description } = req.body;
       const company = await this.companyInteractor.changeStatus(
-        id,
+        id.trim(),
         status,
         description
       );
-      if(status==="Rejected"){
-        await rejectMailProducer(company.email,description)
+      if (status === "Rejected") {
+        await rejectMailProducer(company.email, description);
       }
-      res.status(200).json({ status: true, message: "Success", user: company,role:"company" });
+      res
+        .status(200)
+        .json({
+          status: true,
+          message: "Success",
+          user: company,
+          role: "company",
+        });
     } catch (error) {
       next(error);
     }
   }
+
+  async getApprovelCompanies(req: Request, res: Response, next: NextFunction) {
+    try {
+      const companies=await this.companyInteractor.getApprovelCompanies()
+      res.status(200).json({status:true,role:"company",companies})
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  
 }
