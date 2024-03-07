@@ -20,6 +20,7 @@ export class Company{
         public readonly approvelStatus?:{status:"Accepted"|"Rejected"|"Pending",description:string},
         public readonly profileCompleted?:boolean,
         public readonly profileCompletionStatus?:"0%"|"25%"|"50%"|"75%"|"100%",
-        public readonly socialLinks?:string[]
+        public readonly socialLinks?:string[],
+        public readonly _id?:string
     ){}
 }

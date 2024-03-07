@@ -3,7 +3,8 @@ import { ICompanyRepository } from "../interfaces/repository_interface/ICompanyR
 import companyModel from "../intfrastructure/database/models/companyModel";
 import bcrypt from "bcrypt";
 export class CompanyRepository implements ICompanyRepository {
-  updateProfile(data: Company): Promise<Company> {
+  async updateProfile(data: Company): Promise<Company> {
+    // const company=await companyModel.findOne({_id:data.})
     throw new Error("Method not implemented.");
   }
   async addCompany(data: Company): Promise<Company> {

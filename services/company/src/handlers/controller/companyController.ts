@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import e, { NextFunction, Request, Response } from "express";
 import { ICompanyInteractor } from "../../interfaces/interactor_interface/ICompanyInteractor";
 import { getPayload } from "../../utils/getPayload";
 import { rejectMailProducer } from "../../intfrastructure/messagebrokers/kafka/producers/rejectMailProducer";
@@ -11,14 +11,18 @@ export class CompanyController {
 
   async getCompanyData(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('Called (()()');
-      
+      console.log("Called (()()");
+
       const data = getPayload(req.cookies?.access_token);
       const company = await this.companyInteractor.getCompany(data.id);
 
-      res
-        .status(200)
-        .json({ status: true, message: "Successfull!!", user: company,role:"company",approvelStatus:company.approvelStatus?.status });
+      res.status(200).json({
+        status: true,
+        message: "Successfull!!",
+        user: company,
+        role: "company",
+        approvelStatus: company.approvelStatus?.status,
+      });
     } catch (error) {
       next(error);
     }
@@ -26,7 +30,7 @@ export class CompanyController {
 
   async changeStatus(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log(req.body,' Body');
+      console.log(req.body, " Body");
       const { id, status, description } = req.body;
       const company = await this.companyInteractor.changeStatus(
         id.trim(),
@@ -36,14 +40,12 @@ export class CompanyController {
       if (status === "Rejected") {
         await rejectMailProducer(company.email, description);
       }
-      res
-        .status(200)
-        .json({
-          status: true,
-          message: "Success",
-          user: company,
-          role: "company",
-        });
+      res.status(200).json({
+        status: true,
+        message: "Success",
+        user: company,
+        role: "company",
+      });
     } catch (error) {
       next(error);
     }
@@ -51,12 +53,17 @@ export class CompanyController {
 
   async getApprovelCompanies(req: Request, res: Response, next: NextFunction) {
     try {
-      const companies=await this.companyInteractor.getApprovelCompanies()
-      res.status(200).json({status:true,role:"company",companies})
+      const companies = await this.companyInteractor.getApprovelCompanies();
+      res.status(200).json({ status: true, role: "company", companies });
     } catch (error) {
       next(error);
     }
   }
 
-  
+  async updateProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+    } catch (error) {
+      next(error);
+    }
+  }
 }
