@@ -17,6 +17,9 @@ export class AuthInteractor implements IAuthInteractor {
     return user;
   }
   async validateUserData(body: User): Promise<{ status: boolean }> {
-    return await this.repository.validateUserData(body)
+    return await this.repository.validateUserData(body);
+  }
+  async checkEmailExistforForgot(email: string): Promise<{ status: boolean }> {
+    return await this.repository.checkEmailExistforForgot(email);
   }
 }

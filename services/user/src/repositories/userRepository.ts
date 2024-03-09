@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { User } from "../entities/user.entity";
 import UserSchema from "../infra/mongodb/Schema/UserSchema";
 import { IUserRepository } from "../interfaces/repository_interface/IUserRepository";
-
+import bcrypt from "bcrypt";
 export class UserRepository implements IUserRepository {
   async addUserData(data: User): Promise<User> {
     const enuserId = await UserSchema.findById(data._id);
@@ -16,8 +16,8 @@ export class UserRepository implements IUserRepository {
         role: data.role,
       });
       return newUser.toObject();
-    }else{
-      throw new Error(" duplicate id ")
+    } else {
+      throw new Error(" duplicate id ");
     }
   }
   async getUserData(id: string): Promise<User> {
@@ -26,6 +26,18 @@ export class UserRepository implements IUserRepository {
       return user?.toObject();
     } else {
       throw new Error("User not found");
+    }
+  }
+  async updatePassword(newPass: string, email: string): Promise<User> {
+    const user = await UserSchema.findOne({ email: email });
+
+    if (user?.password) {
+      newPass = bcrypt.hashSync(newPass, 10);
+      user.password = newPass;
+      await user.save();
+      return user.toJSON();
+    } else {
+      throw new Error("User not found or password is undefined/null");
     }
   }
 }

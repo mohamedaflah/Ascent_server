@@ -5,4 +5,5 @@ export interface IAuthInteractor {
   signup(body: User): Promise<User>;
   login(body: LoginBody): Promise<User>;
   validateUserData(body: User): Promise<{ status: boolean }>;
+  checkEmailExistforForgot(email:string): Promise<{ status: boolean }>;
 }
