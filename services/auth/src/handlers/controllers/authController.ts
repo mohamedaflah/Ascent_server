@@ -13,6 +13,7 @@ import { payload } from "../../utils/types/loginType";
 import { userAddProducer } from "../../infra/message/kafka/producers/userAddProducer";
 import { companyAddProducer } from "../../infra/message/kafka/producers/companyAddProducer";
 import { sendForgotMailLink } from "../../infra/message/kafka/producers/sendForgotPassmail";
+import { updatePassProducer } from "../../infra/message/kafka/producers/updatePasswordProducer";
 export class AuthController {
   private interactor: IAuthInteractor;
   constructor(authInteractor: IAuthInteractor) {
@@ -158,12 +159,59 @@ export class AuthController {
         req.body.email as string
       );
       if (!emailExist) throw new Error(" Email not exist ");
-      const token = generateEmailValidationToken(req.body.email);
-      const mailLink = `${process.env.CLIENT_URL}/verify-forgot-mail/${token}/role=${req.body.role}`;
+      const token = generateEmailValidationToken({
+        email: req.body.email,
+        role: emailExist.role,
+      });
+      const mailLink = `${process.env.CLIENT_URL}/verify-forgot-
+      mail/${token}/role=${req.body.role}`;
       await sendForgotMailLink(mailLink);
+      res.cookie("forgot_key", token, {
+        maxAge: 5 * 60 * 1000,
+        httpOnly: true,
+      });
       res
         .status(200)
         .json({ status: true, message: "Verification mail Sended" });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async checkForgotPassToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      // forgot_key
+      console.log("key))");
+
+      const { token: bodyToken } = req.body;
+      const token = req.cookies.forgot_key;
+      if (!token) {
+        throw new Error("Your Verification link in expired");
+      }
+      if (bodyToken !== token) throw new Error("Token not matching");
+      res.status(200).json({ status: true, message: " token found " });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updatePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log("Calling ");
+      const token = req.cookies.forgot_key;
+      if (!token) throw new Error(" Your Verification link is Expired ");
+      const { email } = jwt.verify(
+        token,
+        process.env.JWT_EMAIL_VALIDATION_KEY as string
+      ) as { email: string };
+      const { newPass } = req.body;
+      console.log("🚀 ~ UserController ~ updatePassword ~ newPass:", newPass);
+      const user = await this.interactor.updatePassword(newPass, email);
+      await updatePassProducer({ id: user._id as string, newPass }, user.role);
+      res.status(200).json({
+        status: true,
+        message: "Password changed ",
+        changeStatus: true,
+      });
     } catch (error) {
       next(error);
     }

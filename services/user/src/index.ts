@@ -20,7 +20,7 @@ app.use(
 );
 app.use(express.json())
 app.use(cookieParser());
-app.use(checkAuthentication);
+// app.use(checkAuthentication);
 (async() => {
   await runConsumer();
   process.on("SIGTERM", async () => {

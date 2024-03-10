@@ -9,12 +9,14 @@ const repository = new UserRepository();
 const interactor = new UserInteractor(repository);
 const userController = new UserController(interactor);
 
-userRouter.use(checkAuthentication);
-userRouter
-  .route("/get-user")
-  .get(userController.getUserData.bind(userController));
 userRouter.post(
   `/update-password`,
   userController.updatePassword.bind(userController)
 );
+userRouter.use(checkAuthentication);
+userRouter
+  .route("/get-user")
+  .get(userController.getUserData.bind(userController));
+
+
 export default userRouter;

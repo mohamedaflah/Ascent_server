@@ -58,12 +58,23 @@ export class AuthRepository implements IAuthRepository {
     }
     return { status: true };
   }
-  async checkEmailExistforForgot(email: string): Promise<{ status: boolean }> {
+  async checkEmailExistforForgot(email: string): Promise<User> {
     const emailExist = await AuthSchema.findOne({ email: email });
     if (emailExist) {
-      return { status: true };
+      return emailExist.toObject();
+    } 
+    throw new Error(" User not found with this email")
+  }
+
+  async updatePassword(email: string, newPass: string): Promise<User> {
+    const user = await AuthSchema.findOne({ email: email });
+    console.log("🚀 ~ UserRepository ~ updatePassword ~ user:", user);
+    if (user?.password) {
+      user.password = bcrypt.hashSync(newPass, 10);
+      await user.save();
+      return user.toJSON();
     } else {
-      return { status: false };
+      throw new Error("User not found or password is undefined/null");
     }
   }
 }

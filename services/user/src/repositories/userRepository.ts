@@ -28,12 +28,12 @@ export class UserRepository implements IUserRepository {
       throw new Error("User not found");
     }
   }
-  async updatePassword(newPass: string, email: string): Promise<User> {
-    const user = await UserSchema.findOne({ email: email });
+  async updatePassword(newPass: string, id: string): Promise<User> {
+    const user = await UserSchema.findOne({ _id: id });
+    console.log("🚀 ~ UserRepository ~ updatePassword ~ user:", user);
 
     if (user?.password) {
-      newPass = bcrypt.hashSync(newPass, 10);
-      user.password = newPass;
+      user.password = bcrypt.hashSync(newPass, 10);
       await user.save();
       return user.toJSON();
     } else {

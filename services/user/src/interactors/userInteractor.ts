@@ -15,8 +15,8 @@ export class UserInteractor implements IUserInteractor {
     const userData = await this.userRepository.getUserData(id);
     return userData;
   }
-  async updatePassword(newPass: string,email:string): Promise<User> {
-    const user = await this.userRepository.updatePassword(newPass,email);
+  async updatePassword(newPass: string,id:string): Promise<User> {
+    const user = await this.userRepository.updatePassword(newPass,id);
     return user;
   }
 }

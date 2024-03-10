@@ -12,6 +12,7 @@ export class NotificaionConsumerActions {
       // const sixDigitOtp = generateOtp();
       const splited = verificationLink.split("/");
       const userData = getPaylaod(splited[splited.length - 2]);
+      
       const mailOptions = {
         from: String(process.env.ASCENT_OFFICIAL_MAIL),
         to: String(userData.email),
@@ -97,7 +98,7 @@ export class NotificaionConsumerActions {
   async sendForgotPassMail(link: string) {
     try {
       const splited = link.split("/");
-      const mail=getPaylaod(splited[splited.length - 2]);
+      const mail=getPaylaod(splited[splited.length - 2]).email;
       const mailOptions = {
         from: String(process.env.ASCENT_OFFICIAL_MAIL),
         to: String(mail),

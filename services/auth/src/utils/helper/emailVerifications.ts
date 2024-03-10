@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { payload } from "../types/loginType";
 export const generateEmailValidationToken = (payload: any) => {
-  const token = jwt.sign(payload, String(process.env.JWT_EMAIL_VALIDATION_KEY));
+  const token = jwt.sign(payload, String(process.env.JWT_EMAIL_VALIDATION_KEY),{expiresIn:"5m"});
   return token;
 };
 
