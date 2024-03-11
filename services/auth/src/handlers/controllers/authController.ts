@@ -163,8 +163,7 @@ export class AuthController {
         email: req.body.email,
         role: emailExist.role,
       });
-      const mailLink = `${process.env.CLIENT_URL}/verify-forgot-
-      mail/${token}/role=${req.body.role}`;
+      const mailLink = `${process.env.CLIENT_URL}/verify-forgot-mail/${token}/role=${req.body.role}`;
       await sendForgotMailLink(mailLink);
       res.cookie("forgot_key", token, {
         maxAge: 5 * 60 * 1000,

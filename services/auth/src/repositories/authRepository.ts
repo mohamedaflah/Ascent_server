@@ -27,6 +27,8 @@ export class AuthRepository implements IAuthRepository {
         role: body.role,
       });
     } else {
+      const nameExist = await AuthSchema.findOne({ name: body.name });
+      if(nameExist) throw new Error(" Company Already Registered with this name")
       newUser = new AuthSchema({
         name: body.name,
         email: body.email,
@@ -52,9 +54,15 @@ export class AuthRepository implements IAuthRepository {
     return userData.toObject();
   }
   async validateUserData(body: User): Promise<{ status: boolean }> {
+    console.log("🚀 ~ AuthRepository ~ validateUserData ~ body:", body)
     const emailExist = await AuthSchema.findOne({ email: body.email });
+
     if (emailExist) {
       throw new Error("Email already taken!!");
+    }
+    if(body.role=="company"){
+      const nameExist=await AuthSchema.findOne({name:body.name})
+      if(nameExist) throw new Error(`Company Already Registered with this name`)
     }
     return { status: true };
   }
@@ -62,11 +70,13 @@ export class AuthRepository implements IAuthRepository {
     const emailExist = await AuthSchema.findOne({ email: email });
     if (emailExist) {
       return emailExist.toObject();
-    } 
-    throw new Error(" User not found with this email")
+    }
+    
+    throw new Error(" User not found with this email");
   }
 
-  async updatePassword(email: string, newPass: string): Promise<User> {
+  async updatePassword(newPass: string, email: string): Promise<User> {
+    console.log("🚀 ~ AuthRepository ~ updatePassword ~ email:", email);
     const user = await AuthSchema.findOne({ email: email });
     console.log("🚀 ~ UserRepository ~ updatePassword ~ user:", user);
     if (user?.password) {
