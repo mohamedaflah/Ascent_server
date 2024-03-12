@@ -3,10 +3,6 @@ import { ICompanyRepository } from "../interfaces/repository_interface/ICompanyR
 import companyModel from "../intfrastructure/database/models/companyModel";
 import bcrypt from "bcrypt";
 export class CompanyRepository implements ICompanyRepository {
-  async updateProfile(data: Company): Promise<Company> {
-    // const company=await companyModel.findOne({_id:data.})
-    throw new Error("Method not implemented.");
-  }
   async addCompany(data: Company): Promise<Company> {
     const password = bcrypt.hashSync(data.password, 10);
     const newCompany = await companyModel.create({
@@ -17,6 +13,7 @@ export class CompanyRepository implements ICompanyRepository {
         description: "Waiting for approval",
       },
       profileCompleted: false,
+      profileCompletionStatus:"1%"
     });
     return newCompany.toObject();
   }
@@ -52,9 +49,22 @@ export class CompanyRepository implements ICompanyRepository {
     return company.toObject();
   }
   async getApprovelCompanies(): Promise<Company[] | any[]> {
-    const companies = await companyModel.find({
-      "approvelStatus.status": "Pending",
-    }).sort({createdAt:-1})
+    const companies = await companyModel
+      .find({
+        "approvelStatus.status": "Pending",
+      })
+      .sort({ createdAt: -1 });
     return companies;
+  }
+  async updateProfile(id: string, data: Company): Promise<Company> {
+    const company = await companyModel.findOne({ _id: id });
+    if (!company) throw new Error("Company not found");
+    await companyModel.updateOne({ _id: id }, { $set: data });
+    const updated = await companyModel.findOne({ _id: id });
+    if (updated) {
+      return updated?.toObject();
+    }else{
+      throw new Error(`Something went wrong`)
+    }
   }
 }

@@ -8,7 +8,6 @@ import authRouter from "./handlers/routers/authRouter";
 import { errorHandler } from "./middlewares/errorHandler";
 import { runConsumer, stopConsumer } from "./infra/message/kafka/consumers";
 import otpRouter from "./handlers/routers/otpRouter";
-import AuthSchema from "./infra/database/mongodb/Schema/AuthSchema";
 const app = express();
 
 app.use(express.json());

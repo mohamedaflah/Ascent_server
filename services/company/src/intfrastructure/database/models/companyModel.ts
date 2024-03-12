@@ -8,12 +8,13 @@ const CompanyModel = new mongoose.Schema(
     password: String,
     description: String,
     contact: String,
-    officeLocations: [
-      {
-        name: String,
-        icon: String,
-      },
-    ],
+    // officeLocations: [
+    //   {
+    //     name: String,
+    //     icon: String,
+    //   },
+    // ],
+    locations: [String],
     joinDate: Date,
     industry: String,
     images: [String],
@@ -26,14 +27,16 @@ const CompanyModel = new mongoose.Schema(
     ],
     foundedDate: Date,
     teams: [{ type: String, profile: String, designation: String }],
-    techStack: [
-      {
-        name: String,
-        icon: String,
-      },
-    ],
+    techStack: [String],
+    // techStack: [
+    //   {
+    //     name: String,
+    //     icon: String,
+    //   },
+    // ],
     website: String,
     coverImage: String,
+    icon: String,
     approvelStatus: {
       status: {
         type: String,
@@ -44,11 +47,14 @@ const CompanyModel = new mongoose.Schema(
     profileCompleted: Boolean,
     profileCompletionStatus: {
       type: String,
-      enum: ["0%", "25%", "50%", "75%", "100%"],
+      enum: ["1%", "2%", "3%"],
     },
     socialLinks: {
       type: [String],
     },
+    LinkedInLink: String,
+    certificate: String,
+    registrationId: String,
   },
   { timestamps: true }
 );

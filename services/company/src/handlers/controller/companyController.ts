@@ -62,6 +62,19 @@ export class CompanyController {
 
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log(` api caling ()(OI)()*I()* ${JSON.stringify(req.body)}`);
+      
+      const company = await this.companyInteractor.updateProfile(
+        req.body.id,
+        req.body.data
+      );
+      res.status(200).json({
+        status: true,
+        message: "Successfull!!",
+        user: company,
+        role: "company",
+        approvelStatus: company.approvelStatus?.status,
+      });
     } catch (error) {
       next(error);
     }

@@ -26,5 +26,5 @@ companyRoute.get(
   companyController.getApprovelCompanies.bind(companyController)
 );
 
-// companyRoute.post('/update-profile')
+companyRoute.post('/update-profile',companyController.updateProfile.bind(companyController))
 export default companyRoute;

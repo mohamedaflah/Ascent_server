@@ -9,5 +9,5 @@ export interface ICompanyRepository {
     description: string
   ): Promise<Company>;
   getApprovelCompanies(): Promise<Company[]>;
-  updateProfile(data: Company): Promise<Company>;
+  updateProfile(id:string,data: Company): Promise<Company>;
 }
