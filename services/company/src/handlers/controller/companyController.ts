@@ -79,4 +79,18 @@ export class CompanyController {
       next(error);
     }
   }
+  async getCompanyProfile(req:Request,res:Response,next:NextFunction){
+    try {
+      
+      const company = await this.companyInteractor.getCompany(req.params.id);
+
+      res.status(200).json({
+        status: true,
+        message: "Successfull!!",
+        user: company,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

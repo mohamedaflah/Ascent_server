@@ -57,6 +57,7 @@ export class CompanyRepository implements ICompanyRepository {
     return companies;
   }
   async updateProfile(id: string, data: Company): Promise<Company> {
+    console.log("🚀 ~ CompanyRepository ~ updateProfile ~ data:", data)
     const company = await companyModel.findOne({ _id: id });
     if (!company) throw new Error("Company not found");
     await companyModel.updateOne({ _id: id }, { $set: data });
