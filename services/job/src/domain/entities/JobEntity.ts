@@ -19,7 +19,9 @@ export class Job {
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
     public readonly expiry?: Date,
-    public readonly completdJobAdd?: "first" | "second"
+    public readonly completdJobAdd?: "first" | "second",
+    public readonly status?: boolean,
+    public readonly expired?: boolean
   ) {}
 }
 

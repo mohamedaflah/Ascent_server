@@ -18,6 +18,10 @@ const JobModel = new mongoose.Schema({
     type: String,
     enum: ["first", "second"],
   },
+  status: Boolean,
+  expired: Boolean,
 });
 
+// public readonly status?: boolean,
+//     public readonly expired?: boolean
 export default mongoose.model(process.env.JOB_MODEL as string, JobModel);
