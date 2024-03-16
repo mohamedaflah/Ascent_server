@@ -8,6 +8,8 @@ export class AddCategoryController {
   }
   async addCategory(req: Request, res: Response, next: NextFunction) {
     try {
+        console.log('callind ')
+        console.log(req.body,' body of req')
       const category = await this.categoryInteractor.addCategory(req.body);
       res.status(200).json({category,status:true,message:"Succesfull"})
     } catch (error) {

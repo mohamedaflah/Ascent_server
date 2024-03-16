@@ -18,9 +18,10 @@ export class CategoryRepository implements ICategoryRepository {
     return updatedCategory.toObject();
   }
   async deleteCategory(id: string): Promise<Category> {
-    await CategoryModel.updateMany({ _id: id }, { $set: { status: false } });
     const updatedCategory = await CategoryModel.findById(id);
     if (!updatedCategory) throw new Error("Category not found");
+    updatedCategory.status = !updatedCategory.status;
+    await updatedCategory.save();
     return updatedCategory.toObject();
   }
   async getCategory(id: string): Promise<Category> {
@@ -28,8 +29,10 @@ export class CategoryRepository implements ICategoryRepository {
     if (!Category) throw new Error("Category not found");
     return Category.toObject();
   }
-  async getAllCategory(limit: number): Promise<Category[]|any[]> {
-    const categories=await CategoryModel.find({}).limit(limit)
-    return categories
+  async getAllCategory(limit: number): Promise<Category[] | any[]> {
+    const categories = await CategoryModel.find({})
+      .sort({ createdAt: -1 })
+      .limit(limit);
+    return categories;
   }
 }
