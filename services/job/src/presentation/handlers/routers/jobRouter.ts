@@ -27,5 +27,5 @@ router
   .post(updateJobController.updateJob.bind(updateJobController))
   .get(getSpecificjobController.getSpecificjob.bind(getSpecificjobController))
   .get(deleteJobController.deleteJob.bind(deleteJobController));
-
+// router.get('/get-jobs/:companyId')
 export default router;

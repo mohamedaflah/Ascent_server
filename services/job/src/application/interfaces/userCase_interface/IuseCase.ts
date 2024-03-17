@@ -6,4 +6,5 @@ export interface IUseCase {
   getAllJob(limiit: number): Promise<Job[]>;
   deleteJob(id: string): Promise<Job>;
   getSpecificJob(id: string): Promise<Job>;
+  getJobsWithCompany(companyId:string):Promise<Job[]>
 }

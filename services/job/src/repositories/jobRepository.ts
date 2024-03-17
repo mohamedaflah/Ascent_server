@@ -31,4 +31,19 @@ export class JobRepository implements IJobRepository {
     if (!job) throw new Error("job not found");
     return job.toObject();
   }
+  async getJobsWithCompany(companyId: string): Promise<Job[]> {
+    // const jobs = await jobModel.aggregate({
+    // {
+    //     $match: {
+    //     companyId: companyId,
+    //   }
+    // },
+    // {
+    //     $lookup:{
+    //         from:"categ"
+    //     }
+    // }
+    // });
+    throw new Error();
+  }
 }
