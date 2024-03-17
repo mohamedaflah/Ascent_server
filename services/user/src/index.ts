@@ -10,8 +10,8 @@ import {
   stopConsumer,
 } from "./infra/message_broker/kafka/consumers";
 import userRouter from "./handlers/routers/userRouter";
-import { checkAuthentication } from "./middlewares/checkAuthentication";
-import categoryRoute from "./handlers/routers/categoryRoute";
+
+
 const app = express();
 app.use(
   cors({
@@ -30,7 +30,7 @@ app.use(cookieParser());
 })();
 
 app.use("/user", userRouter);
-app.use("/category", categoryRoute);
+
 app.use(errorHandler);
 
 app.listen(process.env.USER_SERVICE_PORT, () =>
