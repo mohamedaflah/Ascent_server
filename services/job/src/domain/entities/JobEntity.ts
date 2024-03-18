@@ -9,7 +9,7 @@ export class Job {
     public readonly joblocation: string,
     public readonly salaryrange: { status: boolean; from: number; to: number },
     // public readonly experiencelevel: string,
-    public readonly vacancies: { available: number; filled: number },
+    public readonly vacancies: { status:boolean,available: number; filled: number },
     public readonly responsibilities: string,
     public readonly qualification?: string,
     public readonly skills?: string[],

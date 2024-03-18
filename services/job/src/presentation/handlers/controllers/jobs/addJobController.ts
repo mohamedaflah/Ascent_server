@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IUseCase } from "../../../application/interfaces/userCase_interface/IuseCase";
+import { IUseCase } from "../../../../application/interfaces/userCase_interface/IuseCase";
 
 export class AddJob {
   private useCase: IUseCase;
