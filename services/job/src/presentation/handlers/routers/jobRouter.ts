@@ -26,9 +26,9 @@ router
 
 router
   .route("/job/:id")
-  .post(updateJobController.updateJob.bind(updateJobController))
+  .patch(updateJobController.updateJob.bind(updateJobController))
   .get(getSpecificjobController.getSpecificjob.bind(getSpecificjobController))
-  .get(deleteJobController.deleteJob.bind(deleteJobController));
+  .put(deleteJobController.deleteJob.bind(deleteJobController));
 router.get(
   "/get-jobs/:companyId",
   companyJobsController.getJobsWithCompany.bind(companyJobsController)

@@ -11,6 +11,7 @@ export class JobRepository implements IJobRepository {
       companyId: new mongoose.Types.ObjectId(body.companyId),
       category: new mongoose.Types.ObjectId(body.category),
       expired: false,
+      status: true,
     });
     const addedJob = await jobModel.aggregate([
       {
@@ -33,6 +34,11 @@ export class JobRepository implements IJobRepository {
         },
       },
       {
+        $addFields: {
+          categoryId: "$result._id",
+        },
+      },
+      {
         $project: { result: 0 },
       },
     ]);
@@ -41,23 +47,139 @@ export class JobRepository implements IJobRepository {
     return addedJob[0];
   }
   async updateJob(body: Job, id: string): Promise<Job> {
-    await jobModel.updateOne({ _id: id }, { $set: body });
-    const updatedJob = await jobModel.findOne({ _id: id });
-    if (!updatedJob) throw new Error(" job not found");
-    return updatedJob?.toObject();
+    console.log("🚀 ~ JobRepository ~ updateJob ~ body:", body);
+    let updateObj: any = { ...body };
+
+    // Conditionally set the category if it's provided
+    if (body.category) {
+      updateObj.category = new mongoose.Types.ObjectId(body.category);
+    }
+
+    await jobModel.updateOne({ _id: id }, { $set: updateObj });
+    const updatedJob = await jobModel.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(id) },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "result",
+        },
+      },
+      {
+        $unwind: "$result",
+      },
+      {
+        $set: {
+          category: "$result.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$result._id",
+        },
+      },
+      {
+        $project: { result: 0 },
+      },
+    ]);
+    if (updatedJob.length <= 0) throw new Error(" job not found");
+    return updatedJob[0];
   }
-  async getAllJob(limiit: number): Promise<Job[] | any[]> {
-    return await jobModel
-      .find({ status: true })
-      .limit(limiit)
-      .sort({ createdAt: -1 });
+  async getAllJob(limiit: number): Promise<Job[]> {
+    const jobs = await jobModel.aggregate([
+      {
+        $match: { status: true },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "result",
+        },
+      },
+      {
+        $unwind: "$result",
+      },
+      {
+        $set: {
+          category: "$result.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$result._id",
+        },
+      },
+      {
+        $project: { result: false },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      // {
+      //   $limit: limiit??0,
+      // },
+      {
+        $lookup: {
+          from: "companies",
+          localField: "companyId",
+          foreignField: "_id",
+          as: "company",
+        },
+      },
+      {
+        $unwind: "$company",
+      },
+    ]);
+    console.log("🚀 ~ JobRepository ~ getAllJob ~ jobs:", jobs)
+    // return await jobModel
+    //   .find({ status: true })
+    //   .limit(limiit)
+    //   .sort({ createdAt: -1 });
+    return jobs;
   }
   async deleteJob(id: string): Promise<Job> {
     const job = await jobModel.findById(id);
     if (!job) throw new Error("job not found");
     job.status = !job.status;
     await job.save();
-    return job.toObject();
+    const deletedJob = await jobModel.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(id) },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "result",
+        },
+      },
+      {
+        $unwind: "$result",
+      },
+      {
+        $set: {
+          category: "$result.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$result._id",
+        },
+      },
+      {
+        $project: {
+          result: 0,
+        },
+      },
+    ]);
+    if (deletedJob.length <= 0) throw new Error("Something went wrong");
+    return deletedJob[0];
   }
   async getSpecificJob(id: string): Promise<Job> {
     const job = await jobModel.findById(id);
@@ -79,6 +201,11 @@ export class JobRepository implements IJobRepository {
       {
         $set: {
           category: "$result.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$result._id",
         },
       },
       {
@@ -110,6 +237,11 @@ export class JobRepository implements IJobRepository {
       {
         $set: {
           category: "$result.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$result._id",
         },
       },
       {

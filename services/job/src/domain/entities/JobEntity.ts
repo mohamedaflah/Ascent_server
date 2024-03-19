@@ -9,9 +9,13 @@ export class Job {
     public readonly joblocation: string,
     public readonly salaryrange: { status: boolean; from: number; to: number },
     // public readonly experiencelevel: string,
-    public readonly vacancies: { status:boolean,available: number; filled: number },
+    public readonly vacancies: {
+      status: boolean;
+      available: number;
+      filled: number;
+    },
     public readonly responsibilities: string,
-    public readonly qualification?: string,
+    public readonly qualification?: string[],
     public readonly skills?: string[],
     public readonly experince?: number,
     public readonly companyId?: mongoose.Types.ObjectId,
@@ -21,7 +25,7 @@ export class Job {
     public readonly expiry?: Date,
     public readonly completdJobAdd?: "first" | "second",
     public readonly status?: boolean,
-    public readonly expired?: boolean
+    public readonly expired?: boolean,
   ) {}
 }
 

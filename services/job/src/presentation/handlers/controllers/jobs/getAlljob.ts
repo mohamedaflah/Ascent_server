@@ -8,7 +8,7 @@ export class GetAllJob {
   }
   async getAlljob(req: Request, res: Response, next: NextFunction) {
     try {
-      const jobs = await this.useCase.getAllJob(Number(req.query.limit)??0 );
+      const jobs = await this.useCase.getAllJob(Number(req.query.limit??0) );
       res
         .status(200)
         .json({ status: true, jobs, messsage: "Succesfull"});

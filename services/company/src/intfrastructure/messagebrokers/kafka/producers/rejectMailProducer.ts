@@ -26,3 +26,4 @@ export const rejectMailProducer = async (
     producer.disconnect();
   }
 };
+
