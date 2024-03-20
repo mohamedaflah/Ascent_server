@@ -17,7 +17,7 @@ export class UserRepository implements IUserRepository {
       });
       return newUser.toObject();
     } else {
-      throw new Error(" duplicate id ");
+      return enuserId.toObject();
     }
   }
   async getUserData(id: string): Promise<User> {

@@ -213,6 +213,17 @@ export class JobRepository implements IJobRepository {
           result: 0,
         },
       },
+      {
+        $lookup: {
+          from: "companies",
+          localField: "companyId",
+          foreignField: "_id",
+          as: "company",
+        },
+      },
+      {
+        $unwind: "$company",
+      }
     ]);
     console.log("🚀 ~ JobRepository ~ addJob ~ addedJob:", addedJob);
     if (!job) throw new Error("job not found");

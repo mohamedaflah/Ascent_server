@@ -1,5 +1,6 @@
 import { User } from "../../../../entities/user.entity";
 import { IUserInteractor } from "../../../../interfaces/interactor_interface/IUserinteractor";
+import { addUserProducer } from "../producers/addUser";
 
 export class ConsumerActions {
   private userInteractor: IUserInteractor;
@@ -11,6 +12,7 @@ export class ConsumerActions {
       console.log(` ___ Add user consumer called ___`);
       const newUser = await this.userInteractor.addUserData(data);
       console.log("🚀 ~ ConsumerActions ~ addUser ~ newUser:", newUser);
+      await addUserProducer(data);
     } catch (error) {
       console.log(` Err while running addUserconsumer ${error}`);
     }

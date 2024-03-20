@@ -25,7 +25,7 @@ app.use(cookieParser());
 (async () => {
   await runConsumer();
   process.on("SIGTERM", async () => {
-    await stopConsumer();
+    stopConsumer();
   });
 })();
 
