@@ -17,6 +17,9 @@ userRouter.use(checkAuthentication);
 userRouter
   .route("/get-user")
   .get(userController.getUserData.bind(userController));
-
+userRouter.patch(
+  `/update-profile/:userId`,
+  userController.updateProfile.bind(userController)
+);
 
 export default userRouter;

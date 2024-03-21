@@ -33,7 +33,7 @@ export class UserController {
         process.env.JWT_EMAIL_VALIDATION_KEY as string
       ) as { email: string };
       const { newPass } = req.body;
-      console.log("🚀 ~ UserController ~ updatePassword ~ newPass:", newPass)
+      console.log("🚀 ~ UserController ~ updatePassword ~ newPass:", newPass);
       const user = await this.userInteractor.updatePassword(newPass, email);
       res.status(200).json({
         status: true,
@@ -57,6 +57,26 @@ export class UserController {
       }
       if (bodyToken !== token) throw new Error("Token not matching");
       res.status(200).json({ status: true, message: " token found " });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await this.userInteractor.updateProfile(
+        req.params.userId,
+        req.body
+      );
+      res
+        .status(200)
+        .json({
+          status: true,
+          user,
+          message: "Success!!",
+          role: user.role,
+          id: user._id,
+        });
     } catch (error) {
       next(error);
     }

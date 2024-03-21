@@ -25,4 +25,14 @@ export class JobUseCase implements IUseCase {
   async getJobsWithCompany(companyId: string): Promise<Job[]> {
     return await this.repository.getJobsWithCompany(companyId);
   }
+  async applyJob(body: {
+    userId: string;
+    jobId: string;
+    resume: string;
+  }): Promise<Job> {
+    return await this.repository.applyJob(body);
+  }
+  async getAllApplicant(companyId: string, limit: number): Promise<any> {
+    return await this.repository.getAllApplicant(companyId,limit);
+  }
 }

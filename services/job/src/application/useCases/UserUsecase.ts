@@ -11,4 +11,8 @@ export class UserUserCase implements IUserUsecase {
     const user = await this.repository.addUser(body);
     return user;
   }
+  async updateUser(body: User, id: string): Promise<User> {
+    const newUser = await this.repository.updateUser(body, id);
+    return newUser;
+  }
 }

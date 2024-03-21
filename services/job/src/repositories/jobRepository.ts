@@ -135,7 +135,7 @@ export class JobRepository implements IJobRepository {
         $unwind: "$company",
       },
     ]);
-    console.log("🚀 ~ JobRepository ~ getAllJob ~ jobs:", jobs)
+    console.log("🚀 ~ JobRepository ~ getAllJob ~ jobs:", jobs);
     // return await jobModel
     //   .find({ status: true })
     //   .limit(limiit)
@@ -223,7 +223,7 @@ export class JobRepository implements IJobRepository {
       },
       {
         $unwind: "$company",
-      }
+      },
     ]);
     console.log("🚀 ~ JobRepository ~ addJob ~ addedJob:", addedJob);
     if (!job) throw new Error("job not found");
@@ -263,11 +263,84 @@ export class JobRepository implements IJobRepository {
       {
         $project: {
           result: 0,
+          applicants: 0,
         },
       },
     ]);
 
     console.log(jobs);
     return jobs.map((value) => value);
+  }
+  async applyJob(body: {
+    userId: string;
+    jobId: string;
+    resume: string;
+  }): Promise<Job> {
+    const job = await jobModel.findById(body.jobId);
+    if (job?.vacancies?.available === job?.vacancies?.filled) {
+      throw new Error(" Application full");
+    }
+    if (!job) throw new Error("job not found");
+    job?.applicants.push({
+      applicantId: new mongoose.Types.ObjectId(body.userId),
+      appliedDate: new Date(),
+      hiringstage: "Applied",
+      resume: body.resume,
+    });
+    if (job.vacancies?.filled !== undefined) {
+      job.vacancies.filled = (job.vacancies.filled ?? 0) + 1;
+    }
+    await job?.save();
+    return job?.toObject();
+  }
+  async getAllApplicant(
+    companyId: string,
+    limit: number
+  ): Promise<Job[] | any> {
+    const applicants = await jobModel.aggregate([
+      {
+        $match: { companyId: new mongoose.Types.ObjectId(companyId) },
+      },
+      {
+        $unwind: "$applicants",
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $unwind: "$categories",
+      },
+      {
+        $set: {
+          category: "$categories.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$categories.categoryId",
+        },
+      },
+      {
+        $project: { categories: 0 },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "applicants.applicantId",
+          foreignField: "_id",
+          as: "applicantDetails",
+        },
+      },
+      {
+        $unwind: "$applicantDetails",
+      },
+    ]);
+    console.log("🚀 ~ JobRepository ~ applicants:", applicants);
+    return applicants;
   }
 }

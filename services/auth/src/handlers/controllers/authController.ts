@@ -215,4 +215,25 @@ export class AuthController {
       next(error);
     }
   }
+
+  async resendMail(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log(` resend api caaling 🎎🎍🎍🎍 ${JSON.stringify(req.body)}`);
+      
+      const emailInVerify = await OtpSchema.findOne({ email: req.body.email });
+      if (!emailInVerify)
+        throw new Error("Your Link is Expired please Signup again");
+      const token = generateEmailValidationToken(req.body);
+      let verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}/role=${req.body.role}`;
+      await signupProducer(verificationLink);
+      res.status(200).json({
+        status: true,
+        message: "Verification link sended",
+        user: null,
+      });
+    } catch (error) {
+      console.log("🚀 ~ AuthController ~ resendMail ~ error:", error)
+      next(error);
+    }
+  }
 }

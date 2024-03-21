@@ -26,6 +26,12 @@ export class Job {
     public readonly completdJobAdd?: "first" | "second",
     public readonly status?: boolean,
     public readonly expired?: boolean,
+    public readonly applicants?: {
+      applicantId: string;
+      appliedDate: Date;
+      hiringstage: "Applied"|"Inreview"|"Shortlisted"|"Interview";
+      resume: string;
+    }[]
   ) {}
 }
 

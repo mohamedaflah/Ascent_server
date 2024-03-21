@@ -26,6 +26,17 @@ const JobModel = new mongoose.Schema(
     qualification: [String],
     status: Boolean,
     expired: Boolean,
+    applicants: [
+      {
+        applicantId: mongoose.Types.ObjectId,
+        appliedDate: Date,
+        hiringstage: {
+          type: String,
+          enum:["Applied","Inreview","Shortlisted","Interview"]
+        },
+        resume: String,
+      },
+    ],
   },
   { timestamps: true }
 );

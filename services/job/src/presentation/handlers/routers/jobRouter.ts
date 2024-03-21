@@ -7,6 +7,8 @@ import { DeleteJob } from "../controllers/jobs/deleteJob";
 import { GetAllJob } from "../controllers/jobs/getAlljob";
 import { GetSpecificJob } from "../controllers/jobs/getSpecificjobController";
 import { GetJobsWithCompany } from "../controllers/jobs/getJobwithCompany";
+import { ApplyJob } from "../controllers/jobs/applyJob";
+import { GetAllApplicant } from "../controllers/jobs/getAllApplicant";
 
 const router = Router();
 
@@ -19,6 +21,8 @@ const deleteJobController = new DeleteJob(useCase);
 const getAllJobController = new GetAllJob(useCase);
 const getSpecificjobController = new GetSpecificJob(useCase);
 const companyJobsController = new GetJobsWithCompany(useCase);
+const applyJob = new ApplyJob(useCase);
+const getAllApplicant = new GetAllApplicant(useCase);
 router
   .route("/job")
   .post(addJobController.addJob.bind(addJobController))
@@ -33,4 +37,8 @@ router.get(
   "/get-jobs/:companyId",
   companyJobsController.getJobsWithCompany.bind(companyJobsController)
 );
+router
+  .route("/applicants")
+  .post(applyJob.applyJob.bind(applyJob))
+router.get('/applicants/:companyId',getAllApplicant.getAllApplicant.bind(getAllApplicant))  
 export default router;

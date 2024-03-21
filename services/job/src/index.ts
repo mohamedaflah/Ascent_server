@@ -1,5 +1,6 @@
 import "./presentation/app";
 import "./infra/databases/mongodb/.config";
+import './infra/external/cron-job'
 import {
   runConsumer,
   stopConsumer,

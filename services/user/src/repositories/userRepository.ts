@@ -40,4 +40,13 @@ export class UserRepository implements IUserRepository {
       throw new Error("User not found or password is undefined/null");
     }
   }
+  async updateProfile(id: string, body: User): Promise<User> {
+    await UserSchema.updateOne(
+      { _id: id },
+      { $set: { ...body, profileCompleted: true } }
+    );
+    const newUser = await UserSchema.findById(id);
+    if (!newUser) throw new Error("Something went wrong");
+    return newUser.toObject();
+  }
 }
