@@ -31,6 +31,7 @@ const UserModel = new mongoose.Schema(
       default: true,
     },
     phonenumber: String,
+    dateofbirth:Date,
     resume: String,
     skills: [String],
     experiences: [{ title: String, description: String, image: String }],
@@ -40,6 +41,7 @@ const UserModel = new mongoose.Schema(
     icon: String,
     location: String,
     about: String,
+    currengDesignation:String,
     education: [
       {
         image: String,

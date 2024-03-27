@@ -7,6 +7,19 @@ export interface IUseCase {
   deleteJob(id: string): Promise<Job>;
   getSpecificJob(id: string): Promise<Job>;
   getJobsWithCompany(companyId: string): Promise<Job[]>;
-  applyJob(body:{userId: string,jobId:string,resume:string}): Promise<Job>;
-  getAllApplicant(companyId: string, limit: number): Promise<Job[]|any>;
+  applyJob(body: {
+    userId: string;
+    jobId: string;
+    resume: string;
+  }): Promise<Job>;
+  getAllApplicant(companyId: string, limit: number): Promise<Job[] | any>;
+  getOneApplicant(jobId: string, applicantId: string): Promise<Job>;
+  changeApplicationStatus(
+    jobId: string,
+    applicantId: string,
+    status: string,
+    description: string,
+    title: string,
+    interviewDate: Date
+  ): Promise<Job>;
 }

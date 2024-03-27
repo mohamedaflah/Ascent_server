@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IUserInteractor } from "../../interfaces/interactor_interface/IUserinteractor";
 import jwt from "jsonwebtoken";
+import { updateUserProducer } from "../../infra/message_broker/kafka/producers/updateUser";
 export class UserController {
   private userInteractor: IUserInteractor;
   constructor(interactor: IUserInteractor) {
@@ -68,6 +69,8 @@ export class UserController {
         req.params.userId,
         req.body
       );
+      console.log(req.body, '*(*(*(*')
+      await updateUserProducer(user._id as string,user)
       res
         .status(200)
         .json({

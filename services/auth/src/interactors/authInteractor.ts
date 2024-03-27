@@ -25,4 +25,11 @@ export class AuthInteractor implements IAuthInteractor {
   async updatePassword(email: string, newPass: string): Promise<User> {
     return await this.repository.updatePassword(email, newPass);
   }
+  async changePassword(
+    email: string,
+    currentPass: string,
+    newPass: string
+  ): Promise<User> {
+    return await this.repository.changePassword(email, currentPass, newPass);
+  }
 }

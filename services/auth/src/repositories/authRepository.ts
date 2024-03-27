@@ -28,7 +28,8 @@ export class AuthRepository implements IAuthRepository {
       });
     } else {
       const nameExist = await AuthSchema.findOne({ name: body.name });
-      if(nameExist) throw new Error(" Company Already Registered with this name")
+      if (nameExist)
+        throw new Error(" Company Already Registered with this name");
       newUser = new AuthSchema({
         name: body.name,
         email: body.email,
@@ -54,15 +55,16 @@ export class AuthRepository implements IAuthRepository {
     return userData.toObject();
   }
   async validateUserData(body: User): Promise<{ status: boolean }> {
-    console.log("🚀 ~ AuthRepository ~ validateUserData ~ body:", body)
+    console.log("🚀 ~ AuthRepository ~ validateUserData ~ body:", body);
     const emailExist = await AuthSchema.findOne({ email: body.email });
 
     if (emailExist) {
       throw new Error("Email already taken!!");
     }
-    if(body.role=="company"){
-      const nameExist=await AuthSchema.findOne({name:body.name})
-      if(nameExist) throw new Error(`Company Already Registered with this name`)
+    if (body.role == "company") {
+      const nameExist = await AuthSchema.findOne({ name: body.name });
+      if (nameExist)
+        throw new Error(`Company Already Registered with this name`);
     }
     return { status: true };
   }
@@ -71,7 +73,7 @@ export class AuthRepository implements IAuthRepository {
     if (emailExist) {
       return emailExist.toObject();
     }
-    
+
     throw new Error(" User not found with this email");
   }
 
@@ -86,5 +88,22 @@ export class AuthRepository implements IAuthRepository {
     } else {
       throw new Error("User not found or password is undefined/null");
     }
+  }
+  async changePassword(
+    email: string,
+    currentPass: string,
+    newPass: string
+  ): Promise<User> {
+    if (!email) throw new Error("Please provide email");
+    const user = await AuthSchema.findOne({ email: email });
+    if (!user?.password) throw new Error("Please provide password");
+    const comparedPass = bcrypt.compareSync(currentPass, user?.password);
+    if (!comparedPass) throw new Error("Incorrect Password");
+    const hashed = bcrypt.hashSync(newPass, 10);
+    await AuthSchema.updateOne(
+      { email: email },
+      { $set: { password: hashed } }
+    );
+    return user.toObject();
   }
 }

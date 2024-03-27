@@ -33,6 +33,25 @@ export class JobUseCase implements IUseCase {
     return await this.repository.applyJob(body);
   }
   async getAllApplicant(companyId: string, limit: number): Promise<any> {
-    return await this.repository.getAllApplicant(companyId,limit);
+    return await this.repository.getAllApplicant(companyId, limit);
+  }
+  async getOneApplicant(jobId: string, applicantId: string): Promise<Job> {
+    return await this.repository.getOneApplicant(jobId, applicantId);
+  }
+  async changeApplicationStatus(
+    jobId: string,
+    applicantId: string,
+    status: string,
+    description: string,
+    title: string,interviewDate: Date
+  ): Promise<Job> {
+    return await this.repository.changeApplicationStatus(
+      jobId,
+      applicantId,
+      status,
+      description,
+      title,
+      interviewDate
+    );
   }
 }

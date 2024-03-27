@@ -41,12 +41,14 @@ export class UserRepository implements IUserRepository {
     }
   }
   async updateProfile(id: string, body: User): Promise<User> {
-    await UserSchema.updateOne(
+    const updatedUser = await UserSchema.findOneAndUpdate(
       { _id: id },
-      { $set: { ...body, profileCompleted: true } }
+      { $set: { ...body, profileCompleted: true } },
+      { new: true } // Return the modified document
     );
-    const newUser = await UserSchema.findById(id);
-    if (!newUser) throw new Error("Something went wrong");
-    return newUser.toObject();
+
+    const newUser = await UserSchema.findOne({ _id: id });
+    if (!newUser) throw new Error(" Something went wrong");
+    return newUser?.toObject();
   }
 }

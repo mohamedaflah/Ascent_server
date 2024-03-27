@@ -9,6 +9,8 @@ import { GetSpecificJob } from "../controllers/jobs/getSpecificjobController";
 import { GetJobsWithCompany } from "../controllers/jobs/getJobwithCompany";
 import { ApplyJob } from "../controllers/jobs/applyJob";
 import { GetAllApplicant } from "../controllers/jobs/getAllApplicant";
+import { GetOneApplicant } from "../controllers/jobs/getOneApplicant";
+import { ChangeApplicationStatus } from "../controllers/jobs/changeStatus";
 
 const router = Router();
 
@@ -23,6 +25,8 @@ const getSpecificjobController = new GetSpecificJob(useCase);
 const companyJobsController = new GetJobsWithCompany(useCase);
 const applyJob = new ApplyJob(useCase);
 const getAllApplicant = new GetAllApplicant(useCase);
+const getSpecific = new GetOneApplicant(useCase);
+const changeApplicationStatus = new ChangeApplicationStatus(useCase);
 router
   .route("/job")
   .post(addJobController.addJob.bind(addJobController))
@@ -37,8 +41,18 @@ router.get(
   "/get-jobs/:companyId",
   companyJobsController.getJobsWithCompany.bind(companyJobsController)
 );
+router.route("/applicants").post(applyJob.applyJob.bind(applyJob));
+router.get(
+  "/applicants/:companyId",
+  getAllApplicant.getAllApplicant.bind(getAllApplicant)
+);
 router
-  .route("/applicants")
-  .post(applyJob.applyJob.bind(applyJob))
-router.get('/applicants/:companyId',getAllApplicant.getAllApplicant.bind(getAllApplicant))  
+  .route("/applicants/:jobId/:applicantId")
+  .get(getSpecific.getOneApplicant.bind(getSpecific))
+  .put(
+    changeApplicationStatus.changeApplicationStatus.bind(
+      changeApplicationStatus
+    )
+  );
+
 export default router;

@@ -8,6 +8,10 @@ cron.schedule("* * * * *", async () => {
       { expiry: { $lte: now }, expired: false }, // Select jobs where expiry date is past and not already marked as expired
       { $set: { expired: true } } // Set expired status to true
     );
+    await jobModel.updateMany(
+      { expiry: { $gte: now }, expired: true }, // Select jobs where expiry date is past and not already marked as expired
+      { $set: { expired: false } } // Set expired status to true
+    )
     const jobs = await jobModel.find();
 
     for (const job of jobs) {

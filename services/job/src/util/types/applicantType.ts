@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export class Job {
+export class Applicant {
   constructor(
     public readonly jobTitle: string,
     public readonly employment: string,
@@ -40,19 +40,11 @@ export class Job {
       statusDescription: {
         title: string;
         description: string;
-        joiningDate: Date;
       };
+      interviewTime: Date;
       interviewDate: Date;
       applicationSeen: boolean;
-      interviewSchedules: {
-        title: String;
-        time: string;
-        status: "Pending" | "Completed";
-        place: string;
-        type:"Online"|"Offline"
-        feedback:String
-      }[];
-    }[]
+    }
   ) {}
 }
 

@@ -23,6 +23,7 @@ authRouter.post(
   controller.checkForgotPassToken.bind(controller)
 );
 authRouter.post(`/resendMail`, controller.resendMail.bind(controller));
+authRouter.put(`/change-pass`,controller.chanagePassword.bind(controller))
 // authRouter.get('/get-user')
 // authRouter.route('')
 export default authRouter;

@@ -7,4 +7,9 @@ export interface IAuthInteractor {
   validateUserData(body: User): Promise<{ status: boolean }>;
   checkEmailExistforForgot(email: string): Promise<User>;
   updatePassword(email: string, newPass: string): Promise<User>;
+  changePassword(
+    email: string,
+    currentPass: string,
+    newPass: string
+  ): Promise<User>;
 }

@@ -3,6 +3,7 @@ import { IJobRepository } from "../application/interfaces/repository_interface/I
 import { Job } from "../domain/entities/JobEntity";
 import jobModel from "../infra/databases/mongodb/models/jobModel";
 import CategoryModel from "../infra/databases/mongodb/models/CategoryModel";
+import { Applicant } from "../util/types/applicantType";
 
 export class JobRepository implements IJobRepository {
   async addJob(body: Job): Promise<Job> {
@@ -342,5 +343,124 @@ export class JobRepository implements IJobRepository {
     ]);
     console.log("🚀 ~ JobRepository ~ applicants:", applicants);
     return applicants;
+  }
+  async getOneApplicant(jobId: string, applicantId: string): Promise<Job> {
+    const applicantDetail = await jobModel.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(jobId),
+          "applicants.applicantId": new mongoose.Types.ObjectId(applicantId),
+        },
+      },
+      {
+        $unwind: "$applicants",
+      },
+      {
+        $match: {
+          "applicants.applicantId": new mongoose.Types.ObjectId(applicantId),
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $unwind: "$categories",
+      },
+      {
+        $set: {
+          category: "$categories.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$categories.categoryId",
+        },
+      },
+      {
+        $project: { categories: 0 },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "applicants.applicantId",
+          foreignField: "_id",
+          as: "applicantDetails",
+        },
+      },
+      {
+        $unwind: "$applicantDetails",
+      },
+    ]);
+    const detail = applicantDetail[0] as unknown as Applicant;
+    if (detail && detail.applicants && !detail.applicants?.applicationSeen) {
+      await jobModel.updateOne(
+        {
+          _id: jobId,
+          "applicants.applicantId": applicantId,
+        },
+        {
+          $set: {
+            "applicants.$.applicationSeen": true,
+            "applicants.$.hiringstage": "Inreview",
+          },
+        }
+      );
+
+      return this.getOneApplicant(jobId, applicantId);
+    }
+
+    return applicantDetail[0];
+  }
+  async changeApplicationStatus(
+    jobId: string,
+    applicantId: string,
+    status:
+      | "Applied"
+      | "Inreview"
+      | "Shortlisted"
+      | "Interview"
+      | "Selected"
+      | "Rejected",
+    description: string,
+    title: string,
+    interviewDate: Date
+  ): Promise<Job> {
+    let applicant;
+    if (status === "Interview") {
+      await jobModel.findOneAndUpdate(
+        {
+          _id: jobId,
+          "applicants.applicantId": applicantId,
+        },
+        {
+          $set: {
+            "applicants.$.hiringstage": status,
+            "applicants.$.statusDescription.title": title,
+            "applicants.$.statusDescription.description": description,
+            "applicants.$.interviewDate": new Date(interviewDate),
+          },
+        }
+      );
+    } else {
+      await jobModel.findOneAndUpdate(
+        {
+          _id: jobId,
+          "applicants.applicantId": applicantId,
+        },
+        {
+          $set: {
+            "applicants.$.hiringstage": status,
+            "applicants.$.statusDescription.title": title,
+            "applicants.$.statusDescription.description": description,
+          },
+        }
+      );
+    }
+    return this.getOneApplicant(jobId, applicantId);
   }
 }

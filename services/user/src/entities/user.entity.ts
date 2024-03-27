@@ -29,6 +29,8 @@ export class User {
       year: { from: Date; to: Date };
       description: string;
     }[],
-    public readonly profileCompleted?: boolean
+    public readonly profileCompleted?: boolean,
+    public readonly dateofbirth?: Date,
+    public readonly currengDesignation?:String
   ) {}
 }

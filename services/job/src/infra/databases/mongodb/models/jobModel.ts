@@ -32,9 +32,42 @@ const JobModel = new mongoose.Schema(
         appliedDate: Date,
         hiringstage: {
           type: String,
-          enum:["Applied","Inreview","Shortlisted","Interview"]
+          enum: [
+            "Applied",
+            "Inreview",
+            "Shortlisted",
+            "Interview",
+            "Rejected",
+            "Selected",
+          ],
+        },
+        interviewDate: Date,
+        statusDescription: {
+          title: String,
+          description: String,
+          joiningDate: Date,
         },
         resume: String,
+        applicationSeen: {
+          type: Boolean,
+          default: false,
+        },
+        interviewSchedules: [
+          {
+            title: String,
+            time: String,
+            status: {
+              type: String,
+              enum: ["Pending", "Completed"],
+            },
+            place: String,
+            type:{
+              type:String,
+              enum:["Online","Offline"]
+            },
+            feedback:String
+          },
+        ],
       },
     ],
   },

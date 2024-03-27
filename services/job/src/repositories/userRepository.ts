@@ -17,7 +17,7 @@ export class UserRepository implements IUserRepository {
     }
   }
   async updateUser(body: User, id: string): Promise<User> {
-    await UserModel.updateOne({ _id: id }, { $set: { body } });
+    await UserModel.updateOne({ _id: id }, { $set: { ...body } });
     const newUser = await UserModel.findById(id);
     if(!newUser) throw new Error(" Something went wrong")
     return newUser?.toObject();

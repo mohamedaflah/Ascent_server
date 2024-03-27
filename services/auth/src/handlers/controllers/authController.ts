@@ -219,7 +219,7 @@ export class AuthController {
   async resendMail(req: Request, res: Response, next: NextFunction) {
     try {
       console.log(` resend api caaling 🎎🎍🎍🎍 ${JSON.stringify(req.body)}`);
-      
+
       const emailInVerify = await OtpSchema.findOne({ email: req.body.email });
       if (!emailInVerify)
         throw new Error("Your Link is Expired please Signup again");
@@ -232,7 +232,21 @@ export class AuthController {
         user: null,
       });
     } catch (error) {
-      console.log("🚀 ~ AuthController ~ resendMail ~ error:", error)
+      console.log("🚀 ~ AuthController ~ resendMail ~ error:", error);
+      next(error);
+    }
+  }
+
+  async chanagePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, currentpass, newpass } = req.body;
+      const user = await this.interactor.changePassword(
+        email,
+        currentpass,
+        newpass
+      );
+      res.json({ status: true, message: "Succesfull" });
+    } catch (error) {
       next(error);
     }
   }
