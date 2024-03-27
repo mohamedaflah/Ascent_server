@@ -8,7 +8,7 @@ export class GetOneApplicant {
   }
   async getOneApplicant(req: Request, res: Response, next: NextFunction) {
     try {
-     console.log('asfd');
+     console.log('__Calling___');
      
       
       const applicant = await this.useCase.getOneApplicant(req.params.jobId,req.params.applicantId);

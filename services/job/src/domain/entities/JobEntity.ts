@@ -49,10 +49,13 @@ export class Job {
         time: string;
         status: "Pending" | "Completed";
         place: string;
-        type:"Online"|"Offline"
-        feedback:String
+        type: "Online" | "Offline";
+        feedback: String;
       }[];
-    }[]
+    }[],
+    public readonly applicantDetails?:{
+      email:string
+    }
   ) {}
 }
 

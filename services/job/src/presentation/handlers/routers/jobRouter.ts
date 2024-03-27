@@ -11,6 +11,7 @@ import { ApplyJob } from "../controllers/jobs/applyJob";
 import { GetAllApplicant } from "../controllers/jobs/getAllApplicant";
 import { GetOneApplicant } from "../controllers/jobs/getOneApplicant";
 import { ChangeApplicationStatus } from "../controllers/jobs/changeStatus";
+import { ScheduleInterview } from "../controllers/jobs/scheduleInterview";
 
 const router = Router();
 
@@ -27,6 +28,7 @@ const applyJob = new ApplyJob(useCase);
 const getAllApplicant = new GetAllApplicant(useCase);
 const getSpecific = new GetOneApplicant(useCase);
 const changeApplicationStatus = new ChangeApplicationStatus(useCase);
+const schedulingInterview = new ScheduleInterview(useCase);
 router
   .route("/job")
   .post(addJobController.addJob.bind(addJobController))
@@ -53,6 +55,7 @@ router
     changeApplicationStatus.changeApplicationStatus.bind(
       changeApplicationStatus
     )
-  );
+  )
+  .patch(schedulingInterview.sheduleInterview.bind(schedulingInterview));
 
 export default router;

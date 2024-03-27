@@ -20,6 +20,15 @@ app.use(cookieParser());
 app.use("/api/v1", router);
 app.use("/api/category", categoryRoute);
 app.use(errorHandler);
-app.listen(process.env.JOB_SERVICE_PORT, () =>
-  console.log("Job service started at port " + process.env.JOB_SERVICE_PORT)
-);
+app.listen(process.env.JOB_SERVICE_PORT, () => {
+  console.log("Job service started at port " + process.env.JOB_SERVICE_PORT);
+  console.log(`
+       _       _                           _          
+      | |     | |                         (_)         
+      | | ___ | |__    ___  ___ _ ____   ___  ___ ___ 
+  _   | |/ _ \| '_ \  / __|/ _ \ '__\ \ / / |/ __/ _ \
+ | |__| | (_) | |_) | \__ \  __/ |   \ V /| | (_|  __/
+  \____/ \___/|_.__/  |___/\___|_|    \_/ |_|\___\___|
+                                                   
+  `);
+});

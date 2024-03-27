@@ -22,4 +22,10 @@ export interface IJobRepository {
     title: string,
     interviewDate: Date
   ): Promise<Job>;
+  scheduleInterview(data: {
+    jobId: string;
+    applicantId: string;
+    time: string;
+    title: string;
+  }): Promise<Job>;
 }

@@ -43,7 +43,8 @@ export class JobUseCase implements IUseCase {
     applicantId: string,
     status: string,
     description: string,
-    title: string,interviewDate: Date
+    title: string,
+    interviewDate: Date
   ): Promise<Job> {
     return await this.repository.changeApplicationStatus(
       jobId,
@@ -53,5 +54,13 @@ export class JobUseCase implements IUseCase {
       title,
       interviewDate
     );
+  }
+  async scheduleInterview(data: {
+    jobId: string;
+    applicantId: string;
+    time: string;
+    title: string;
+  }): Promise<Job> {
+    return await this.repository.scheduleInterview(data);
   }
 }

@@ -43,12 +43,12 @@ export class JobRepository implements IJobRepository {
         $project: { result: 0 },
       },
     ]);
-    console.log("🚀 ~ JobRepository ~ addJob ~ addedJob:", addedJob);
+
 
     return addedJob[0];
   }
   async updateJob(body: Job, id: string): Promise<Job> {
-    console.log("🚀 ~ JobRepository ~ updateJob ~ body:", body);
+    
     let updateObj: any = { ...body };
 
     // Conditionally set the category if it's provided
@@ -136,7 +136,7 @@ export class JobRepository implements IJobRepository {
         $unwind: "$company",
       },
     ]);
-    console.log("🚀 ~ JobRepository ~ getAllJob ~ jobs:", jobs);
+   
     // return await jobModel
     //   .find({ status: true })
     //   .limit(limiit)
@@ -462,5 +462,35 @@ export class JobRepository implements IJobRepository {
       );
     }
     return this.getOneApplicant(jobId, applicantId);
+  }
+  async scheduleInterview(data: {
+    jobId: string;
+    applicantId: string;
+    time: string;
+    title: string;
+  }): Promise<Job> {
+    const interviewScheduleData = {
+      title: data.title,
+      time: data.time,
+    };
+    await jobModel.updateOne(
+      {
+        _id: data.jobId,
+        "applicants.applicantId": data.applicantId,
+      },
+      {
+        $push: {
+          "applicants.$[outer].interviewSchedules": interviewScheduleData,
+        },
+      },
+      {
+        arrayFilters: [
+          {
+            "outer.applicantId": new mongoose.Types.ObjectId(data.applicantId),
+          },
+        ],
+      }
+    );
+    return this.getOneApplicant(data.jobId, data.applicantId);
   }
 }
