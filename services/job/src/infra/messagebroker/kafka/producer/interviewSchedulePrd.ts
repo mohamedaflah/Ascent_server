@@ -4,6 +4,7 @@ export const sendInterviewMail = async (data: {
   description: string;
   date: string;
   email: string;
+  from?:"time"|"date"
 }) => {
   try {
     console.log("interview scheduling sending producer");

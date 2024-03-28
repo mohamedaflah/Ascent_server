@@ -55,10 +55,7 @@ const JobModel = new mongoose.Schema(
         interviewSchedules: [
           {
             title: String,
-            date: {
-              from: Date,
-              to: Date,
-            },
+            time: String,
             status: {
               type: String,
               enum: ["Pending", "Completed"],

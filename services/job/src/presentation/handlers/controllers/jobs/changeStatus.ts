@@ -29,6 +29,7 @@ export class ChangeApplicationStatus {
           description: req.body.description,
           date: req.body.interviewDate,
           email: String(applicant.applicantDetails?.email),
+          from:"date"
         });
       } else {
         await sendApplicationMail({

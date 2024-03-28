@@ -28,6 +28,7 @@ type sendInterviewMail = (data: {
   description: string;
   date: string;
   email: string;
+  from?:"time"|"date"
 }) => Promise<void>;
 
 type GeneralSubscriberFunction =
