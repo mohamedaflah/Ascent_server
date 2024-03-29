@@ -13,7 +13,7 @@ export class CompanyRepository implements ICompanyRepository {
         description: "Waiting for approval",
       },
       profileCompleted: false,
-      profileCompletionStatus:"1%"
+      profileCompletionStatus: "1%",
     });
     return newCompany.toObject();
   }
@@ -48,24 +48,33 @@ export class CompanyRepository implements ICompanyRepository {
     await company.save();
     return company.toObject();
   }
-  async getApprovelCompanies(): Promise<Company[] | any[]> {
+  async getApprovelCompanies(
+    page: number,
+    pageSize: number
+  ): Promise<{ companies: Company[] | any[]; totalPages: number }> {
+    const totalCount = await companyModel.countDocuments({"approvelStatus.status": "Pending"});
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    const skip = (page - 1) * pageSize;
     const companies = await companyModel
       .find({
         "approvelStatus.status": "Pending",
       })
+      .skip(skip)
+      .limit(pageSize)
       .sort({ createdAt: -1 });
-    return companies;
+    return { companies, totalPages };
   }
   async updateProfile(id: string, data: Company): Promise<Company> {
-    console.log("🚀 ~ CompanyRepository ~ updateProfile ~ data:", data)
+    console.log("🚀 ~ CompanyRepository ~ updateProfile ~ data:", data);
     const company = await companyModel.findOne({ _id: id });
     if (!company) throw new Error("Company not found");
     await companyModel.updateOne({ _id: id }, { $set: data });
     const updated = await companyModel.findOne({ _id: id });
     if (updated) {
       return updated?.toObject();
-    }else{
-      throw new Error(`Something went wrong`)
+    } else {
+      throw new Error(`Something went wrong`);
     }
   }
 }

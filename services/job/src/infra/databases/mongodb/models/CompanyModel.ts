@@ -30,7 +30,7 @@ const CompanyModel = new mongoose.Schema(
     approvelStatus: {
       status: {
         type: String,
-        enum: ["Accepted", "Rejected", "Pending"],
+        enum: ["Accepted", "Rejected", "Pending","Message"],
       },
       description: String,
     },

@@ -54,9 +54,32 @@ export class CompanyController {
 
   async getApprovelCompanies(req: Request, res: Response, next: NextFunction) {
     try {
-      const companies = await this.companyInteractor.getApprovelCompanies();
-      res.status(200).json({ status: true, role: "company", companies });
+      const page = req.query.page ?? 1;
+      console.log(
+        "🚀 ~ CompanyController ~ getApprovelCompanies ~ page:",
+        page
+      );
+
+      const pageSize = req.query.pageSize ?? 6;
+      console.log(
+        "🚀 ~ CompanyController ~ getApprovelCompanies ~ pageSize:",
+        pageSize
+      );
+
+      const { companies, totalPages } =
+      await this.companyInteractor.getApprovelCompanies(
+        Number(page),
+        Number(pageSize)
+        );
+        
+      res
+        .status(200)
+        .json({ status: true, role: "company", companies, totalPages });
     } catch (error) {
+      console.log(
+        "🚀 ~ CompanyController ~ getApprovelCompanies ~ error:",
+        error
+      );
       next(error);
     }
   }
@@ -64,12 +87,12 @@ export class CompanyController {
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {
       console.log(` api caling ()(OI)()*I()* ${JSON.stringify(req.body)}`);
-      
+
       const company = await this.companyInteractor.updateProfile(
         req.body.id,
         req.body.data
       );
-      await addCompany(company)
+      await addCompany(company);
       res.status(200).json({
         status: true,
         message: "Successfull!!",
@@ -81,9 +104,8 @@ export class CompanyController {
       next(error);
     }
   }
-  async getCompanyProfile(req:Request,res:Response,next:NextFunction){
+  async getCompanyProfile(req: Request, res: Response, next: NextFunction) {
     try {
-      
       const company = await this.companyInteractor.getCompany(req.params.id);
 
       res.status(200).json({

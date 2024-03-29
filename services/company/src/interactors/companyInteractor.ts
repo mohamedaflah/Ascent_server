@@ -24,8 +24,11 @@ export class CompanyInteractor implements ICompanyInteractor {
     const company = await this.repository.changeStatus(id, status, description);
     return company;
   }
-  async getApprovelCompanies(): Promise<Company[]> {
-    const companies = this.repository.getApprovelCompanies();
+  async getApprovelCompanies(
+    page: number,
+    pageSize: number
+  ): Promise<{ companies: Company[]; totalPages: number }> {
+    const companies = this.repository.getApprovelCompanies(page, pageSize);
     return companies;
   }
   async updateProfile(id: string, data: Company): Promise<Company> {

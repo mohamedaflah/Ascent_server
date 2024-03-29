@@ -26,7 +26,7 @@ export class Company {
     public readonly website?: string,
     public readonly coverImage?: string,
     public readonly approvelStatus?: {
-      status: "Accepted" | "Rejected" | "Pending";
+      status: "Accepted" | "Rejected" | "Pending" |"Message";
       description: string;
     },
     public readonly profileCompleted?: boolean,

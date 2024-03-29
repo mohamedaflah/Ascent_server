@@ -44,11 +44,9 @@ export class JobRepository implements IJobRepository {
       },
     ]);
 
-
     return addedJob[0];
   }
   async updateJob(body: Job, id: string): Promise<Job> {
-    
     let updateObj: any = { ...body };
 
     // Conditionally set the category if it's provided
@@ -89,59 +87,66 @@ export class JobRepository implements IJobRepository {
     if (updatedJob.length <= 0) throw new Error(" job not found");
     return updatedJob[0];
   }
-  async getAllJob(limiit: number): Promise<Job[]> {
-    const jobs = await jobModel.aggregate([
-      {
-        $match: { status: true },
-      },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "category",
-          foreignField: "_id",
-          as: "result",
+  async getAllJob(
+    page: number,
+    pageSize: number
+  ): Promise<{ applicant: Job[]; totalPages: number }> {
+    const totalCount = await jobModel.countDocuments();
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    const skip = (page - 1) * pageSize;
+    const jobs = await jobModel
+      .aggregate([
+        {
+          $match: { status: true },
         },
-      },
-      {
-        $unwind: "$result",
-      },
-      {
-        $set: {
-          category: "$result.categoryname",
+        {
+          $lookup: {
+            from: "categories",
+            localField: "category",
+            foreignField: "_id",
+            as: "result",
+          },
         },
-      },
-      {
-        $addFields: {
-          categoryId: "$result._id",
+        {
+          $unwind: "$result",
         },
-      },
-      {
-        $project: { result: false },
-      },
-      {
-        $sort: { createdAt: -1 },
-      },
-      // {
-      //   $limit: limiit??0,
-      // },
-      {
-        $lookup: {
-          from: "companies",
-          localField: "companyId",
-          foreignField: "_id",
-          as: "company",
+        {
+          $set: {
+            category: "$result.categoryname",
+          },
         },
-      },
-      {
-        $unwind: "$company",
-      },
-    ]);
-   
+        {
+          $addFields: {
+            categoryId: "$result._id",
+          },
+        },
+        {
+          $project: { result: false },
+        },
+        {
+          $sort: { createdAt: -1 },
+        },
+        {
+          $lookup: {
+            from: "companies",
+            localField: "companyId",
+            foreignField: "_id",
+            as: "company",
+          },
+        },
+        {
+          $unwind: "$company",
+        },
+      ])
+      .skip(skip)
+      .limit(pageSize);
+
     // return await jobModel
     //   .find({ status: true })
     //   .limit(limiit)
     //   .sort({ createdAt: -1 });
-    return jobs;
+    return { applicant: jobs, totalPages: totalPages };
   }
   async deleteJob(id: string): Promise<Job> {
     const job = await jobModel.findById(id);
