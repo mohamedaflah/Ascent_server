@@ -72,3 +72,9 @@ export class Applicant {
 //   updatedAt?: Date;
 //   expiry?: Date;
 //   completdJobAdd: "first" | "second";
+export interface JobFilterQuery {
+  status: boolean;
+  expired: boolean;
+  category?: { $in: mongoose.Types.ObjectId[]|string[] };
+  employment?: { $in: string[] };
+}

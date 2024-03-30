@@ -3,7 +3,7 @@ import { IJobRepository } from "../application/interfaces/repository_interface/I
 import { Job } from "../domain/entities/JobEntity";
 import jobModel from "../infra/databases/mongodb/models/jobModel";
 import CategoryModel from "../infra/databases/mongodb/models/CategoryModel";
-import { Applicant } from "../util/types/applicantType";
+import { Applicant, JobFilterQuery } from "../util/types/applicantType";
 
 export class JobRepository implements IJobRepository {
   async addJob(body: Job): Promise<Job> {
@@ -89,16 +89,46 @@ export class JobRepository implements IJobRepository {
   }
   async getAllJob(
     page: number,
-    pageSize: number
+    pageSize: number,
+    category?: string,
+    employment?: string
   ): Promise<{ applicant: Job[]; totalPages: number }> {
-    const totalCount = await jobModel.countDocuments();
+    const totalCount = await jobModel.countDocuments({
+      status: true,
+      expired: false,
+    });
     const totalPages = Math.ceil(totalCount / pageSize);
 
     const skip = (page - 1) * pageSize;
+    console.log(category, " ****");
+    console.log(employment, " ****");
+    let matchConditions: JobFilterQuery = {
+      status: true,
+      expired: false,
+    };
+    
+    if (category && category !== "null" && category.trim() !== "") {
+      const categories = category
+        .split(",")
+        .filter((cat) => cat && cat !== "null" && cat.trim() !== "");
+      if (categories.length > 0) {
+        matchConditions.category = { $in: categories.map(value=>new mongoose.Types.ObjectId(value)) };
+      }
+    }
+
+    if (employment && employment !== "null" && employment.trim() !== "") {
+      const employments = employment
+        .split(",")
+        .filter((emp) => emp && emp !== "null" && emp.trim() !== "");
+      if (employments.length > 0) {
+        matchConditions.employment = { $in: employments };
+      }
+    }
+    
     const jobs = await jobModel
       .aggregate([
         {
-          $match: { status: true },
+          $match: matchConditions,
         },
         {
           $lookup: {
@@ -141,11 +171,8 @@ export class JobRepository implements IJobRepository {
       ])
       .skip(skip)
       .limit(pageSize);
+console.log(matchConditions,' Cond');
 
-    // return await jobModel
-    //   .find({ status: true })
-    //   .limit(limiit)
-    //   .sort({ createdAt: -1 });
     return { applicant: jobs, totalPages: totalPages };
   }
   async deleteJob(id: string): Promise<Job> {
@@ -231,7 +258,7 @@ export class JobRepository implements IJobRepository {
         $unwind: "$company",
       },
     ]);
-    console.log("🚀 ~ JobRepository ~ addJob ~ addedJob:", addedJob);
+    
     if (!job) throw new Error("job not found");
     return addedJob[0];
   }

@@ -13,8 +13,8 @@ export class JobUseCase implements IUseCase {
   async updateJob(body: Job, id: string): Promise<Job> {
     return await this.repository.updateJob(body, id);
   }
-  async getAllJob(page: number,pageSize: number): Promise<{applicant:Job[],totalPages:number}> {
-    return await this.repository.getAllJob(page,pageSize);
+  async getAllJob(page: number,pageSize: number,category?:string,employment?:string): Promise<{applicant:Job[],totalPages:number}> {
+    return await this.repository.getAllJob(page,pageSize,category,employment);
   }
   async deleteJob(id: string): Promise<Job> {
     return await this.repository.deleteJob(id);
