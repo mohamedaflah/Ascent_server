@@ -75,6 +75,10 @@ export class Applicant {
 export interface JobFilterQuery {
   status: boolean;
   expired: boolean;
-  category?: { $in: mongoose.Types.ObjectId[]|string[] };
+  category?: { $in: mongoose.Types.ObjectId[] | string[] };
   employment?: { $in: string[] };
+  jobTitle?: {
+    $regex: RegExp;
+    $options?: string;
+  };
 }

@@ -91,7 +91,8 @@ export class JobRepository implements IJobRepository {
     page: number,
     pageSize: number,
     category?: string,
-    employment?: string
+    employment?: string,
+    search?: string
   ): Promise<{ applicant: Job[]; totalPages: number }> {
     const totalCount = await jobModel.countDocuments({
       status: true,
@@ -100,23 +101,50 @@ export class JobRepository implements IJobRepository {
     const totalPages = Math.ceil(totalCount / pageSize);
 
     const skip = (page - 1) * pageSize;
+
     console.log(category, " ****");
     console.log(employment, " ****");
     let matchConditions: JobFilterQuery = {
       status: true,
       expired: false,
     };
-    
-    if (category && category !== "null" && category.trim() !== "") {
+
+    if (
+      category &&
+      category !== "null" &&
+      category.trim() !== "" &&
+      category !== "undefined"
+    ) {
       const categories = category
         .split(",")
         .filter((cat) => cat && cat !== "null" && cat.trim() !== "");
       if (categories.length > 0) {
-        matchConditions.category = { $in: categories.map(value=>new mongoose.Types.ObjectId(value)) };
+        matchConditions.category = {
+          $in: categories
+            .map((value) => {
+              if (value) {
+                try {
+                  return new mongoose.Types.ObjectId(value);
+                } catch (error) {
+                  console.error(`Invalid ObjectId: ${value}`);
+                }
+              }
+              return null; // Or handle the undefined case accordingly
+            })
+            .filter(
+              (id): id is mongoose.Types.ObjectId =>
+                id instanceof mongoose.Types.ObjectId
+            ), // Filter out null values and keep only valid ObjectIds
+        };
       }
     }
 
-    if (employment && employment !== "null" && employment.trim() !== "") {
+    if (
+      employment &&
+      employment !== "null" &&
+      employment.trim() !== "" &&
+      employment !== "undefined"
+    ) {
       const employments = employment
         .split(",")
         .filter((emp) => emp && emp !== "null" && emp.trim() !== "");
@@ -124,7 +152,13 @@ export class JobRepository implements IJobRepository {
         matchConditions.employment = { $in: employments };
       }
     }
-    
+    if (search && search.trim() !== "" && search !== "undefined" && search!=="null") {
+      matchConditions.jobTitle = {
+        $regex: new RegExp(String(search)),
+        $options: "i",
+      };
+    }
+    console.log("🚀 ~ JobRepository ~ matchConditions:", matchConditions);
     const jobs = await jobModel
       .aggregate([
         {
@@ -171,7 +205,7 @@ export class JobRepository implements IJobRepository {
       ])
       .skip(skip)
       .limit(pageSize);
-console.log(matchConditions,' Cond');
+    console.log("  ",jobs.length, "🚀 ~ JobRepository ~ jobs:");
 
     return { applicant: jobs, totalPages: totalPages };
   }
@@ -258,7 +292,7 @@ console.log(matchConditions,' Cond');
         $unwind: "$company",
       },
     ]);
-    
+
     if (!job) throw new Error("job not found");
     return addedJob[0];
   }
