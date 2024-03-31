@@ -94,16 +94,7 @@ export class JobRepository implements IJobRepository {
     employment?: string,
     search?: string
   ): Promise<{ applicant: Job[]; totalPages: number }> {
-    const totalCount = await jobModel.countDocuments({
-      status: true,
-      expired: false,
-    });
-    const totalPages = Math.ceil(totalCount / pageSize);
-
-    const skip = (page - 1) * pageSize;
-
-    console.log(category, " ****");
-    console.log(employment, " ****");
+   
     let matchConditions: JobFilterQuery = {
       status: true,
       expired: false,
@@ -159,6 +150,10 @@ export class JobRepository implements IJobRepository {
       };
     }
     console.log("🚀 ~ JobRepository ~ matchConditions:", matchConditions);
+    const totalCount = await jobModel.countDocuments(matchConditions);
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    const skip = (page - 1) * pageSize;
     const jobs = await jobModel
       .aggregate([
         {
