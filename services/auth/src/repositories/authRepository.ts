@@ -40,9 +40,13 @@ export class AuthRepository implements IAuthRepository {
     await newUser.save();
     return newUser.toObject();
   }
-  async login(body: LoginBody): Promise<User> {
+  async login(
+    body: LoginBody,
+    role?: "user" | "admin" | "company"
+  ): Promise<User> {
     const userData = await AuthSchema.findOne({ email: body.email });
-    if (!userData) {
+    console.log("🚀 ~ AuthRepository ~ login ~ userData:", userData);
+    if (!userData || userData.role !== role) {
       throw new Error("User not found");
     }
     const passMatch: boolean = bcrypt.compareSync(

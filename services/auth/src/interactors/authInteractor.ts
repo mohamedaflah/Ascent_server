@@ -12,8 +12,8 @@ export class AuthInteractor implements IAuthInteractor {
     const user = await this.repository.signup(body);
     return user;
   }
-  async login(body: LoginBody): Promise<User> {
-    const user = await this.repository.login(body);
+  async login(body: LoginBody,role?:"user"|"admin"|"company"): Promise<User> {
+    const user = await this.repository.login(body,role);
     return user;
   }
   async validateUserData(body: User): Promise<{ status: boolean }> {

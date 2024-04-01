@@ -45,12 +45,10 @@ export class AuthController {
   }
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log("calling");
-
       const body = req.body;
       if (req.body.email === "admin@gmail.com") {
       }
-      const user = await this.interactor.login(body);
+      const user = await this.interactor.login(body, req.body.role);
       const token = generateToken({
         id: String(user._id),
         role: user.role as "user" | "admin" | "company",
