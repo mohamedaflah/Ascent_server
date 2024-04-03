@@ -10,6 +10,7 @@ export class CreateMessageController {
   async createMessage(req: Request, res: Response, next: NextFunction) {
     try {
       const message = await this.useCase.createMessage(req.body);
+      console.log("🚀 ~ CreateMessageController ~ createMessage ~ message:", message)
       res.status(200).json({ status: true, message });
     } catch (error) {
       next(error);
