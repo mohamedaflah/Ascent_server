@@ -67,11 +67,11 @@ export class CompanyController {
       );
 
       const { companies, totalPages } =
-      await this.companyInteractor.getApprovelCompanies(
-        Number(page),
-        Number(pageSize)
+        await this.companyInteractor.getApprovelCompanies(
+          Number(page),
+          Number(pageSize)
         );
-        
+
       res
         .status(200)
         .json({ status: true, role: "company", companies, totalPages });
@@ -112,6 +112,19 @@ export class CompanyController {
         status: true,
         message: "Successfull!!",
         user: company,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAllcompanies(req: Request, res: Response, next: NextFunction) {
+    try {
+      const company = await this.companyInteractor.getAllCompanies();
+
+      res.status(200).json({
+        status: true,
+        message: "Successfull!!",
+        companies: company,
       });
     } catch (error) {
       next(error);

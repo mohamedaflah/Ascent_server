@@ -17,6 +17,16 @@ export const addCompany = async (data: Company) => {
             },
           ],
         },
+        // COMMUNICATION_SERVICE_TOPIC=communication-service-topic
+        {
+          topic: process.env.COMMUNICATION_SERVICE_TOPIC as string,
+          messages: [
+            {
+              key: process.env.ADD_COMPANY_SUBSCIBER_KEY as string,
+              value: JSON.stringify(data),
+            },
+          ],
+        },
       ];
       producer.sendBatch({ topicMessages: messages });
     } catch (error) {

@@ -21,5 +21,9 @@ userRouter.patch(
   `/update-profile/:userId`,
   userController.updateProfile.bind(userController)
 );
+userRouter.get(
+  "/get-allusers",
+  userController.getAllusres.bind(userController)
+);
 
 export default userRouter;

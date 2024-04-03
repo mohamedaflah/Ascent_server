@@ -52,7 +52,9 @@ export class CompanyRepository implements ICompanyRepository {
     page: number,
     pageSize: number
   ): Promise<{ companies: Company[] | any[]; totalPages: number }> {
-    const totalCount = await companyModel.countDocuments({"approvelStatus.status": "Pending"});
+    const totalCount = await companyModel.countDocuments({
+      "approvelStatus.status": "Pending",
+    });
     const totalPages = Math.ceil(totalCount / pageSize);
 
     const skip = (page - 1) * pageSize;
@@ -76,5 +78,10 @@ export class CompanyRepository implements ICompanyRepository {
     } else {
       throw new Error(`Something went wrong`);
     }
+  }
+
+  async getAllCompanies(): Promise<Company[] | any[]> {
+    const companies = await companyModel.find().sort({ createdAt: -1 });
+    return companies;
   }
 }

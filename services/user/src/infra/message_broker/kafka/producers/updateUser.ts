@@ -14,6 +14,15 @@ export const updateUserProducer = async (id: string, user: User) => {
           },
         ],
       },
+      {
+        topic: process.env.COMMUNICATION_SERVICE_TOPIC as string,
+        messages: [
+          {
+            key: process.env.UPDATE_USER_JOB_SERVICE_KEY as string,
+            value: JSON.stringify({ id, user }),
+          },
+        ],
+      },
     ];
     producer.sendBatch({ topicMessages: messages });
   } catch (error) {
