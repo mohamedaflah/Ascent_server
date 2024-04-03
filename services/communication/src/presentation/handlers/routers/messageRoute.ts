@@ -23,7 +23,7 @@ messageRouter
 
 messageRouter
   .route("/messages/:messageId")
-  .put(deleteMessageController.deleteMessage.bind(deleteMessageController))
+  .delete(deleteMessageController.deleteMessage.bind(deleteMessageController))
   .patch(updateMessageController.updateMessage.bind(updateMessageController));
 
 messageRouter

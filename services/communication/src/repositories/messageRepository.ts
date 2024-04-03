@@ -9,6 +9,7 @@ export class MessageRepository implements IMessageRepository {
     return newMessage.toObject();
   }
   async deleteMessage(messageId: string): Promise<Message> {
+    console.log("🚀 ~ MessageRepository ~ deleteMessage ~ messageId:", messageId)
     const message = await MessageModel.findByIdAndUpdate(messageId, {
       $set: { deleteStatus: true },
     });
