@@ -81,7 +81,7 @@ export class CompanyRepository implements ICompanyRepository {
   }
 
   async getAllCompanies(): Promise<Company[] | any[]> {
-    const companies = await companyModel.find().sort({ createdAt: -1 });
+    const companies = await companyModel.find({"approvelStatus.status":"Accepted"}).sort({ createdAt: -1 });
     return companies;
   }
 }

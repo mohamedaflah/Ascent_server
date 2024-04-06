@@ -11,9 +11,9 @@ export class CompanyAddConsumer {
   async addCompany(body: Company) {
     try {
       const user = await this.companyUseCase.addCompany(body);
-      console.log("🚀 ~ UserAddConsumer ~ addUser ~ user:", user);
+      console.log("🚀 ~ company ~ addUser ~ user:", user);
     } catch (error) {
-      console.log("🚀 ~ UserAddConsumer ~ addUser ~ error:", error);
+      console.log("🚀 ~ company ~ addUser ~ error:", error);
     }
   }
 }

@@ -3,6 +3,8 @@ import { subscriber } from "../subscriber/subscriber";
 
 export const runConsumer = async () => {
   try {
+    console.log("consumer running 🎈🎈",process.env.JOB_SERVICE_TOPIC);
+    
     await consumer.connect();
 
     await consumer.subscribe({

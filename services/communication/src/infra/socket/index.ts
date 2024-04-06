@@ -1,6 +1,10 @@
 import { Socket } from "socket.io";
 import { server } from "../../presentation/app";
 import { Message } from "../../domain/entities/message.entitie";
+import {
+  VideoCallDecline,
+  VideoCallPayload,
+} from "../../util/types/videoCallSocketEventType";
 
 const socket = require("socket.io");
 const io: Socket = socket(server, {
@@ -28,6 +32,10 @@ io.on("connection", (socket: Socket) => {
     }
     console.log(onlineUsers);
   });
+  function checkUserOnline(userId: string) {
+    const user = onlineUsers.find((value) => value.id === userId);
+    return user;
+  }
 
   socket.on("send-message", (data: { reciverId: string; data: Message }) => {
     const reciever = onlineUsers.find((value) => value.id === data.reciverId);
@@ -37,13 +45,6 @@ io.on("connection", (socket: Socket) => {
       socket.to(reciever.socketId).emit("get-message", data.data);
     }
   });
-
-  // socket?.emit("stopTyping", {
-  //   chatId: chatId,
-  //   message: "stop typing",
-  //   recieverdId: selectedUser?._id,
-  //   senderId: user?._id,
-  // });
 
   socket.on(
     "typing",
@@ -55,10 +56,10 @@ io.on("connection", (socket: Socket) => {
       recievedId: string;
     }) => {
       const user = onlineUsers.find((value) => value.id == data.recievedId);
-      console.log("🚀 ~ io.on ~ user:", user)
-      console.log("🚀 ~ io.on ~ user:", data.recievedId)
+      console.log("🚀 ~ io.on ~ user:", user);
+      console.log("🚀 ~ io.on ~ user:", data.recievedId);
       console.log(onlineUsers.length);
-      
+
       if (user) {
         socket.to(user.socketId).emit("typing", data);
       }
@@ -74,11 +75,53 @@ io.on("connection", (socket: Socket) => {
       senderId: string;
     }) => {
       const user = onlineUsers.find((value) => value.id == data.recieverdId);
-      if(user){
-        socket.to(user.socketId).emit("stopTyping",data)
+      if (user) {
+        socket.to(user.socketId).emit("stopTyping", data);
       }
     }
   );
+
+  socket.on(
+    "delete-message",
+    (data: {
+      chatId: string;
+      senderId: string;
+      recieverId: string;
+      message: string;
+      messageId: string;
+    }) => {
+      const user = onlineUsers.find((value) => value.id == data.recieverId);
+      if (user) {
+        socket.to(user.socketId).emit("delete-message", data);
+      }
+    }
+  );
+
+  // call receive
+
+  socket.on("video-call", (data: VideoCallPayload) => {
+    const user = checkUserOnline(data.recieverId);
+
+    if (user) {
+      console.log(" vidoe calling ");
+      socket.to(user.socketId).emit("video-call", data);
+    }
+  });
+
+  // socket?.emit("decline-call", {
+  //   callId: videoCallData?.callId,
+  //   senderId: user?._id,
+  //   senderProfile: user?.icon,
+  //   message: "Decline Call",
+  //   senderName: user?.firstname,
+  // });
+
+  socket.on("decline-call", (data: VideoCallDecline) => {
+    const user = checkUserOnline(data.reciverId);
+    if (user) {
+      socket.to(user.socketId).emit("decline-call", data);
+    }
+  });
 
   //   user leaving or diesconnecting event
   socket.on("disconnect", () => {
