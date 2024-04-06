@@ -25,6 +25,16 @@ companyRoute.get(
   "/get-approvelcompanies",
   companyController.getApprovelCompanies.bind(companyController)
 );
-companyRoute.get('/get-company/:id',companyController.getCompanyProfile.bind(companyController))
-companyRoute.post('/update-profile',companyController.updateProfile.bind(companyController))
+companyRoute.get(
+  "/get-company/:id",
+  companyController.getCompanyProfile.bind(companyController)
+);
+companyRoute.post(
+  "/update-profile",
+  companyController.updateProfile.bind(companyController)
+);
+companyRoute.get(
+  "/get-allcompanies",
+  companyController.getAllcompanies.bind(companyController)
+);
 export default companyRoute;

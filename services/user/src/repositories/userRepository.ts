@@ -51,4 +51,9 @@ export class UserRepository implements IUserRepository {
     if (!newUser) throw new Error(" Something went wrong");
     return newUser?.toObject();
   }
+  async getAllusers(): Promise<User[]|any[]> {
+    const allUsers =await UserSchema.find().sort({ createdAt: -1 });
+   
+    return allUsers;
+  }
 }

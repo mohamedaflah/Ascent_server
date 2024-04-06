@@ -22,4 +22,8 @@ export class UserInteractor implements IUserInteractor {
   async updateProfile(id: string, body: User): Promise<User> {
     return await this.userRepository.updateProfile(id, body);
   }
+  async getAllusers(): Promise<User[]|any[]> {
+    const users=await this.userRepository.getAllusers();
+    return users 
+  }
 }

@@ -2,7 +2,7 @@ import e, { NextFunction, Request, Response } from "express";
 import { ICompanyInteractor } from "../../interfaces/interactor_interface/ICompanyInteractor";
 import { getPayload } from "../../utils/getPayload";
 import { rejectMailProducer } from "../../intfrastructure/messagebrokers/kafka/producers/rejectMailProducer";
-import { addCompany } from "../../intfrastructure/messagebrokers/kafka/producers/addCompanyProducer";
+import { addCompanyProducer } from "../../intfrastructure/messagebrokers/kafka/producers/addCompanyProducer";
 
 export class CompanyController {
   private companyInteractor: ICompanyInteractor;
@@ -41,6 +41,9 @@ export class CompanyController {
       if (status === "Rejected") {
         await rejectMailProducer(company.email, description);
       }
+      if(status==="Accepted"){
+        await addCompanyProducer(company)
+      }
       res.status(200).json({
         status: true,
         message: "Success",
@@ -67,11 +70,11 @@ export class CompanyController {
       );
 
       const { companies, totalPages } =
-      await this.companyInteractor.getApprovelCompanies(
-        Number(page),
-        Number(pageSize)
+        await this.companyInteractor.getApprovelCompanies(
+          Number(page),
+          Number(pageSize)
         );
-        
+
       res
         .status(200)
         .json({ status: true, role: "company", companies, totalPages });
@@ -92,7 +95,7 @@ export class CompanyController {
         req.body.id,
         req.body.data
       );
-      await addCompany(company);
+      await addCompanyProducer(company);
       res.status(200).json({
         status: true,
         message: "Successfull!!",
@@ -112,6 +115,19 @@ export class CompanyController {
         status: true,
         message: "Successfull!!",
         user: company,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async getAllcompanies(req: Request, res: Response, next: NextFunction) {
+    try {
+      const company = await this.companyInteractor.getAllCompanies();
+
+      res.status(200).json({
+        status: true,
+        message: "Successfull!!",
+        companies: company,
       });
     } catch (error) {
       next(error);

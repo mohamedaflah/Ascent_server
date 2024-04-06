@@ -5,4 +5,5 @@ export interface IUserInteractor {
   getUserData(id: string): Promise<User>;
   updatePassword(newPass: string, id: string): Promise<User>;
   updateProfile(id: string, body: User): Promise<User>;
+  getAllusers(): Promise<User[]|any[]>;
 }

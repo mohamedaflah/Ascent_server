@@ -14,6 +14,15 @@ export const addUserProducer = async (user: User) => {
           },
         ],
       },
+      {
+        topic: process.env.COMMUNICATION_SERVICE_TOPIC as string,
+        messages: [
+          {
+            key: process.env.ADD_USER_JOB_SERVICE_KEY as string,
+            value: JSON.stringify(user),
+          },
+        ],
+      },
     ];
     producer.sendBatch({ topicMessages: messages });
   } catch (error) {

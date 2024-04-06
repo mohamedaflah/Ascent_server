@@ -69,17 +69,25 @@ export class UserController {
         req.params.userId,
         req.body
       );
-      console.log(req.body, '*(*(*(*')
-      await updateUserProducer(user._id as string,user)
-      res
-        .status(200)
-        .json({
-          status: true,
-          user,
-          message: "Success!!",
-          role: user.role,
-          id: user._id,
-        });
+      console.log(req.body, "*(*(*(*");
+      await updateUserProducer(user._id as string, user);
+      res.status(200).json({
+        status: true,
+        user,
+        message: "Success!!",
+        role: user.role,
+        id: user._id,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAllusres(req: Request, res: Response, next: NextFunction) {
+    try {
+      const users =await this.userInteractor.getAllusers();
+      
+      res.status(200).json({ status: true, message: "Succesfull!", users });
     } catch (error) {
       next(error);
     }
