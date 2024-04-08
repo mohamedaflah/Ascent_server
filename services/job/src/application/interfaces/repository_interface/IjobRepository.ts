@@ -34,4 +34,5 @@ export interface IJobRepository {
     time: string;
     title: string;
   }): Promise<Job>;
+  getSelectedAndRejectedCandidates(companyId: string): Promise<Applicant[]>;
 }

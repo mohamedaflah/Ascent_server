@@ -1,4 +1,5 @@
 import { Job } from "../../domain/entities/JobEntity";
+import { Applicant } from "../../util/types/applicantType";
 import { IJobRepository } from "../interfaces/repository_interface/IjobRepository";
 import { IUseCase } from "../interfaces/userCase_interface/IuseCase";
 
@@ -74,5 +75,8 @@ export class JobUseCase implements IUseCase {
     title: string;
   }): Promise<Job> {
     return await this.repository.scheduleInterview(data);
+  }
+  async getSelectedAndRejectedCandidates(companyId: string): Promise<Applicant[]> {
+    return this.repository.getSelectedAndRejectedCandidates(companyId);
   }
 }

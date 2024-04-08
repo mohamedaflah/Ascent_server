@@ -12,6 +12,8 @@ import { GetAllApplicant } from "../controllers/jobs/getAllApplicant";
 import { GetOneApplicant } from "../controllers/jobs/getOneApplicant";
 import { ChangeApplicationStatus } from "../controllers/jobs/changeStatus";
 import { ScheduleInterview } from "../controllers/jobs/scheduleInterview";
+import { GetSelectedAndRejectedCandidates } from "../controllers/jobs/getSelectedAndRejctedCandidate";
+import { DownloadCandidateReport } from "../controllers/jobs/downloadCandidate";
 
 const router = Router();
 
@@ -29,6 +31,8 @@ const getAllApplicant = new GetAllApplicant(useCase);
 const getSpecific = new GetOneApplicant(useCase);
 const changeApplicationStatus = new ChangeApplicationStatus(useCase);
 const schedulingInterview = new ScheduleInterview(useCase);
+const candidates = new GetSelectedAndRejectedCandidates(useCase);
+const candidateReportDownload = new DownloadCandidateReport(useCase);
 router
   .route("/job")
   .post(addJobController.addJob.bind(addJobController))
@@ -57,5 +61,15 @@ router
     )
   )
   .patch(schedulingInterview.sheduleInterview.bind(schedulingInterview));
+router
+  .route(`/candidates`)
+  .post(candidates.getCandidateisSelectedAndRejected.bind(candidates));
 
+router
+  .route("/download-candidate-report")
+  .get(
+    candidateReportDownload.downloadCandidateReport.bind(
+      candidateReportDownload
+    )
+  );
 export default router;

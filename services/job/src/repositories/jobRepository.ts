@@ -94,7 +94,6 @@ export class JobRepository implements IJobRepository {
     employment?: string,
     search?: string
   ): Promise<{ applicant: Job[]; totalPages: number }> {
-   
     let matchConditions: JobFilterQuery = {
       status: true,
       expired: false,
@@ -143,7 +142,12 @@ export class JobRepository implements IJobRepository {
         matchConditions.employment = { $in: employments };
       }
     }
-    if (search && search.trim() !== "" && search !== "undefined" && search!=="null") {
+    if (
+      search &&
+      search.trim() !== "" &&
+      search !== "undefined" &&
+      search !== "null"
+    ) {
       matchConditions.jobTitle = {
         $regex: new RegExp(String(search)),
         $options: "i",
@@ -200,7 +204,7 @@ export class JobRepository implements IJobRepository {
       ])
       .skip(skip)
       .limit(pageSize);
-    console.log("  ",jobs.length, "🚀 ~ JobRepository ~ jobs:");
+    console.log("  ", jobs.length, "🚀 ~ JobRepository ~ jobs:");
 
     return { applicant: jobs, totalPages: totalPages };
   }
@@ -553,5 +557,61 @@ export class JobRepository implements IJobRepository {
       }
     );
     return this.getOneApplicant(data.jobId, data.applicantId);
+  }
+  async getSelectedAndRejectedCandidates(companyId: string): Promise<Applicant[]> {
+    console.log(
+      "🚀 ~ JobRepository ~ getSelectedAndRejectedCandidates ~ companyId:",
+      companyId
+    );
+    const applicants = await jobModel.aggregate([
+      {
+        $match: { companyId: new mongoose.Types.ObjectId(companyId) },
+      },
+      {
+        $unwind: "$applicants",
+      },
+      {
+        $match: {
+          "applicants.hiringstage": { $in: ["Selected", "Rejected"] },
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $unwind: "$categories",
+      },
+      {
+        $set: {
+          category: "$categories.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$categories.categoryId",
+        },
+      },
+      {
+        $project: { categories: 0 },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "applicants.applicantId",
+          foreignField: "_id",
+          as: "applicantDetails",
+        },
+      },
+      {
+        $unwind: "$applicantDetails",
+      },
+    ]);
+    console.log("🚀 ~ JobRepository ~ getSelectedAndRejectedCandidates ~ applicants:", applicants)
+    return applicants;
   }
 }

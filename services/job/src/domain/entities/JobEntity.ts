@@ -53,8 +53,10 @@ export class Job {
         feedback: String;
       }[];
     }[],
-    public readonly applicantDetails?:{
-      email:string
+    public readonly applicantDetails?: {
+      email: string;
+      firstname: string;
+      lastname: string;
     }
   ) {}
 }

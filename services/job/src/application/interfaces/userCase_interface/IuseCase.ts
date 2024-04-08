@@ -1,4 +1,5 @@
 import { Job } from "../../../domain/entities/JobEntity";
+import { Applicant } from "../../../util/types/applicantType";
 
 export interface IUseCase {
   addJob(body: Job): Promise<Job>;
@@ -34,4 +35,5 @@ export interface IUseCase {
     time: string;
     title: string;
   }): Promise<Job>;
+  getSelectedAndRejectedCandidates(companyId: string): Promise<Applicant[]>;
 }
