@@ -46,7 +46,7 @@ export class AuthRepository implements IAuthRepository {
   ): Promise<User> {
     const userData = await AuthSchema.findOne({ email: body.email });
     console.log("🚀 ~ AuthRepository ~ login ~ userData:", userData);
-    if (!userData || userData.role !== role) {
+    if (!userData ) { //|| userData.role !== role
       throw new Error("User not found");
     }
     const passMatch: boolean = bcrypt.compareSync(

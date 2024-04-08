@@ -76,7 +76,18 @@ export class JobUseCase implements IUseCase {
   }): Promise<Job> {
     return await this.repository.scheduleInterview(data);
   }
-  async getSelectedAndRejectedCandidates(companyId: string): Promise<Applicant[]> {
+  async getSelectedAndRejectedCandidates(
+    companyId: string
+  ): Promise<Applicant[]> {
     return this.repository.getSelectedAndRejectedCandidates(companyId);
+  }
+  async updateInterviewFeedback(data: {
+    jobId: string;
+    applicantId: string;
+    interivewId: string;
+    feedbackDescription: string;
+    feedback: string;
+  }): Promise<Applicant> {
+    return await this.repository.updateInterviewFeedback(data);
   }
 }

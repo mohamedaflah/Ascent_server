@@ -14,6 +14,10 @@ import { ChangeApplicationStatus } from "../controllers/jobs/changeStatus";
 import { ScheduleInterview } from "../controllers/jobs/scheduleInterview";
 import { GetSelectedAndRejectedCandidates } from "../controllers/jobs/getSelectedAndRejctedCandidate";
 import { DownloadCandidateReport } from "../controllers/jobs/downloadCandidate";
+import { AddCompany } from "../controllers/Company/AddCompany";
+import { CompanyRepository } from "../../../repositories/companyRepository";
+import { CompanyUseCase } from "../../../application/useCases/companyUseCase";
+import { InterviewFeedback } from "../controllers/jobs/InterviewFeedback";
 
 const router = Router();
 
@@ -33,6 +37,12 @@ const changeApplicationStatus = new ChangeApplicationStatus(useCase);
 const schedulingInterview = new ScheduleInterview(useCase);
 const candidates = new GetSelectedAndRejectedCandidates(useCase);
 const candidateReportDownload = new DownloadCandidateReport(useCase);
+const interviewFeedback = new InterviewFeedback(useCase);
+
+const companyRepo = new CompanyRepository();
+const companyUsecase = new CompanyUseCase(companyRepo);
+const addCompany = new AddCompany(companyUsecase);
+
 router
   .route("/job")
   .post(addJobController.addJob.bind(addJobController))
@@ -72,4 +82,8 @@ router
       candidateReportDownload
     )
   );
+router.post("/add-company", addCompany.addCompany.bind(addCompany));
+router
+  .route("/interview-feedback")
+  .put(interviewFeedback.updateInterviewFeedback.bind(interviewFeedback));
 export default router;

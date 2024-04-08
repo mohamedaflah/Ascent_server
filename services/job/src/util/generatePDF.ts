@@ -1,22 +1,21 @@
 import { format } from "date-fns";
-const PDFDocument = require("pdfkit");
-const fs = require("fs");
-
+import PDFDocument from 'pdfkit'
+import fs from 'fs'
 export const generatePDF = async (applicants: any) => {
   const doc = new PDFDocument();
   doc.pipe(fs.createWriteStream("Report.pdf"));
 
   // Company Logo
-  doc.image("ASCENT.png", 45, 10, { width: 100 });
+  doc.image("ASCENT.png", 20, 22, { width: 100 });
 
   // Downloaded Date
   doc
     .fontSize(12)
-    .text(`Downloaded Date: ${format(new Date(), 'PPP')}`, 400, 30, {
+    .text(`Downloaded Date: ${format(new Date(), 'PPP')}`, 350, 30, {
       align: "right",
     });
 
-  let currentY = 100;
+  let currentY = 90;
 
   // Table Headers
   const headers = ["Job Title", "Applicant Name", "Applicant Email", "Applied Date", "Hiring Stage"];
@@ -30,7 +29,7 @@ export const generatePDF = async (applicants: any) => {
   currentY += 20;
 
   // Draw a line
-  doc.moveTo(20, currentY).lineTo(700, currentY).stroke();
+  doc.moveTo(20, currentY).lineTo(580, currentY).stroke("#c5cdd9");
 
   currentY += 10;
 
@@ -51,7 +50,7 @@ export const generatePDF = async (applicants: any) => {
 
     rowContent.forEach((text, i) => {
       // Ensure content fits within column width
-      const maxWidth = columnPositions[i + 1] - columnPositions[i] - 10;
+      const maxWidth = columnPositions[i + 1] - columnPositions[i] - 30;
       const textWidth = doc.widthOfString(text);
       if (textWidth > maxWidth) {
         // Truncate text if it exceeds column width

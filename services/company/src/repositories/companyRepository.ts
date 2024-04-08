@@ -5,6 +5,10 @@ import bcrypt from "bcrypt";
 export class CompanyRepository implements ICompanyRepository {
   async addCompany(data: Company): Promise<Company> {
     const password = bcrypt.hashSync(data.password, 10);
+    const company = await companyModel.findOne({ _id: data?._id });
+    if (company) {
+      return company.toObject();
+    }
     const newCompany = await companyModel.create({
       ...data,
       password,
@@ -81,7 +85,9 @@ export class CompanyRepository implements ICompanyRepository {
   }
 
   async getAllCompanies(): Promise<Company[] | any[]> {
-    const companies = await companyModel.find({"approvelStatus.status":"Accepted"}).sort({ createdAt: -1 });
+    const companies = await companyModel
+      .find({ "approvelStatus.status": "Accepted" })
+      .sort({ createdAt: -1 });
     return companies;
   }
 }

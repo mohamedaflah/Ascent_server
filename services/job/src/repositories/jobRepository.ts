@@ -558,7 +558,9 @@ export class JobRepository implements IJobRepository {
     );
     return this.getOneApplicant(data.jobId, data.applicantId);
   }
-  async getSelectedAndRejectedCandidates(companyId: string): Promise<Applicant[]> {
+  async getSelectedAndRejectedCandidates(
+    companyId: string
+  ): Promise<Applicant[]> {
     console.log(
       "🚀 ~ JobRepository ~ getSelectedAndRejectedCandidates ~ companyId:",
       companyId
@@ -611,7 +613,42 @@ export class JobRepository implements IJobRepository {
         $unwind: "$applicantDetails",
       },
     ]);
-    console.log("🚀 ~ JobRepository ~ getSelectedAndRejectedCandidates ~ applicants:", applicants)
+    console.log(
+      "🚀 ~ JobRepository ~ getSelectedAndRejectedCandidates ~ applicants:",
+      applicants
+    );
     return applicants;
+  }
+
+  async updateInterviewFeedback(data: {
+    jobId: string;
+    applicantId: string;
+    interivewId: string;
+    feedbackDescription: string;
+    feedback: string;
+  }): Promise<Applicant | any> {
+    const application = await jobModel.findOneAndUpdate(
+      {
+        _id: data.jobId,
+        "applicants.applicantId": data.applicantId,
+        "applicants.interviewSchedules._id": data.interivewId,
+      },
+      {
+        $set: {
+          "applicants.$[applicant].interviewSchedules.$[schedule].feedback":
+            data.feedback,
+          "applicants.$[applicant].interviewSchedules.$[schedule].feedbackDescription":
+            data.feedbackDescription,
+        },
+      },
+      {
+        arrayFilters: [
+          { "applicant.applicantId": data.applicantId },
+          { "schedule._id": data.interivewId },
+        ],
+      }
+    );
+    console.log("🚀 ~ JobRepository ~ application:", application)
+    return this.getOneApplicant(data.jobId, data.applicantId)
   }
 }

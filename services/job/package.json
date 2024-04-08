@@ -18,6 +18,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",
     "ascent-errorhandler": "^1.0.0",
+    "axios": "^1.6.8",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",

@@ -36,4 +36,11 @@ export interface IUseCase {
     title: string;
   }): Promise<Job>;
   getSelectedAndRejectedCandidates(companyId: string): Promise<Applicant[]>;
+  updateInterviewFeedback(data: {
+    jobId: string;
+    applicantId: string;
+    interivewId: string;
+    feedbackDescription: string;
+    feedback: string;
+  }): Promise<Applicant>;
 }

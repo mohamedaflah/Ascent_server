@@ -60,6 +60,8 @@ const JobModel = new mongoose.Schema(
               type: String,
               enum: ["Pending", "Completed"],
             },
+            feedback: String,
+            feedbackDescription: String,
           },
         ],
       },

@@ -24,6 +24,8 @@ app.use(
 (async () => {
   await runConsumer();
   process.on("SIGTERM", async () => {
+    console.log("Stoping ");
+    
     stopConsumer();
   });
 })();

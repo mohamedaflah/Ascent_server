@@ -51,6 +51,7 @@ export class Job {
         place: string;
         type: "Online" | "Offline";
         feedback: String;
+        feedbackDescription: String;
       }[];
     }[],
     public readonly applicantDetails?: {

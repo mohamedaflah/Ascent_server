@@ -1,4 +1,5 @@
 import { Job } from "../../../domain/entities/JobEntity";
+import { Applicant } from "../../../util/types/applicantType";
 
 export interface IJobRepository {
   addJob(body: Job): Promise<Job>;
@@ -35,4 +36,11 @@ export interface IJobRepository {
     title: string;
   }): Promise<Job>;
   getSelectedAndRejectedCandidates(companyId: string): Promise<Applicant[]>;
+  updateInterviewFeedback(data: {
+    jobId: string;
+    applicantId: string;
+    interivewId: string;
+    feedbackDescription: string;
+    feedback: string;
+  }): Promise<Applicant>;
 }

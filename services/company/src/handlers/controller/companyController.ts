@@ -3,6 +3,7 @@ import { ICompanyInteractor } from "../../interfaces/interactor_interface/ICompa
 import { getPayload } from "../../utils/getPayload";
 import { rejectMailProducer } from "../../intfrastructure/messagebrokers/kafka/producers/rejectMailProducer";
 import { addCompanyProducer } from "../../intfrastructure/messagebrokers/kafka/producers/addCompanyProducer";
+import axios from "axios";
 
 export class CompanyController {
   private companyInteractor: ICompanyInteractor;
@@ -43,6 +44,10 @@ export class CompanyController {
       }
       if(status==="Accepted"){
         await addCompanyProducer(company)
+        console.log(`String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company`);
+        
+        await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/v1/add-company`,{...company})
+        await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company`,{...company})
       }
       res.status(200).json({
         status: true,
@@ -95,7 +100,9 @@ export class CompanyController {
         req.body.id,
         req.body.data
       );
-      await addCompanyProducer(company);
+      // await addCompanyProducer(company);
+      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/v1/add-company`,{...company})
+      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company`,{...company})
       res.status(200).json({
         status: true,
         message: "Successfull!!",
