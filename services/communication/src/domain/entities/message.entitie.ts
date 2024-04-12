@@ -19,6 +19,7 @@ export class Message {
     public readonly _id?: Date,
     public readonly senderName?: String,
     public readonly senderProfile?: String,
-    public readonly ChatId?: mongoose.Types.ObjectId
+    public readonly ChatId?: mongoose.Types.ObjectId,
+    public  reciverId?: string
   ) {}
 }

@@ -495,7 +495,6 @@ export class JobRepository implements IJobRepository {
     title: string,
     interviewDate: Date
   ): Promise<Job> {
-    let applicant;
     if (status === "Interview") {
       await jobModel.findOneAndUpdate(
         {

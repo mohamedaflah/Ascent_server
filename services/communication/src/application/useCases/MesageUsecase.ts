@@ -19,4 +19,7 @@ export class MessageUseCase implements IMessageUseCase {
   async getAllMessages(chatId: string): Promise<Message[]> {
     return await this.messageRepository.getAllMessages(chatId);
   }
+  async  fetchUnreadMessageAndLastMessage(userId:string): Promise<{ message: Message; count: number; }[]> {
+    return await this.messageRepository.fetchUnreadMessageAndLastMessage(userId)
+  }
 }

@@ -5,4 +5,5 @@ export interface IMessageUseCase {
   deleteMessage(messageId: string): Promise<Message>;
   updateMessage(messageId: string, body: Message): Promise<Message>;
   getAllMessages(chatId: string): Promise<Message[]>;
+  fetchUnreadMessageAndLastMessage(userId:string):Promise<{message:Message,count:number}[]>
 }

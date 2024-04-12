@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const MessageModel = new mongoose.Schema(
   {
+    _id:String,
     senderId: {
       type: mongoose.Types.ObjectId,
     },

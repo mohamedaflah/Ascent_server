@@ -9,6 +9,7 @@ import { CreateMessageController } from "../controllers/MessageController/create
 import { CompanyRepository } from "../../../repositories/companyRepository";
 import { CompanyUseCase } from "../../../application/useCases/companyUseCase";
 import { AddCompany } from "../controllers/companyController/addCompany";
+import { FetchUnreadAndLastMessage } from "../controllers/MessageController/unreadAndLastMsg";
 
 const messageRouter = Router();
 
@@ -19,6 +20,9 @@ const createMessageController = new CreateMessageController(messageUseCase);
 const getAllMessageController = new GetAllMessageController(messageUseCase);
 const deleteMessageController = new DeleteMessageController(messageUseCase);
 const updateMessageController = new UpdateMessageController(messageUseCase);
+const fetchUnreadAndLastMessages = new FetchUnreadAndLastMessage(
+  messageUseCase
+);
 
 const companyRepo = new CompanyRepository();
 const companyUsecase = new CompanyUseCase(companyRepo);
@@ -35,6 +39,11 @@ messageRouter
 
 messageRouter
   .route("/chats/:chatId")
-  .get(getAllMessageController.getAllMessages.bind(getAllMessageController));
+  .get(getAllMessageController.getAllMessages.bind(getAllMessageController))
+  .post(
+    fetchUnreadAndLastMessages.fetchUnreadAndLastMsg.bind(
+      fetchUnreadAndLastMessages
+    )
+  );
 messageRouter.post("/add-company", addCompany.addCompany.bind(addCompany));
 export default messageRouter;

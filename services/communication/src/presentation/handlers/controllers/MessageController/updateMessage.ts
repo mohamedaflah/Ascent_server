@@ -10,6 +10,7 @@ export class UpdateMessageController {
   async updateMessage(req: Request, res: Response, next: NextFunction) {
     try {
       const { messageId } = req.params;
+      console.log(req.body)
       const message = await this.useCase.updateMessage(messageId, req.body);
       res.status(200).json({ status: true, message });
     } catch (error) {

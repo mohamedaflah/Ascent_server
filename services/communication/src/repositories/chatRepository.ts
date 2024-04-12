@@ -4,6 +4,7 @@ import { Chat } from "../domain/entities/chat.entitie";
 import ChatModel from "../infra/database/mongodb/Schema/ChatModel";
 import CompanyModel from "../infra/database/mongodb/Schema/CompanyModel";
 import UserModel from "../infra/database/mongodb/Schema/UserModel";
+import MessageModel from "../infra/database/mongodb/Schema/MessageModel";
 
 export class ChatRepository implements IChatRepo {
   async createOnetwoOneChat(
@@ -12,7 +13,12 @@ export class ChatRepository implements IChatRepo {
     role: "user" | "company" | "admin"
   ): Promise<{ chat: Chat; user: any }> {
     const chat = await ChatModel.findOne({
-      members: { $all: [new mongoose.Types.ObjectId(firstId), new mongoose.Types.ObjectId(secondId)] },
+      members: {
+        $all: [
+          new mongoose.Types.ObjectId(firstId),
+          new mongoose.Types.ObjectId(secondId),
+        ],
+      },
     });
     let user;
     if (role === "admin" || role == "user") {
@@ -20,12 +26,15 @@ export class ChatRepository implements IChatRepo {
     } else {
       user = await UserModel.findById(secondId);
     }
-    if (chat) return {chat:chat.toObject(),user};
+    if (chat) {
+      // "read", "unread"
+      await MessageModel.updateMany({status:"unread",senderId:secondId},{$set:{status:"read"}})
+      return { chat: chat.toObject(), user };
+    }
     const newChat = await new ChatModel({
       members: [firstId, secondId],
     }).save();
-    
-    
+
     return { chat: newChat.toObject(), user };
   }
 }
