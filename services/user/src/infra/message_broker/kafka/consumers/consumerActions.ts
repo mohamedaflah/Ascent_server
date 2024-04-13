@@ -1,3 +1,4 @@
+import axios from "axios";
 import { User } from "../../../../entities/user.entity";
 import { IUserInteractor } from "../../../../interfaces/interactor_interface/IUserinteractor";
 import { addUserProducer } from "../producers/addUser";
@@ -12,6 +13,8 @@ export class ConsumerActions {
       console.log(` ___ Add user consumer called ___`);
       const newUser = await this.userInteractor.addUserData(data);
       console.log("🚀 ~ ConsumerActions ~ addUser ~ newUser:", newUser);
+      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/v1/add-user`,{...newUser})
+      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-user`,{...newUser})
       await addUserProducer(data);
     } catch (error) {
       console.log(` Err while running addUserconsumer ${error}`);

@@ -10,6 +10,9 @@ import { CompanyRepository } from "../../../repositories/companyRepository";
 import { CompanyUseCase } from "../../../application/useCases/companyUseCase";
 import { AddCompany } from "../controllers/companyController/addCompany";
 import { FetchUnreadAndLastMessage } from "../controllers/MessageController/unreadAndLastMsg";
+import { AddUser } from "../controllers/userController/addUser";
+import { UserRepository } from "../../../repositories/userRepository";
+import { UserUseCase } from "../../../application/useCases/userUseCase";
 
 const messageRouter = Router();
 
@@ -28,6 +31,11 @@ const companyRepo = new CompanyRepository();
 const companyUsecase = new CompanyUseCase(companyRepo);
 const addCompany = new AddCompany(companyUsecase);
 
+// user
+const userRepo = new UserRepository();
+const userUseCase = new UserUseCase(userRepo);
+const addNewUser = new AddUser(userUseCase);
+
 messageRouter
   .route("/messages")
   .post(createMessageController.createMessage.bind(createMessageController));
@@ -45,5 +53,10 @@ messageRouter
       fetchUnreadAndLastMessages
     )
   );
+
+//company routes
 messageRouter.post("/add-company", addCompany.addCompany.bind(addCompany));
+
+// user route
+messageRouter.post("/add-user", addNewUser.addUser.bind(addNewUser));
 export default messageRouter;

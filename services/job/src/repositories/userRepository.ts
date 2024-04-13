@@ -7,10 +7,12 @@ export class UserRepository implements IUserRepository {
   async addUser(body: User): Promise<User | any> {
     let idExist = await UserModel.findById(body._id);
     if (!idExist) {
-      const newUser = await UserModel.create({
-        _id: new mongoose.Types.ObjectId(body._id),
+      const _id = new mongoose.Types.ObjectId(body._id);
+      const newUser = new UserModel({
+        _id: _id,
         ...body,
       });
+      await newUser.save();
       return newUser.toObject();
     } else {
       return idExist.toObject;

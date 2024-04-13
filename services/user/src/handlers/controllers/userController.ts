@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IUserInteractor } from "../../interfaces/interactor_interface/IUserinteractor";
 import jwt from "jsonwebtoken";
 import { updateUserProducer } from "../../infra/message_broker/kafka/producers/updateUser";
+import axios from "axios";
 export class UserController {
   private userInteractor: IUserInteractor;
   constructor(interactor: IUserInteractor) {
@@ -71,6 +72,8 @@ export class UserController {
       );
       console.log(req.body, "*(*(*(*");
       await updateUserProducer(user._id as string, user);
+      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/v1/add-user`,{...user})
+      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-user`,{...user})
       res.status(200).json({
         status: true,
         user,

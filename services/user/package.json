@@ -25,6 +25,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/validator": "^13.11.9",
     "ascent-errorhandler": "^1.0.0",
+    "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

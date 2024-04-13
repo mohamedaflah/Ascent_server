@@ -18,6 +18,9 @@ import { AddCompany } from "../controllers/Company/AddCompany";
 import { CompanyRepository } from "../../../repositories/companyRepository";
 import { CompanyUseCase } from "../../../application/useCases/companyUseCase";
 import { InterviewFeedback } from "../controllers/jobs/InterviewFeedback";
+import { UserRepository } from "../../../repositories/userRepository";
+import { UserUserCase } from "../../../application/useCases/UserUsecase";
+import { AddUser } from "../controllers/User/addUser";
 
 const router = Router();
 
@@ -42,6 +45,10 @@ const interviewFeedback = new InterviewFeedback(useCase);
 const companyRepo = new CompanyRepository();
 const companyUsecase = new CompanyUseCase(companyRepo);
 const addCompany = new AddCompany(companyUsecase);
+
+const userRepo = new UserRepository();
+const userUseCase = new UserUserCase(userRepo);
+const addNewUser = new AddUser(userUseCase);
 
 router
   .route("/job")
@@ -83,6 +90,7 @@ router
     )
   );
 router.post("/add-company", addCompany.addCompany.bind(addCompany));
+router.post(`/add-user`, addNewUser.addUser.bind(addNewUser));
 router
   .route("/interview-feedback")
   .put(interviewFeedback.updateInterviewFeedback.bind(interviewFeedback));
