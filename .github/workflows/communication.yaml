@@ -1,0 +1,36 @@
+name: ascent-communication
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'services/communication/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'services/communication/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./services/communication
+          push: true
+          tags: aflu/ascent-communication:latest

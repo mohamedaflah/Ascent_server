@@ -34,5 +34,5 @@ app.use("/user", userRouter);
 app.use(errorHandler);
 
 app.listen(process.env.USER_SERVICE_PORT, () =>
-  console.log(`user service started on  port  ${process.env.USER_SERVICE_PORT}`)
+  console.log(`(user service) started on  port  ${process.env.USER_SERVICE_PORT}`)
 );
