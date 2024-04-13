@@ -1,0 +1,6 @@
+auth/configMap.yaml
+communication/configMap.yaml
+company/configMap.yaml
+job/configMap.yaml
+notification/configMap.yaml
+user/configMap.yaml

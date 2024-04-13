@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notification-config
+data:
+  NOTIFICATION_SERVICE_PORT: 3003
+  KAFKA_CLIENT_ID: my-app
+  KAFKA_BROKER_URL: localhost:9092
+  AUTH_SERVICE_KAFKA_GROUP_ID: auth-service-kafka-group
+  USER_SERVICE_TOPIC: user-service-topic
+  NOTIFICATION_SERVICE_TOPIC: notification-servie-topic
+  NOTIFICATION_SERVICE_KAFKA_CONSUMER_GROUP_ID: notification-service-kafka-group
+  NOTIFIICATION_SERVICE_TOPIC: notification-service-topic
+  AUTH_SERVICE_TOPIC: auth-service-topic
+
+  ASCENT_OFFICIAL_MAIL: mohamedaflah186@gmail.com
+  ASCENT_SECRET_PASS: frih rrud anvu ldpa
+  JWT_EMAIL_VALIDATION_KEY: verifyingemail

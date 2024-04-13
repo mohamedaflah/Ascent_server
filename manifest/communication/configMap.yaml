@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: communication-config
+data:
+  COMMUNICATION_SERVICE_PORT: 8000
+  MONGODB_URI: mongodb+srv://mohamedaflah186:XdhNE9lzIYY9NLog@cluster0.n9bvkdz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+  JOB_MODEL: jobs
+  JWT_KEY: Ascentjwtsecretkey
+  VERIFICIATION_LINK: verificationlinks
+  KAFKA_CLIENT_ID: my-app
+  KAFKA_BROKER_URL: localhost:9092
+  COMMUNICATION_SERVICE_KAFKA_GROUP_ID: job-service-kafka-group
+  COMMUNICATION_SERVICE_TOPIC: communication-service-topic
+  CHAT_MODEL_NAME: Chats
+  JOB_SERVICE_TOPIC: job-service-topic
+  AUTH_SERVICE_TOPIC: auth-service-topicf
+  USER_SERVICE_TOPIC: users-service-topic
+  COMPANY_SERVICE_TOPIC: company-service-topic
+  NOTIFIICATION_SERVICE_TOPIC: notification-service-topic
+  SEND_OTP_KEY: sendOtp
+  ADD_USER_USER_SERVICE_KEY: addUser
+  CLIENT_URL: http://localhost:5173
+  JWT_EMAIL_VALIDATION_KEY: verifyingemail
+  APPLICANT_MODEL: Applications
+  NODE_ENV: production
+  APPROVEL_MODEL: approvels
+  REJECT_MAIL_PRODUCER_KEY: sendRejectmailforCompany
+  CATEGORY_MODEL: Categories
+  USER_MODEL: users
+  COMPANY_MODEL: Company
+  SEND_APPLICAITON_MAIL: sendApplicationmail
+  SEND_INTERVIEW_MAIL: sendInterviewMail
+  MESSAGES_MODEL: Messages

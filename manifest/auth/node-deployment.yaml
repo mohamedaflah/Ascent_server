@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  labels:
+    app: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: aflu/ascent-auth:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: AUTH_SERVICE_PORT
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: AUTH_SERVICE_PORT
+            - name: MONGODB_URI
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: MONGODB_URI
+            - name: AUTH_MODEL
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: AUTH_MODEL
+            - name: JWT_KEY
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: JWT_KEY
+            - name: VERIFICIATION_LINK
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: VERIFICIATION_LINK
+            - name: KAFKA_CLIENT_ID
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: KAFKA_CLIENT_ID
+            - name: KAFKA_BROKER_URL
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: KAFKA_BROKER_URL
+            - name: AUTH_SERVICE_KAFKA_GROUP_ID
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: AUTH_SERVICE_KAFKA_GROUP_ID
+            - name: AUTH_SERVICE_TOPIC
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: AUTH_SERVICE_TOPIC
+            - name: USER_SERVICE_TOPIC
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: USER_SERVICE_TOPIC
+            - name: NOTIFIICATION_SERVICE_TOPIC
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: NOTIFIICATION_SERVICE_TOPIC
+            - name: COMPANY_SERVICE_TOPIC
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: COMPANY_SERVICE_TOPIC
+            - name: COMPANY_SERVICE_ADDCOMPANY_KEY
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: COMPANY_SERVICE_ADDCOMPANY_KEY
+            - name: SEND_OTP_KEY
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: SEND_OTP_KEY
+            - name: ADD_USER_USER_SERVICE_KEY
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: ADD_USER_USER_SERVICE_KEY
+            - name: CLIENT_URL
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: CLIENT_URL
+            - name: JWT_EMAIL_VALIDATION_KEY
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: JWT_EMAIL_VALIDATION_KEY
+            - name: NODE_ENV
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: NODE_ENV
+            - name: UPDATE_PASSWORD_KEY
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: UPDATE_PASSWORD_KEY
+            - name: NOTIFICATION_SERVICE_SEND_FORGOT_MAIL_KEY
+              valueFrom: 
+                configMapKeyRef:
+                  name: auth-config
+                  key: NOTIFICATION_SERVICE_SEND_FORGOT_MAIL_KEY
