@@ -34,3 +34,5 @@ app.listen(process.env.AUTH_SERVICE_PORT, async () => {
     ` Authentication service started ${process.env.AUTH_SERVICE_PORT} `
   );
 });
+
+// auth service

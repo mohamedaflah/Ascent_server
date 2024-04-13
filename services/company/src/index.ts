@@ -37,3 +37,5 @@ app.listen(process.env.COMPANY_SERVICE_PORT, () =>
     ` Company Service started at ${process.env.COMPANY_SERVICE_PORT} `
   )
 );
+
+// company service

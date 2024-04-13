@@ -23,3 +23,5 @@ app.listen(process.env.NOTIFICATION_SERVICE_PORT, () =>
     ` _Notification service started ${process.env.NOTIFICATION_SERVICE_PORT}`
   )
 );
+
+// notification service

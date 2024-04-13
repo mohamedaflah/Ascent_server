@@ -11,3 +11,5 @@ import './infra/socket/index'
     stopConsumer();
   });
 })();
+
+// communication
