@@ -5,7 +5,7 @@ metadata:
 data:
   NOTIFICATION_SERVICE_PORT: "3003"
   KAFKA_CLIENT_ID: "my-app"
-  KAFKA_BROKER_URL: "localhost:9092"
+  KAFKA_BROKER_URL: "kafka-service:9092"
   AUTH_SERVICE_KAFKA_GROUP_ID: "auth-service-kafka-group"
   USER_SERVICE_TOPIC: "user-service-topic"
   NOTIFICATION_SERVICE_TOPIC: "notification-servie-topic"

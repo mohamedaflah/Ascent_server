@@ -10,7 +10,7 @@ data:
   JWT_KEY: "Ascentjwtsecretkey"
   VERIFICIATION_LINK: "verificationlinks"
   KAFKA_CLIENT_ID: "my-app"
-  KAFKA_BROKER_URL: "localhost:9092"
+  KAFKA_BROKER_URL: "kafka-service:9092"
   COMPANY_SERVICE_KAFKA_GROUP_ID: "company-service-kafka-group"
   AUTH_SERVICE_TOPIC: "auth-service-topicf"
   USER_SERVICE_TOPIC: "users-service-topic"
