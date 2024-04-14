@@ -15,7 +15,7 @@ import userRouter from "./handlers/routers/userRouter";
 const app = express();
 app.use(
   cors({
-    origin: [String(process.env.CLIENT_URL),"https://ascent-pbzt.onrender.com"],
+    origin: [String(process.env.CLIENT_URL),"https://ascent-pbzt.onrender.com","https://ascent-front-end.vercel.app/"],
     credentials: true,
   })
 );

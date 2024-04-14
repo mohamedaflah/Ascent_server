@@ -1,0 +1,52 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ascent-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /auth-service/
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
+      - path: /user-service/
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 80
+      - path: /notification-service/
+        pathType: Prefix
+        backend:
+          service:
+            name: notification-service
+            port:
+              number: 80
+      - path: /company-service/
+        pathType: Prefix
+        backend:
+          service:
+            name: company-service
+            port:
+              number: 80
+      - path: /communication-service/
+        pathType: Prefix
+        backend:
+          service:
+            name: communication-service
+            port:
+              number: 80
+      - path: /job-service/
+        pathType: Prefix
+        backend:
+          service:
+            name: job-service
+            port:
+              number: 80

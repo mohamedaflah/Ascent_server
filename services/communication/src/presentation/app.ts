@@ -7,7 +7,7 @@ dotenv.config();
 import chatRouter from "./handlers/routers/chatRoute";
 import messageRouter from "./handlers/routers/messageRoute";
 const app: Application = express();
-app.use(cors({ origin: [String(process.env.CLIENT_URL),"https://ascent-pbzt.onrender.com"], credentials: true }));
+app.use(cors({ origin: [String(process.env.CLIENT_URL),"https://ascent-pbzt.onrender.com","https://ascent-front-end.vercel.app/"], credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/v1", chatRouter);
