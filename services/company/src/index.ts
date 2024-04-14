@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(express.json())
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL as string],
+    origin: [process.env.CLIENT_URL as string,"https://ascent-pbzt.onrender.com"],
     credentials: true,
   })
 );

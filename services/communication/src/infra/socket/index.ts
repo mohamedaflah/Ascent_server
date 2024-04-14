@@ -9,7 +9,7 @@ import {
 const socket = require("socket.io");
 const io: Socket = socket(server, {
   cors: {
-    origin: process.env.CLIENT_URL as string,
+    origin: [process.env.CLIENT_URL as string,"https://ascent-pbzt.onrender.com"],
     credentials: true,
   },
 });
