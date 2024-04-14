@@ -35,6 +35,16 @@ spec:
                 configMapKeyRef:
                   name: notification-config
                   key: KAFKA_BROKER_URL
+            - name: KAFKA_USER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-config
+                  key: KAFKA_USER_NAME
+            - name: KAFKA_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-config
+                  key: KAFKA_PASSWORD
             - name: AUTH_SERVICE_KAFKA_GROUP_ID
               valueFrom:
                 configMapKeyRef:
