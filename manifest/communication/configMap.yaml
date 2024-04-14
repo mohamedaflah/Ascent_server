@@ -9,10 +9,9 @@ data:
   JWT_KEY: "Ascentjwtsecretkey"
   VERIFICIATION_LINK: "verificationlinks"
   KAFKA_CLIENT_ID: "my-app"
-    # KAFKA_BROKER_URL: " kafka-service:9092"
-  KAFKA_BROKER_URL: pkc-xrnwx.asia-south2.gcp.confluent.cloud:9092
-  KAFKA_USER_NAME: IYQ36EKMR4WANX77
-  KAFKA_PASSWORD: M7f5AvqYNmYihpuQzMAEhwRQla/FfCLdAf1PvnuL9VGM7NDZVsw+fQ37UAt5iEYI
+  KAFKA_BROKER_URL: "pkc-xrnwx.asia-south2.gcp.confluent.cloud:9092"
+  KAFKA_USER_NAME: "IYQ36EKMR4WANX77"
+  KAFKA_PASSWORD: "M7f5AvqYNmYihpuQzMAEhwRQla/FfCLdAf1PvnuL9VGM7NDZVsw+fQ37UAt5iEYI"
   COMMUNICATION_SERVICE_KAFKA_GROUP_ID: "job-service-kafka-group"
   COMMUNICATION_SERVICE_TOPIC: "communication-service-topic"
   CHAT_MODEL_NAME: "Chats"
