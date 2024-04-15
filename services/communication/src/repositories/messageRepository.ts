@@ -11,10 +11,6 @@ export class MessageRepository implements IMessageRepository {
     return newMessage.toObject();
   }
   async deleteMessage(messageId: string): Promise<Message> {
-    console.log(
-      "🚀 ~ MessageRepository ~ deleteMessage ~ messageId:",
-      messageId
-    );
     await MessageModel.updateOne(
       { _id: messageId },
       { $set: { deleteStatus: true } }
@@ -32,16 +28,11 @@ export class MessageRepository implements IMessageRepository {
   }
   async getAllMessages(chatId: string): Promise<Message[] | any[]> {
     const messages = await MessageModel.find({ chatId: chatId });
-    console.log(
-      "🚀 ~ MessageRepository ~ getAllMessages ~ messages:",
-      messages
-    );
     return messages;
   }
   async fetchUnreadMessageAndLastMessage(
     userId: string
   ): Promise<{ message: Message; count: number }[]> {
-    console.log("🚀 ~ MessageRepository ~ userId:", userId);
     const chats = await ChatModel.find({ members: userId });
     const promises = chats.map(async (chat) => {
       const message = await MessageModel.findOne({ chatId: chat._id }).sort({
@@ -57,10 +48,14 @@ export class MessageRepository implements IMessageRepository {
       // message.reciverId = String(chat.members[0]);
       let newMessage;
       if (message) {
-        newMessage = {
-          ...message?.toObject(),
-          reciverId: String(chat.members[1]),
-        } as Message;
+        if(!message?.reciverId){
+          newMessage = {
+            ...message?.toObject(),
+            reciverId: String(chat.members[1]),
+          } as Message;
+        }else{
+          newMessage = message as unknown as Message;
+        }
       } else {
         newMessage = message as unknown as Message;
       }
@@ -68,8 +63,6 @@ export class MessageRepository implements IMessageRepository {
       return { message: newMessage, count };
     });
     const results = await Promise.all(promises);
-    console.log("🚀 ~ MessageRepository ~ results:", results);
-
     return results;
   }
 }

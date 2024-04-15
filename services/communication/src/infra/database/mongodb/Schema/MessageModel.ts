@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const MessageModel = new mongoose.Schema(
   {
-    _id:String,
+    _id: String,
     senderId: {
       type: mongoose.Types.ObjectId,
     },
@@ -33,6 +33,7 @@ const MessageModel = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    reciverId: String,
   },
   { timestamps: true }
 );
