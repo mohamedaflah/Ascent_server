@@ -8,7 +8,7 @@ import {
 
 const socket = require("socket.io");
 const io: Server =new Server(server, {
-  path: "/socket.io",
+  path: "/ws",
   cors: {
     origin: [
       process.env.CLIENT_URL as string,

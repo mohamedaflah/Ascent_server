@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: communication-deployment
-  
   labels:
     app: communication
 spec:
