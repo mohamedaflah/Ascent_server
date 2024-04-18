@@ -9,12 +9,13 @@ import {
 const socket = require("socket.io");
 const io: Socket = socket(server, {
   cors: {
-    origin: [
-      process.env.CLIENT_URL as string,
-      "https://ascent-pbzt.onrender.com",
-    ],
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['DNT', 'User-Agent', 'X-Requested-With', 'If-Modified-Since', 'Cache-Control', 'Content-Type', 'Range'],
     credentials: true,
-  },
+    transports: ['websocket', 'polling'],
+    optionsSuccessStatus: 204
+  }
 });
 
 let onlineUsers: {

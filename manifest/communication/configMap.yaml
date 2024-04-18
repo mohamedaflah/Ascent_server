@@ -23,7 +23,7 @@ data:
   NOTIFIICATION_SERVICE_TOPIC: "notification-service-topic"
   SEND_OTP_KEY: "sendOtp"
   ADD_USER_USER_SERVICE_KEY: "addUser"
-  CLIENT_URL: "http://localhost:5173"
+  CLIENT_URL: "http://ascentfrontend-service:5173/"
   JWT_EMAIL_VALIDATION_KEY: "verifyingemail"
   APPLICANT_MODEL: "Applications"
   NODE_ENV: "production"
