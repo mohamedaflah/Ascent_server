@@ -29,7 +29,7 @@ app.use(
     stopConsumer();
   });
 })();
-app.use("/", companyRoute);
+app.use("/api/company-service/", companyRoute);
 app.use(errorHandler)
 
 app.listen(process.env.COMPANY_SERVICE_PORT, () =>

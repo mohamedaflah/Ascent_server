@@ -17,8 +17,8 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use("/api/v1", router);
-app.use("/api/category", categoryRoute);
+app.use("/api/job-service/api/v1", router);
+app.use("/api/job-service/api/category", categoryRoute);
 app.use(errorHandler);
 app.listen(process.env.JOB_SERVICE_PORT, () => {
   console.log("Job service started at port " + process.env.JOB_SERVICE_PORT);

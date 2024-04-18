@@ -29,7 +29,7 @@ app.use(cookieParser());
   });
 })();
 
-app.use("/user", userRouter);
+app.use("/api/user-service/user", userRouter);
 
 app.use(errorHandler);
 

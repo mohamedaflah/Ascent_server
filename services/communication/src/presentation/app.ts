@@ -10,8 +10,8 @@ const app: Application = express();
 app.use(cors({ origin: [String(process.env.CLIENT_URL),"https://ascent-pbzt.onrender.com","https://ascent-front-end.vercel.app/"], credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
-app.use("/api/v1", chatRouter);
-app.use("/api/v2", messageRouter);
+app.use("/api/communication-service/api/v1", chatRouter);
+app.use("/api/communication-service/api/v2", messageRouter);
 app.use(errorHandler);
 export const server = app.listen(process.env.COMMUNICATION_SERVICE_PORT, () =>
   console.log(
