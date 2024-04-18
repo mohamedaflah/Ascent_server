@@ -26,8 +26,8 @@ app.use(
   });
 })();
 
-app.use("/", authRouter);
-app.use("/otp", otpRouter);
+app.use("/api", authRouter);
+app.use("/api/otp", otpRouter);
 app.use(errorHandler);
 app.listen(process.env.AUTH_SERVICE_PORT, async () => {
   console.log(
