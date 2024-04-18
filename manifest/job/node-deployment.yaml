@@ -55,6 +55,16 @@ spec:
                 configMapKeyRef:
                   name: job-config
                   key: KAFKA_BROKER_URL
+            - name: KAFKA_USER_NAME
+              valueFrom: 
+                configMapKeyRef:
+                  name: job-config
+                  key: KAFKA_USER_NAME
+            - name: KAFKA_PASSWORD
+              valueFrom: 
+                configMapKeyRef:
+                  name: job-config
+                  key: KAFKA_PASSWORD
             - name: JOB_SERVICE_KAFKA_GROUP_ID
               valueFrom:
                 configMapKeyRef:

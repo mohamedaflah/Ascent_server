@@ -59,6 +59,8 @@ export class AuthController {
       });
       res.status(200).json({ status: true, user, role: user.role });
     } catch (error) {
+      console.log("🚀 ~ AuthController ~ login ~ error:", error)
+      
       next(error);
     }
   }

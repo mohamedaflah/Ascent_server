@@ -9,7 +9,10 @@ import {
 const socket = require("socket.io");
 const io: Socket = socket(server, {
   cors: {
-    origin: [process.env.CLIENT_URL as string,"https://ascent-pbzt.onrender.com"],
+    origin: [
+      process.env.CLIENT_URL as string,
+      "https://ascent-pbzt.onrender.com",
+    ],
     credentials: true,
   },
 });
@@ -31,6 +34,7 @@ io.on("connection", (socket: Socket) => {
       });
     }
     console.log(onlineUsers);
+    io.emit("get-online-users", onlineUsers);
   });
   function checkUserOnline(userId: string) {
     const user = onlineUsers.find((value) => value.id === userId);
@@ -126,6 +130,8 @@ io.on("connection", (socket: Socket) => {
   //   user leaving or diesconnecting event
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((value) => value.socketId !== socket.id);
+    const user = onlineUsers.find((value) => value.socketId == socket.id);
+    io.emit("remove-online-user", user);
   });
   console.log("Socket connected", socket.id);
 });

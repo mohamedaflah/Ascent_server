@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ascent-ingress-controller
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ascent-ingress 
+  template:
+    metadata:
+      labels:
+        app: ascent-ingress  
+    spec:
+      serviceAccountName: nginx-ingress-serviceaccount
+      containers:
+      - name: ascent-ingress-controller
+        image: nginx/nginx-ingress:latest
+        args:
+          - /ascent-ingress-controller
+          - --election-id=ingress-controller-leader
+          - --ingress-class=nginx-custom
+          - --configmap=ascent-ingress/nginx-configuration
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443

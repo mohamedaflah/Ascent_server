@@ -19,6 +19,13 @@ spec:
           image: aflu/ascent-user:latest
           ports:
             - containerPort: 5000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
           env:
             - name: USER_SERVICE_PORT
               valueFrom:

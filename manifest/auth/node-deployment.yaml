@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth-deployment
+ 
   labels:
     app: auth
 spec:
@@ -135,6 +136,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: auth-service
+  
 spec:
   selector:
     app: auth

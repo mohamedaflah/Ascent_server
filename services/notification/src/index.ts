@@ -16,7 +16,7 @@ app.use(errorHandler);
     await stopConsumer();
   });
 })();
-app.use(express.json());
+
 
 app.listen(process.env.NOTIFICATION_SERVICE_PORT, () =>
   console.log(
