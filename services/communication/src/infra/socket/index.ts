@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { Socket,Server } from "socket.io";
 import { server } from "../../presentation/app";
 import { Message } from "../../domain/entities/message.entitie";
 import {
@@ -7,7 +7,7 @@ import {
 } from "../../util/types/videoCallSocketEventType";
 
 const socket = require("socket.io");
-const io: Socket = socket(server, {
+const io: Server =new Server(server, {
   path: "/socket.io",
   cors: {
     origin: [
