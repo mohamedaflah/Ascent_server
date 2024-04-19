@@ -7,8 +7,7 @@ import {
 } from "../../util/types/videoCallSocketEventType";
 
 const socket = require("socket.io");
-const io: Server =new Server(server, {
-  path: "/ws",
+const io: Socket = socket(server, {
   cors: {
     origin: [
       process.env.CLIENT_URL as string,
