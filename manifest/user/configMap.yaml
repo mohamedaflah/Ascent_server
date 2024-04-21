@@ -20,7 +20,7 @@ data:
   ADD_USER_USER_SERVICE_KEY: "addUser"
   ADD_USER_JOB_SERVICE_KEY: "add_user"
   UPDATE_USER_JOB_SERVICE_KEY: "update_user"
-  CLIENT_URL: "http://4.186.34.47/"
+  CLIENT_URL: "https://aflahaflu.shop/"
   JWT_EMAIL_VALIDATION_KEY: "verifyingemail"
   NODE_ENV: "production"
   CATEGORY_MODEL: "Categories"

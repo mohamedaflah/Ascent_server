@@ -55,12 +55,15 @@ export class AuthController {
       });
       res.cookie("access_token", token, {
         httpOnly: true,
+        secure: true,
+        sameSite: "strict", // or 'lax' depending on your needs
         maxAge: 15 * 24 * 60 * 60 * 1000,
       });
+
       res.status(200).json({ status: true, user, role: user.role });
     } catch (error) {
-      console.log("🚀 ~ AuthController ~ login ~ error:", error)
-      
+      console.log("🚀 ~ AuthController ~ login ~ error:", error);
+
       next(error);
     }
   }
@@ -116,9 +119,11 @@ export class AuthController {
       await OtpSchema.deleteOne({ email: user.email });
       res.cookie("access_token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
+        sameSite: "strict", // or 'lax' depending on your needs
         maxAge: 15 * 24 * 60 * 60 * 1000,
       });
+
       res
         .status(200)
         .json({ status: true, user: user, message: "User signup successfull" });
@@ -167,6 +172,8 @@ export class AuthController {
       res.cookie("forgot_key", token, {
         maxAge: 5 * 60 * 1000,
         httpOnly: true,
+        sameSite: "strict",
+        secure: true,
       });
       res
         .status(200)
