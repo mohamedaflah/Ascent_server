@@ -13,6 +13,7 @@ authRouter.route("/login").post(controller.login.bind(controller));
 authRouter.get("/logout", controller.logout.bind(controller));
 authRouter.get("/verify-email/:token", controller.verifyEmail.bind(controller));
 authRouter.post("/update-password", controller.updatePassword.bind(controller));
+authRouter.post('/verify-otp',controller.verifyOtp.bind(controller))
 authRouter.get("/check-role", controller.checkRole.bind(controller));
 authRouter.post(
   "/forgotpass-sendmail",

@@ -28,7 +28,12 @@ type sendInterviewMail = (data: {
   description: string;
   date: string;
   email: string;
-  from?:"time"|"date"
+  from?: "time" | "date";
+}) => Promise<void>;
+
+type sendVerificationOtp = (data: {
+  tag: string;
+  email: string;
 }) => Promise<void>;
 
 type GeneralSubscriberFunction =
@@ -36,7 +41,8 @@ type GeneralSubscriberFunction =
   | SubscriberFunction2
   | forgotMailSubscriber
   | sendApplicationMail
-  | sendInterviewMail;
+  | sendInterviewMail
+  | sendVerificationOtp;
 interface SubscriberActions {
   [key: string]: GeneralSubscriberFunction | undefined;
 }
@@ -50,5 +56,6 @@ export const subscriber = (): SubscriberActions => {
     sendForgotMail: consumerActions.sendForgotPassMail,
     sendApplicationmail: applicationChange.sendApplicationmail,
     sendInterviewMail: interviewMail.sendInterviewMail,
+    sendVerificationOtp: consumerActions.sendVerificationOtp,
   };
 };

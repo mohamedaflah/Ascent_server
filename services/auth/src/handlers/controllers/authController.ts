@@ -14,6 +14,8 @@ import { userAddProducer } from "../../infra/message/kafka/producers/userAddProd
 import { companyAddProducer } from "../../infra/message/kafka/producers/companyAddProducer";
 import { sendForgotMailLink } from "../../infra/message/kafka/producers/sendForgotPassmail";
 import { updatePassProducer } from "../../infra/message/kafka/producers/updatePasswordProducer";
+import { generateOTP } from "../../utils/lib/generateOtp";
+import { otpProducer } from "../../infra/message/kafka/producers/otpProducer";
 export class AuthController {
   private interactor: IAuthInteractor;
   constructor(authInteractor: IAuthInteractor) {
@@ -32,7 +34,23 @@ export class AuthController {
       }
       const token = generateEmailValidationToken(body);
       let verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}/role=${body.role}`;
-      await signupProducer(verificationLink);
+      if (req.body && req.body.type == "otp") {
+        const otp = generateOTP();
+        const otpExist = await OtpSchema.findOne({ email: req.body.email });
+        if (!otpExist) {
+          await new OtpSchema({
+            email: req.body.email,
+            otp: otp,
+            link: "",
+          }).save();
+          await otpProducer({
+            tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
+            email: req.body.email,
+          });
+        }
+      } else {
+        await signupProducer(`${verificationLink}`);
+      }
 
       res.status(200).json({
         status: true,
@@ -228,10 +246,26 @@ export class AuthController {
 
       const emailInVerify = await OtpSchema.findOne({ email: req.body.email });
       if (!emailInVerify)
-        throw new Error("Your Link is Expired please Signup again");
-      const token = generateEmailValidationToken(req.body);
-      let verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}/role=${req.body.role}`;
-      await signupProducer(verificationLink);
+        throw new Error(`Your ${req.body.type} is Expired please Signup again`);
+      if (req.body.type == "otp") {
+        const otp = generateOTP();
+        const otpExist = await OtpSchema.findOne({ email: req.body.email });
+        await OtpSchema.updateOne(
+          { email: req.body.email },
+          { $set: { otp: otp, link: "" } },
+          { upsert: true }
+        );
+        await otpProducer({
+          tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
+          email: req.body.email,
+        });
+      } else {
+        const token = generateEmailValidationToken(req.body);
+        let verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}/role=${req.body.role}`;
+        await signupProducer(
+          `<a href="${verificationLink}" style="width:200px;margin:auto;height:30px;background:blue;color:white;padding:5px;border-radius:5px">Verify Email</a>`
+        );
+      }
       res.status(200).json({
         status: true,
         message: "Verification link sended",
@@ -253,6 +287,55 @@ export class AuthController {
       );
       res.json({ status: true, message: "Succesfull" });
     } catch (error) {
+      next(error);
+    }
+  }
+
+  async verifyOtp(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log("()()()(");
+      const { email, otp } = req.body;
+      console.log(req.body);
+      const otpExist = await OtpSchema.findOne({ email: email });
+      if (!otpExist)
+        throw new Error("Your one time password not exist in our server");
+      if (otp !== otpExist.otp) {
+        throw new Error("Invalid Otp Please check again");
+      }
+
+      const userData = req.body.userData;
+      let user;
+      user = await this.interactor.signup({
+        email: userData.email,
+        firstname: userData.firstname,
+        lastname: userData.lastname,
+        password: userData.password,
+        role: userData.role,
+      });
+      if (userData.role === "user" || userData.role === "admin") {
+        await userAddProducer(user);
+      } else if (userData.role === "company") {
+        await companyAddProducer(user);
+      } else {
+        return res.status(400).json({
+          status: false,
+          message: "Invalid user role",
+        });
+      }
+      const token = generateToken({ id: String(user._id), role: user.role });
+      await OtpSchema.deleteOne({ email: user.email });
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict", // or 'lax' depending on your needs
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+      });
+      res
+        .status(200)
+        .json({ status: true, user: user, message: "User signup successfull" });
+    } catch (error) {
+      console.log("🚀 ~ AuthController ~ verifyOtp ~ error:", error);
+
       next(error);
     }
   }
