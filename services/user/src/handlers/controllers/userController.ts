@@ -72,10 +72,11 @@ export class UserController {
         req.params.userId,
         req.body
       );
+      console.log("🚀 ~ UserController ~ updateProfile ~ user:", user)
       console.log(req.body, "*(*(*(*");
       await updateUserProducer(user._id as string, user);
-      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/v1/add-user`,{...user})
-      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-user`,{...user})
+      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/job-service/api/v1/add-user`,{...user})
+      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/communication-service/api/v2/add-user`,{...user})
       res.status(200).json({
         status: true,
         user,

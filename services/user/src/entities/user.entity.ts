@@ -31,6 +31,8 @@ export class User {
     }[],
     public readonly profileCompleted?: boolean,
     public readonly dateofbirth?: Date,
-    public readonly currengDesignation?:String
+    public readonly currengDesignation?: String,
+    public readonly resumes?: string[],
+    public readonly stage?: string
   ) {}
 }
