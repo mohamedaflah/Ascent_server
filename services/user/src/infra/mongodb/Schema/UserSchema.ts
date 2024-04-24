@@ -34,7 +34,6 @@ const UserModel = new mongoose.Schema(
     dateofbirth: Date,
     resume: String,
     skills: [String],
-    experiences: [{ title: String, description: String, image: String }],
     personalsite: String,
     socialLink: [String],
     coverImage: String,
@@ -51,9 +50,17 @@ const UserModel = new mongoose.Schema(
         description: String,
       },
     ],
+    experiences: [
+      {
+        title: String,
+        description: String,
+        image: String,
+        location: String,
+      },
+    ],
     profileCompleted: Boolean,
     resumes: [String],
-    stage: String
+    stage: String,
   },
   { timestamps: true }
 );

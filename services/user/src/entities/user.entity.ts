@@ -15,6 +15,7 @@ export class User {
       title: string;
       description: string;
       image: string;
+      location: string;
     }[], // corrected spelling and type
     public readonly personalsite?: string,
     public readonly sociallinks?: string[],
