@@ -43,7 +43,7 @@ export class UserRepository implements IUserRepository {
   async updateProfile(id: string, body: User): Promise<User> {
     const updatedUser = await UserSchema.findOneAndUpdate(
       { _id: id },
-      { $set: { ...body, profileCompleted: true } },
+      { $set: { ...body} },
       { new: true } // Return the modified document
     );
 
