@@ -21,6 +21,7 @@ import { InterviewFeedback } from "../controllers/jobs/InterviewFeedback";
 import { UserRepository } from "../../../repositories/userRepository";
 import { UserUserCase } from "../../../application/useCases/UserUsecase";
 import { AddUser } from "../controllers/User/addUser";
+import { GetMyApplication } from "../controllers/jobs/getApplicaitonCotnroller";
 
 const router = Router();
 
@@ -41,6 +42,7 @@ const schedulingInterview = new ScheduleInterview(useCase);
 const candidates = new GetSelectedAndRejectedCandidates(useCase);
 const candidateReportDownload = new DownloadCandidateReport(useCase);
 const interviewFeedback = new InterviewFeedback(useCase);
+const getOneApplcationByUser = new GetMyApplication(useCase);
 
 const companyRepo = new CompanyRepository();
 const companyUsecase = new CompanyUseCase(companyRepo);
@@ -94,4 +96,8 @@ router.post(`/add-user`, addNewUser.addUser.bind(addNewUser));
 router
   .route("/interview-feedback")
   .put(interviewFeedback.updateInterviewFeedback.bind(interviewFeedback));
+router.get(
+  `/application/:userId`,
+  getOneApplcationByUser.getOneApplicant.bind(getOneApplcationByUser)
+);
 export default router;

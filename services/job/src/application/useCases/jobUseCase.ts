@@ -90,4 +90,7 @@ export class JobUseCase implements IUseCase {
   }): Promise<Applicant> {
     return await this.repository.updateInterviewFeedback(data);
   }
+  async getApplication(userId: string): Promise<Job[]> {
+    return await this.repository.getApplication(userId);
+  }
 }

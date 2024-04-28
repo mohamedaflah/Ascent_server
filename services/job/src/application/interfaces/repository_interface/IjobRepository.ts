@@ -43,4 +43,5 @@ export interface IJobRepository {
     feedbackDescription: string;
     feedback: string;
   }): Promise<Applicant>;
+  getApplication(userId:string): Promise<Job[]>;
 }

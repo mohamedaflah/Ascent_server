@@ -153,7 +153,7 @@ export class JobRepository implements IJobRepository {
         $options: "i",
       };
     }
-    console.log("🚀 ~ JobRepository ~ matchConditions:", matchConditions);
+
     const totalCount = await jobModel.countDocuments(matchConditions);
     const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -649,5 +649,69 @@ export class JobRepository implements IJobRepository {
     );
     console.log("🚀 ~ JobRepository ~ application:", application)
     return this.getOneApplicant(data.jobId, data.applicantId)
+  }
+  async getApplication(userId: string): Promise<Job[]> {
+    const application = await jobModel.aggregate([
+      {
+        $match: { "applicants.applicantId": new mongoose.Types.ObjectId(userId) },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "result",
+        },
+      },
+      {
+        $unwind: "$result",
+      },
+      {
+        $set: {
+          category: "$result.categoryname",
+        },
+      },
+      {
+        $addFields: {
+          categoryId: "$result._id",
+        },
+      },
+      {
+        $lookup: {
+          from: "companies",
+          localField: "companyId",
+          foreignField: "_id",
+          as: "companyDetails",
+        },
+      },
+      {
+        $unwind: "$companyDetails",
+      },
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          jobTitle: 1,
+          employment: 1,
+          category: 1,
+          companyName: "$companyDetails.name",
+          companyIcon: "$companyDetails.icon",
+          // Add more fields from companyDetails as needed
+          applicationStatus: "$applicants.hiringstage",
+          appliedDate: "$applicants.appliedDate",
+        },
+      },
+      {
+        $unset: "applicants", // Remove the applicants array from the output
+      },
+    ]);
+    console.log("🚀 ~ JobRepository ~ getApplication ~ application:", application)
+    
+
+    return application
   }
 }
