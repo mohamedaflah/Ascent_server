@@ -92,13 +92,15 @@ export class JobRepository implements IJobRepository {
     pageSize: number,
     category?: string,
     employment?: string,
-    search?: string
+    search?: string,skills?:string
   ): Promise<{ applicant: Job[]; totalPages: number }> {
     let matchConditions: JobFilterQuery = {
       status: true,
       expired: false,
     };
-
+ 
+    let matchCountProjection = { $addFields: { matchCount: 0 } };
+    
     if (
       category &&
       category !== "null" &&
@@ -163,6 +165,13 @@ export class JobRepository implements IJobRepository {
         {
           $match: matchConditions,
         },
+        // matchCountProjection,
+        // {
+        //   $sort: { 
+        //     matchCount: -1, // Sort by descending matchCount
+        //     createdAt: -1, // Then by descending createdAt (or any other priority)
+        //   },
+        // },
         {
           $lookup: {
             from: "categories",
@@ -189,6 +198,9 @@ export class JobRepository implements IJobRepository {
         },
         {
           $sort: { createdAt: -1 },
+        },
+        {
+          $sort:{matchCount:-1}
         },
         {
           $lookup: {

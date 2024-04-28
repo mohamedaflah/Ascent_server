@@ -81,4 +81,5 @@ export interface JobFilterQuery {
     $regex: RegExp;
     $options?: string;
   };
+  skills?: { $in: string[] };
 }

@@ -19,14 +19,14 @@ export class JobUseCase implements IUseCase {
     pageSize: number,
     category?: string,
     employment?: string,
-    search?: string
+    search?: string,skills?:string
   ): Promise<{ applicant: Job[]; totalPages: number }> {
     return await this.repository.getAllJob(
       page,
       pageSize,
       category,
       employment,
-      search
+      search,skills
     );
   }
   async deleteJob(id: string): Promise<Job> {
