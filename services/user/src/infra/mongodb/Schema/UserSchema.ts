@@ -61,6 +61,7 @@ const UserModel = new mongoose.Schema(
     profileCompleted: Boolean,
     resumes: [String],
     stage: String,
+    savedJobs: [String],
   },
   { timestamps: true }
 );

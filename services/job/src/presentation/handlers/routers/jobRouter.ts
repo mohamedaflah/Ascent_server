@@ -22,6 +22,7 @@ import { UserRepository } from "../../../repositories/userRepository";
 import { UserUserCase } from "../../../application/useCases/UserUsecase";
 import { AddUser } from "../controllers/User/addUser";
 import { GetMyApplication } from "../controllers/jobs/getApplicaitonCotnroller";
+import { getJobByIds } from "../controllers/jobs/getJobById";
 
 const router = Router();
 
@@ -100,4 +101,6 @@ router.get(
   `/application/:userId`,
   getOneApplcationByUser.getOneApplicant.bind(getOneApplcationByUser)
 );
+
+router.post('/saved-jobs',getJobByIds)
 export default router;

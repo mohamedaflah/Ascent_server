@@ -34,6 +34,7 @@ export class User {
     public readonly dateofbirth?: Date,
     public readonly currengDesignation?: String,
     public readonly resumes?: string[],
-    public readonly stage?: string
+    public readonly stage?: string,
+    public readonly savedJobs?: string[]
   ) {}
 }

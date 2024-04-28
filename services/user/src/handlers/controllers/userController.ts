@@ -3,6 +3,7 @@ import { IUserInteractor } from "../../interfaces/interactor_interface/IUserinte
 import jwt from "jsonwebtoken";
 import { updateUserProducer } from "../../infra/message_broker/kafka/producers/updateUser";
 import axios from "axios";
+import UserSchema from "../../infra/mongodb/Schema/UserSchema";
 export class UserController {
   private userInteractor: IUserInteractor;
   constructor(interactor: IUserInteractor) {
@@ -11,14 +12,14 @@ export class UserController {
   async getUserData(req: Request, res: Response, next: NextFunction) {
     try {
       const token = req.cookies.access_token;
-      console.log("🚀 ~ UserController ~ getUserData ~ token:", token)
+      console.log("🚀 ~ UserController ~ getUserData ~ token:", token);
       const payload: { id: string; role: "user" | "admin" | "company" } =
         jwt.verify(token, String(process.env.JWT_KEY)) as {
           id: string;
           role: "user" | "admin" | "company";
         };
       const user = await this.userInteractor.getUserData(payload?.id);
-      console.log("🚀 ~ UserController ~ getUserData ~ user:", user)
+      console.log("🚀 ~ UserController ~ getUserData ~ user:", user);
       res
         .status(200)
         .json({ status: true, user, message: "Success!!", role: user.role });
@@ -72,13 +73,23 @@ export class UserController {
         req.params.userId,
         req.body
       );
-      console.log("🚀 ~ UserController ~ updateProfile ~ user:", user)
+      console.log("🚀 ~ UserController ~ updateProfile ~ user:", user);
       // /api/job-service/api/v1
       console.log(req.body, "*(*(*(*");
       await updateUserProducer(user._id as string, user);
-      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/job-service/api/v1/add-user`,{...user})
+      await axios.post(
+        `${String(
+          process.env.JOB_SERVICE_URL
+        )}/api/job-service/api/v1/add-user`,
+        { ...user }
+      );
       // /api/communication-service/api/v2
-      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/communication-service/api/v2/add-user`,{...user})
+      await axios.post(
+        `${String(
+          process.env.COMPANY_SERVICE_URL
+        )}/api/communication-service/api/v2/add-user`,
+        { ...user }
+      );
       res.status(200).json({
         status: true,
         user,
@@ -93,9 +104,32 @@ export class UserController {
 
   async getAllusres(req: Request, res: Response, next: NextFunction) {
     try {
-      const users =await this.userInteractor.getAllusers();
-      
+      const users = await this.userInteractor.getAllusers();
+
       res.status(200).json({ status: true, message: "Succesfull!", users });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async saveNewJob(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { jobId, userId }: { jobId: string; userId: string } = req.body;
+      const { type } = req.query;
+      const user = await UserSchema.findOne({ _id: userId });
+      let message=""
+      if (user) {
+        if (type == "add") {
+          user.savedJobs.push(jobId);
+          message="job saved"
+        }else{
+          user.savedJobs=user.savedJobs.filter(val=>val!=jobId)
+          message="job deleted"
+        }
+        await user.save();
+      }
+      console.log(user?.savedJobs)
+      res.status(200).json({ status: true, message: message, savedjobs:user?.savedJobs });
     } catch (error) {
       next(error);
     }

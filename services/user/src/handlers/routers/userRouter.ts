@@ -26,4 +26,6 @@ userRouter.get(
   userController.getAllusres.bind(userController)
 );
 
+userRouter.route(`/saved-job`).post(userController.saveNewJob.bind(userController))
+
 export default userRouter;
