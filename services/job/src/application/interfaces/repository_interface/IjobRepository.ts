@@ -9,7 +9,7 @@ export interface IJobRepository {
     pageSize: number,
     category?: string,
     employment?: string,
-    search?: string
+    search?: string,
     skills?:string
   ): Promise<{ applicant: Job[]; totalPages: number }>;
   deleteJob(id: string): Promise<Job>;
