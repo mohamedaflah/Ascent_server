@@ -101,8 +101,12 @@ export class CompanyController {
         req.body.data
       );
       // await addCompanyProducer(company);
-      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/v1/add-company`,{...company})
-      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company`,{...company})
+//       app.use("/api/job-service/api/v1", router);
+        // app.use("/api/job-service/api/category", categoryRoute);
+
+        // app.use("/api/communication-service/api/v2", messageRouter);
+      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/job-service/api/v1/add-company`,{...company})
+      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/communication-service/api/v2/add-company`,{...company})
       res.status(200).json({
         status: true,
         message: "Successfull!!",
