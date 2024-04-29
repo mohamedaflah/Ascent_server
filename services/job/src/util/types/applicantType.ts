@@ -82,4 +82,5 @@ export interface JobFilterQuery {
     $options?: string;
   };
   skills?: { $in: string[] };
+  joblocation?: string;
 }

@@ -5,7 +5,8 @@ const CategoryModel = new mongoose.Schema(
     categoryname: {
       type: String,
       required: [true, "Category name is required"],
-      unique:[true,"Category name mustbe unique"]
+      unique:[true,"Category name mustbe unique"],
+      
     },
     categoryDescription: {
       type: String,

@@ -14,6 +14,8 @@ export class GetAllJob {
       console.log("🚀 ~ GetAllJob ~ getAlljob ~ category:", category);
       let employment = String(req.query.employment);
       let search = String(req.query.search);
+      let location = String(req.query.location);
+
       console.log("🚀 ~ GetAllJob ~ getAlljob ~ employment:", req.query);
       console.log("🚀 ~ GetAllJob ~ getAlljob ~ search:", search)
       const { applicant: jobs, totalPages } = await this.useCase.getAllJob(
@@ -22,7 +24,8 @@ export class GetAllJob {
         category,
         employment,
         search,
-        String(req.query.skills)
+        String(req.query.skills),
+        String(location)
       );
       res.status(200).json({
         status: true,

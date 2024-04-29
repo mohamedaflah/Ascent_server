@@ -10,7 +10,8 @@ export interface IUseCase {
     category?: string,
     employment?: string,
     search?: string,
-    skills?:string
+    skills?: string,
+    location?: string
   ): Promise<{ applicant: Job[]; totalPages: number }>;
   deleteJob(id: string): Promise<Job>;
   getSpecificJob(id: string): Promise<Job>;

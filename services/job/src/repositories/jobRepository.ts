@@ -92,15 +92,18 @@ export class JobRepository implements IJobRepository {
     pageSize: number,
     category?: string,
     employment?: string,
-    search?: string,skills?:string
+    search?: string,
+    skills?: string,
+    location?: string
   ): Promise<{ applicant: Job[]; totalPages: number }> {
     let matchConditions: JobFilterQuery = {
       status: true,
       expired: false,
     };
- 
-    let matchCountProjection = { $addFields: { matchCount: 0 } };
     
+    console.log("🚀 ~ JobRepository ~ location:", location)
+    let matchCountProjection = { $addFields: { matchCount: 0 } };
+
     if (
       category &&
       category !== "null" &&
@@ -129,6 +132,15 @@ export class JobRepository implements IJobRepository {
             ), // Filter out null values and keep only valid ObjectIds
         };
       }
+    }
+    if (
+      location &&
+      location !== "null" &&
+      location.trim() !== "" &&
+      location !== "undefined"
+    ) {
+
+      matchConditions.joblocation = location;
     }
 
     if (
@@ -167,7 +179,7 @@ export class JobRepository implements IJobRepository {
         },
         // matchCountProjection,
         // {
-        //   $sort: { 
+        //   $sort: {
         //     matchCount: -1, // Sort by descending matchCount
         //     createdAt: -1, // Then by descending createdAt (or any other priority)
         //   },
@@ -200,7 +212,7 @@ export class JobRepository implements IJobRepository {
           $sort: { createdAt: -1 },
         },
         {
-          $sort:{matchCount:-1}
+          $sort: { matchCount: -1 },
         },
         {
           $lookup: {
@@ -659,13 +671,15 @@ export class JobRepository implements IJobRepository {
         ],
       }
     );
-    console.log("🚀 ~ JobRepository ~ application:", application)
-    return this.getOneApplicant(data.jobId, data.applicantId)
+    console.log("🚀 ~ JobRepository ~ application:", application);
+    return this.getOneApplicant(data.jobId, data.applicantId);
   }
   async getApplication(userId: string): Promise<Job[]> {
     const application = await jobModel.aggregate([
       {
-        $match: { "applicants.applicantId": new mongoose.Types.ObjectId(userId) },
+        $match: {
+          "applicants.applicantId": new mongoose.Types.ObjectId(userId),
+        },
       },
       {
         $lookup: {
@@ -721,9 +735,11 @@ export class JobRepository implements IJobRepository {
         $unset: "applicants", // Remove the applicants array from the output
       },
     ]);
-    console.log("🚀 ~ JobRepository ~ getApplication ~ application:", application)
-    
+    console.log(
+      "🚀 ~ JobRepository ~ getApplication ~ application:",
+      application
+    );
 
-    return application
+    return application;
   }
 }
