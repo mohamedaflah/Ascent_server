@@ -84,10 +84,36 @@ export class CompanyRepository implements ICompanyRepository {
     }
   }
 
-  async getAllCompanies(): Promise<Company[] | any[]> {
-    const companies = await companyModel
-      .find({ "approvelStatus.status": "Accepted" })
-      .sort({ createdAt: -1 });
+  async getAllCompanies(name: string): Promise<Company[] | any[]> {
+
+    let companies;
+    if (
+      name &&
+      name !== "undefined" &&
+      name !== null &&
+      name != undefined &&
+      name != "null"
+    ) {
+      // matchConditions.jobTitle = {
+      //   $regex: new RegExp(String(search)),
+      //   $options: "i",
+      // };
+      // jobTitle?: {
+      //   $regex: RegExp;
+      //   $options?: string;
+      // }
+    
+      
+      const query: { $regex: RegExp; $options: string } = {
+        $regex: new RegExp(String(name)),
+        $options: "i",
+      };
+      companies = await companyModel.find({ name: query,"approvelStatus.status":"Accepted" });
+    } else {
+      companies = await companyModel
+        .find({ "approvelStatus.status": "Accepted" })
+        .sort({ createdAt: -1 });
+    }
     return companies;
   }
 }

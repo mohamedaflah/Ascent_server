@@ -35,7 +35,7 @@ export class CompanyInteractor implements ICompanyInteractor {
     const updated = await this.repository.updateProfile(id, data);
     return updated;
   }
-  async getAllCompanies(): Promise<Company[]> {
-    return await this.repository.getAllCompanies();
+  async getAllCompanies(name?:string): Promise<Company[]> {
+    return await this.repository.getAllCompanies(name);
   }
 }

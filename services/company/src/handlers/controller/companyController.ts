@@ -129,7 +129,8 @@ export class CompanyController {
   }
   async getAllcompanies(req: Request, res: Response, next: NextFunction) {
     try {
-      const company = await this.companyInteractor.getAllCompanies();
+      console.log(req.query)
+      let company = await this.companyInteractor.getAllCompanies(String(req.query.name));
 
       res.status(200).json({
         status: true,

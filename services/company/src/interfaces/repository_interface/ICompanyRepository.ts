@@ -13,5 +13,5 @@ export interface ICompanyRepository {
     pageSize: number
   ): Promise<{ companies: Company[]; totalPages: number }>;
   updateProfile(id: string, data: Company): Promise<Company>;
-  getAllCompanies(): Promise<Company[]>;
+  getAllCompanies(name?:string): Promise<Company[]>;
 }
