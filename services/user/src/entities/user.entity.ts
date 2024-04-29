@@ -35,6 +35,7 @@ export class User {
     public readonly currengDesignation?: String,
     public readonly resumes?: string[],
     public readonly stage?: string,
-    public readonly savedJobs?: string[]
+    public readonly savedJobs?: string[],
+    public readonly certification?:{title:string,file:string}[]
   ) {}
 }

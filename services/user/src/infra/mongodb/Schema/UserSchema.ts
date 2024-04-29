@@ -62,6 +62,7 @@ const UserModel = new mongoose.Schema(
     resumes: [String],
     stage: String,
     savedJobs: [String],
+    certification: [{ title: String, file: String }],
   },
   { timestamps: true }
 );
