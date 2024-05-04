@@ -29,5 +29,5 @@ data:
   JOB_SERVICE_TOPIC: "job-service-topic"
   ADD_COMPANY_SUBSCIBER_KEY: "add_company"
   COMMUNICATION_SERVICE_TOPIC: "communication-service-topic"
-  JOB_SERVICE_URL: "http://job-service:80"
-  COMPANY_SERVICE_URL: "http://company-service:80"
+  JOB_SERVICE_URL: "https://aflahaflu.shop/api/job-service"
+  COMPANY_SERVICE_URL: "https://aflahaflu.shop/api/communication-service"
