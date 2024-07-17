@@ -2,12 +2,12 @@ import { Kafka, Producer, Consumer } from "kafkajs";
 const kafka = new Kafka({
   clientId: String(process.env.KAFKA_CLIENT_ID),
   brokers: [String(process.env.KAFKA_BROKER_URL)],
-  ssl: true,
-  sasl: {
-    mechanism: "plain",
-    username: String(process.env.KAFKA_USER_NAME),
-    password: String(process.env.KAFKA_PASSWORD),
-  },
+  // ssl: true,  // This code removed for development
+  // sasl: {
+  //   mechanism: "plain",
+  //   username: String(process.env.KAFKA_USER_NAME),
+  //   password: String(process.env.KAFKA_PASSWORD),
+  // },
 });
 export const consumer: Consumer = kafka.consumer({
   groupId: process.env.COMMUNICATION_SERVICE_KAFKA_GROUP_ID as string,

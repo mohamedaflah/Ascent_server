@@ -73,9 +73,8 @@ export class UserController {
         req.params.userId,
         req.body
       );
-      console.log("🚀 ~ UserController ~ updateProfile ~ user:", user);
-      // /api/job-service/api/v1
-      console.log(req.body, "*(*(*(*");
+      console.log("😀😀😀😀😀😀😀😀😀",req.body);
+
       await updateUserProducer(user._id as string, user);
       await axios.post(
         `${String(
@@ -117,19 +116,21 @@ export class UserController {
       const { jobId, userId }: { jobId: string; userId: string } = req.body;
       const { type } = req.query;
       const user = await UserSchema.findOne({ _id: userId });
-      let message=""
+      let message = "";
       if (user) {
         if (type == "add") {
           user.savedJobs.push(jobId);
-          message="job saved"
-        }else{
-          user.savedJobs=user.savedJobs.filter(val=>val!=jobId)
-          message="job deleted"
+          message = "job saved";
+        } else {
+          user.savedJobs = user.savedJobs.filter((val) => val != jobId);
+          message = "job deleted";
         }
         await user.save();
       }
-      console.log(user?.savedJobs)
-      res.status(200).json({ status: true, message: message, savedjobs:user?.savedJobs });
+
+      res
+        .status(200)
+        .json({ status: true, message: message, savedjobs: user?.savedJobs });
     } catch (error) {
       next(error);
     }

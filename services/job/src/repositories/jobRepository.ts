@@ -169,7 +169,7 @@ export class JobRepository implements IJobRepository {
     }
 
     const totalCount = await jobModel.countDocuments(matchConditions);
-    const totalPages = Math.ceil(totalCount / pageSize);
+    
 
     const skip = (page - 1) * pageSize;
     const jobs = await jobModel
@@ -229,7 +229,8 @@ export class JobRepository implements IJobRepository {
       .skip(skip)
       .limit(pageSize);
     console.log("  ", jobs.length, "🚀 ~ JobRepository ~ jobs:");
-
+    const totalPages = Math.ceil(jobs.length / pageSize);
+    console.log("🚀 ~ JobRepository ~ totalCount:", totalCount)
     return { applicant: jobs, totalPages: totalPages };
   }
   async deleteJob(id: string): Promise<Job> {

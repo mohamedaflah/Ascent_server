@@ -42,12 +42,20 @@ export class CompanyController {
       if (status === "Rejected") {
         await rejectMailProducer(company.email, description);
       }
-      if(status==="Accepted"){
-        await addCompanyProducer(company)
-        console.log(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company}`);
-        
-        await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/v1/add-company`,{...company})
-        await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company`,{...company})
+      if (status === "Accepted") {
+        await addCompanyProducer(company);
+        console.log(
+          `${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company}`
+        );
+
+        await axios.post(
+          `${String(process.env.JOB_SERVICE_URL)}/api/v1/add-company`,
+          { ...company }
+        );
+        await axios.post(
+          `${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company`,
+          { ...company }
+        );
       }
       res.status(200).json({
         status: true,
@@ -101,14 +109,17 @@ export class CompanyController {
         req.body.data
       );
       // await addCompanyProducer(company);
-//       app.use("/api/job-service/api/v1", router);
-        // app.use("/api/job-service/api/category", categoryRoute);
 
-        // app.use("/api/communication-service/api/v2", messageRouter);
       // await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/job-service/api/v1/add-company`,{...company})
       // await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/communication-service/api/v2/add-company`,{...company})
-      await axios.post(`${String(process.env.JOB_SERVICE_URL)}/api/v1/add-company`,{...company})
-      await axios.post(`${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company`,{...company})
+      await axios.post(
+        `${String(process.env.JOB_SERVICE_URL)}/api/v1/add-company`,
+        { ...company }
+      );
+      await axios.post(
+        `${String(process.env.COMPANY_SERVICE_URL)}/api/v2/add-company`,
+        { ...company }
+      );
       res.status(200).json({
         status: true,
         message: "Successfull!!",
@@ -135,8 +146,10 @@ export class CompanyController {
   }
   async getAllcompanies(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log(req.query)
-      let company = await this.companyInteractor.getAllCompanies(String(req.query.name));
+      console.log(req.query);
+      let company = await this.companyInteractor.getAllCompanies(
+        String(req.query.name)
+      );
 
       res.status(200).json({
         status: true,
