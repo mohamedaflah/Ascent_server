@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 
-
 const linkModel = new mongoose.Schema({
   email: String,
   link: String,
-  otp:String,
+  otp: String,
   createdAt: {
     type: Date,
     default: Date.now,
@@ -12,4 +11,5 @@ const linkModel = new mongoose.Schema({
   },
 });
 
-export default mongoose.model(String(process.env.VERIFICIATION_LINK), linkModel);
+export default mongoose.models[String(process.env.VERIFICIATION_LINK)] ||
+  mongoose.model(String(process.env.VERIFICIATION_LINK), linkModel);

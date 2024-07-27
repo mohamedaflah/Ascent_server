@@ -1,5 +1,5 @@
 import mongoose, { mongo } from "mongoose";
-import {isEmail} from 'validator'
+import { isEmail } from "validator";
 const AuthModel = new mongoose.Schema(
   {
     firstname: {
@@ -8,18 +8,17 @@ const AuthModel = new mongoose.Schema(
     lastname: {
       type: String,
     },
-    name:{
-      type:String
+    name: {
+      type: String,
     },
     email: {
       type: String,
-      unique:[true,'Email alrady taken!!'],
+      unique: [true, "Email alrady taken!!"],
       required: [true, "Please Provide email"],
       validate: {
         validator: isEmail,
-        message: 'Invalid email format',
+        message: "Invalid email format",
       },
-
     },
     password: {
       type: String,
@@ -43,6 +42,7 @@ const AuthModel = new mongoose.Schema(
     },
   },
   { timestamps: true }
-)
+);
 
-export default mongoose.model(String(process.env.AUTH_MODEL), AuthModel);
+export default mongoose.models[String(process.env.AUTH_MODEL)] ||
+  mongoose.model(String(process.env.AUTH_MODEL), AuthModel);

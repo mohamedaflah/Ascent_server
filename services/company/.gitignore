@@ -1,2 +1,11 @@
 node_modules
 .env
+
+# Ignore all .pem and .cert files
+*.pem
+*.cert
+
+# Or if you want to be more specific:
+ca.pem
+service.key
+service.cert
