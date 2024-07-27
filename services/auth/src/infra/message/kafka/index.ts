@@ -103,8 +103,8 @@ f0N6IS1hK6QACR0GvMyx7/Fjtv2k
 const sslOptions = {
   rejectUnauthorized: true,
   ca: [CA],
-  key: SERVICE_KEY,
-  cert: SERVER_CERT,
+  // key: SERVICE_KEY,
+  // cert: SERVER_CERT,
 };
 
 const kafka = new Kafka({
