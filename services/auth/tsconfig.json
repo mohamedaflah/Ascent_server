@@ -2,17 +2,18 @@
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
-    "outDir": "./dist",                     /* Specify an output directory for all emitted files */
-    "rootDir": "./",                        /* Specify the root folder within your source files */
+    "outDir": "./dist" /* Specify an output directory for all emitted files */,
+    "rootDir": "./" /* Specify the root folder within your source files */,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts"                          /* Include all TypeScript files in the 'src' directory */
+    "src/**/*.ts" /* Include all TypeScript files in the 'src' directory */,
+    "src/**/*.pem",
+    "src/**/*.cert",
+    "src/**/*.key"
   ],
-  "exclude": [
-    "node_modules"                         /* Exclude the 'node_modules' directory */
-  ]
+  "exclude": ["node_modules" /* Exclude the 'node_modules' directory */]
 }

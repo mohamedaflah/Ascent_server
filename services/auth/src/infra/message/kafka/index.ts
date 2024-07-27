@@ -5,9 +5,15 @@ import { otpProducer } from "./producers/otpProducer";
 
 const sslOptions = {
   rejectUnauthorized: true,
-  ca: [readFileSync(path.resolve(__dirname, "ca.pem"), "utf-8")],
-  key: readFileSync(path.resolve(__dirname, "service.key"), "utf-8"),
-  cert: readFileSync(path.resolve(__dirname, "service.cert"), "utf-8"),
+  ca: [readFileSync(path.resolve(__dirname, "../../../../ca.pem"), "utf-8")],
+  key: readFileSync(
+    path.resolve(__dirname, "../../../../service.key"),
+    "utf-8"
+  ),
+  cert: readFileSync(
+    path.resolve(__dirname, "../../../../service.cert"),
+    "utf-8"
+  ),
 };
 const kafka = new Kafka({
   clientId: String(process.env.KAFKA_CLIENT_ID),
