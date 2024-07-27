@@ -19,6 +19,7 @@ const kafka = new Kafka({
   clientId: String(process.env.KAFKA_CLIENT_ID),
   brokers: [String(process.env.KAFKA_BROKER_URL)],
   ssl: sslOptions, // removed this much code for development
+  
   sasl: {
     mechanism: "scram-sha-256",
     username: String(process.env.KAFKA_USER_NAME),
