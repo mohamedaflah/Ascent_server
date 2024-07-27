@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es2017",
     "module": "commonjs",
     "outDir": "./dist" /* Specify an output directory for all emitted files */,
     "rootDir": "./" /* Specify the root folder within your source files */,
