@@ -124,4 +124,4 @@ export const producer: Producer = kafka.producer();
 export const consumer: Consumer = kafka.consumer({
   groupId: String(process.env.AUTH_SERVICE_KAFKA_GROUP_ID),
 });
-otpProducer({ email: "koolathaflah@gmail.com", tag: `<h1>helioasfd</h1>` });
+
