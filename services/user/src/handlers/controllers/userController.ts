@@ -11,9 +11,12 @@ export class UserController {
   }
   async getUserData(req: Request, res: Response, next: NextFunction) {
     try {
-      const token = req.cookies.access_token;
+      const authHeader = req.headers.authorization;
+      const secondarytoken = authHeader && authHeader.split(" ")[1];
+
+      const token = req.cookies.access_token || secondarytoken;
       console.log(req.cookies);
-      
+
       console.log("🚀 ~ UserController ~ getUserData ~ token:", token);
       const payload: { id: string; role: "user" | "admin" | "company" } =
         jwt.verify(token, String(process.env.JWT_KEY)) as {
@@ -75,7 +78,7 @@ export class UserController {
         req.params.userId,
         req.body
       );
-      console.log("😀😀😀😀😀😀😀😀😀",req.body);
+      console.log("😀😀😀😀😀😀😀😀😀", req.body);
 
       await updateUserProducer(user._id as string, user);
       await axios.post(
