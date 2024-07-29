@@ -165,7 +165,7 @@ export class AuthController {
           id: string;
           role: "admin" | "user" | "company";
         };
-      res.status(200).json({ status: true, role: payload?.role });
+      res.status(200).json({ status: true, role: payload?.role, token });
     } catch (error) {
       next(error);
     }
