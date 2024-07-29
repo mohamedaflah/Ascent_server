@@ -6,11 +6,12 @@ export const checkAuthentication = async (
   next: NextFunction
 ) => {
   console.log("🚀 ~ checkAuthentication ~ req:", req.cookies);
-
+  
   const authHeader = req.headers.authorization;
   const secondarytoken = authHeader && authHeader.split(" ")[1];
-
+  
   const token = req.cookies.access_token || secondarytoken;
+  console.log("🚀 ~ checkAuthentication ~ req =>            :", token);
 
   if (!token) {
     return res

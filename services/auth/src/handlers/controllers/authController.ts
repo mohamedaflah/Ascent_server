@@ -78,7 +78,7 @@ export class AuthController {
         maxAge: 15 * 24 * 60 * 60 * 1000,
       });
 
-      res.status(200).json({ status: true, user, role: user.role });
+      res.status(200).json({ status: true, user, role: user.role, token });
     } catch (error) {
       console.log("🚀 ~ AuthController ~ login ~ error:", error);
 
