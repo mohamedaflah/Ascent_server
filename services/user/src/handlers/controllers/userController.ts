@@ -12,6 +12,8 @@ export class UserController {
   async getUserData(req: Request, res: Response, next: NextFunction) {
     try {
       const token = req.cookies.access_token;
+      console.log(req.cookies);
+      
       console.log("🚀 ~ UserController ~ getUserData ~ token:", token);
       const payload: { id: string; role: "user" | "admin" | "company" } =
         jwt.verify(token, String(process.env.JWT_KEY)) as {
