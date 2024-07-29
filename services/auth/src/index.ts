@@ -26,6 +26,8 @@ app.use(
   });
 })();
 
+// auth service
+
 app.use("/api/auth-service", authRouter);
 app.use("/api/auth-service/otp", otpRouter);
 app.use(errorHandler);
