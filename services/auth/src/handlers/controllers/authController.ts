@@ -28,16 +28,22 @@ export class AuthController {
       const body = req.body;
       await this.interactor.validateUserData(body);
       const signupValidation = validateSignupData(body);
+
       if (signupValidation.status) {
         return res
           .status(400)
           .json({ status: false, message: signupValidation.message });
       }
+
       const token = generateEmailValidationToken(body);
-      let verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}/role=${body.role}`;
-      if (req.body && req.body.type == "otp") {
+      const verificationLink = `${process.env.CLIENT_URL}/verify-email/${token}/role=${body.role}`;
+      console.log("🚀 ~ AuthController ~ signup ~BEFORE 1:");
+
+      if (req.body && req.body.type === "otp") {
+        console.log("🚀 ~ AuthController ~ signup ~BEFORE 2:");
         const otp = generateOTP();
         const otpExist = await OtpSchema.findOne({ email: req.body.email });
+
         if (!otpExist) {
           await new OtpSchema({
             email: req.body.email,
@@ -45,35 +51,76 @@ export class AuthController {
             link: "",
           }).save();
 
-          const { data } = await axios.post(
-            "https://ascent-notification.onrender.com/api/auth-service/send-otp",
-            {
-              data: {
+          console.log("🚀 ~ AuthController ~ signup ~BEFORE:");
+
+          try {
+            const response = await axios.post(
+              "http://localhost:3003/api/auth-service/send-otp",
+              {
+                data: {
+                  tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
+                  email: req.body.email,
+                },
+              }
+            );
+
+            console.log(
+              "🚀 ~ AuthController ~ signup ~ response.data:",
+              response.data
+            );
+
+            if (!response.data.status) {
+              console.log("Reach here");
+
+              await otpProducer({
                 tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
                 email: req.body.email,
-              },
+              });
             }
-          );
-          if (!data.status) {
-            await otpProducer({
-              tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
-              email: req.body.email,
-            });
+          } catch (error: any) {
+            console.error(
+              "🚀 ~ AuthController ~ signup ~ axios error:",
+              error.message
+            );
+            return res
+              .status(500)
+              .json({ status: false, message: "Error sending OTP" });
           }
         }
       } else {
-        await signupProducer(`${verificationLink}`);
+        console.log("last console - before signupProducer");
+        try {
+          await signupProducer(verificationLink);
+          console.log("last console - after signupProducer");
+        } catch (error:any) {
+          console.error(
+            "🚀 ~ AuthController ~ signup ~ signupProducer error:",
+            error.message
+          );
+          return res
+            .status(500)
+            .json({ status: false, message: "Error in signupProducer" });
+        }
       }
+
+      console.log("last console - before sending response");
 
       res.status(200).json({
         status: true,
-        message: "Verification link sended",
+        message: "Verification link sent",
         user: null,
       });
-    } catch (error) {
+
+      console.log("last console - after sending response");
+    } catch (error: Error | any) {
+      console.error(
+        "🚀 ~ AuthController ~ signup ~ general error:",
+        error.message
+      );
       next(error);
     }
   }
+
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const body = req.body;
@@ -87,7 +134,6 @@ export class AuthController {
       res.cookie("access_token", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       });
-      
 
       res.status(200).json({ status: true, user, role: user.role, token });
     } catch (error) {
@@ -149,7 +195,6 @@ export class AuthController {
       res.cookie("access_token", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       });
-      
 
       res
         .status(200)
@@ -336,7 +381,7 @@ export class AuthController {
       res.cookie("access_token", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       });
-      
+
       res
         .status(200)
         .json({ status: true, user: user, message: "User signup successfull" });
