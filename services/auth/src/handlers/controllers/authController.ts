@@ -55,7 +55,7 @@ export class AuthController {
 
           try {
             const response = await axios.post(
-              "http://localhost:3003/api/auth-service/send-otp",
+              "https://ascent-notification-3m4p.onrender.com/api/auth-service/send-otp",
               {
                 data: {
                   tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
