@@ -18,9 +18,9 @@ app.use(errorHandler);
   });
 })();
 const consumer = new NotificaionConsumerActions();
-app.post("/api/auth-service/send-otp", (req, res) => {
+app.post("/api/auth-service/send-otp", async(req, res) => {
   const { data } = req.body;
-  consumer.sendVerificationOtp(data);
+  await consumer.sendVerificationOtp(data);
   return res.status(200).json({ status: true, message: "otp sended" });
 });
 
