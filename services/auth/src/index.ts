@@ -26,7 +26,7 @@ app.use(
   });
 })();
 
-// auth service
+
 
 app.use("/api/auth-service", authRouter);
 app.use("/api/auth-service/otp", otpRouter);
@@ -37,4 +37,3 @@ app.listen(process.env.AUTH_SERVICE_PORT, async () => {
   );
 });
 
-// auth service

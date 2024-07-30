@@ -23,7 +23,7 @@ app.use(
     credentials: true,
   })
 );
-// app.use(checkAuthentication);
+
 (async () => {
   await runConsumer();
   process.on("SIGTERM", async () => {
