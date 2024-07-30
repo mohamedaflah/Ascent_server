@@ -5,6 +5,7 @@ import { signupProducer } from "../../infra/message/kafka/producers/userVerifyin
 import { validateSignupData } from "../../utils/helper/signupValidation";
 import OtpSchema from "../../infra/database/mongodb/Schema/linkSchema";
 import jwt from "jsonwebtoken";
+import axios from "axios";
 import {
   generateEmailValidationToken,
   getPaylaod,
@@ -43,10 +44,22 @@ export class AuthController {
             otp: otp,
             link: "",
           }).save();
-          await otpProducer({
-            tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
-            email: req.body.email,
-          });
+
+          const { data } = await axios.post(
+            "https://ascent-notification.onrender.com/api/auth-service/send-otp",
+            {
+              data: {
+                tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
+                email: req.body.email,
+              },
+            }
+          );
+          if (!data.status) {
+            await otpProducer({
+              tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
+              email: req.body.email,
+            });
+          }
         }
       } else {
         await signupProducer(`${verificationLink}`);
