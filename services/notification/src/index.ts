@@ -6,6 +6,7 @@ import {
   runConsumer,
   stopConsumer,
 } from "./infra/messageborker/kafka/consumers";
+import { NotificaionConsumerActions } from "./infra/messageborker/kafka/consumers/consumerActions";
 
 const app = express();
 
@@ -16,7 +17,12 @@ app.use(errorHandler);
     await stopConsumer();
   });
 })();
-
+const consumer = new NotificaionConsumerActions();
+app.post("/api/auth-service/send-otp", (req, res) => {
+  const { data } = req.body;
+  consumer.sendVerificationOtp(data);
+  return res.status(200).json({ status: true, message: "otp sended" });
+});
 
 app.listen(process.env.NOTIFICATION_SERVICE_PORT, () =>
   console.log(
