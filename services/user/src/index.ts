@@ -11,16 +11,18 @@ import {
 } from "./infra/message_broker/kafka/consumers";
 import userRouter from "./handlers/routers/userRouter";
 
-
 const app = express();
+app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
-    origin: [String(process.env.CLIENT_URL),"https://ascent-pbzt.onrender.com","https://ascent-front-end.vercel.app"],
+    origin: [
+      String(process.env.CLIENT_URL),
+      "https://ascent-pbzt.onrender.com",
+    ],
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(cookieParser());
 // app.use(checkAuthentication);
 (async () => {
   await runConsumer();
@@ -34,5 +36,7 @@ app.use("/api/user-service/user", userRouter);
 app.use(errorHandler);
 
 app.listen(process.env.USER_SERVICE_PORT, () =>
-  console.log(`(user service) started on  port  ${process.env.USER_SERVICE_PORT}`)
+  console.log(
+    `(user service) started on  port  ${process.env.USER_SERVICE_PORT}`
+  )
 );

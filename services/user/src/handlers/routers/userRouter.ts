@@ -13,10 +13,6 @@ userRouter.post(
   `/update-password`,
   userController.updatePassword.bind(userController)
 );
-userRouter.use(checkAuthentication);
-userRouter
-  .route("/get-user")
-  .get(userController.getUserData.bind(userController));
 userRouter.patch(
   `/update-profile/:userId`,
   userController.updateProfile.bind(userController)
@@ -25,7 +21,11 @@ userRouter.get(
   "/get-allusers",
   userController.getAllusres.bind(userController)
 );
-
 userRouter.route(`/saved-job`).post(userController.saveNewJob.bind(userController))
+userRouter.use(checkAuthentication);
+userRouter
+  .route("/get-user")
+  .get(userController.getUserData.bind(userController));
+
 
 export default userRouter;
