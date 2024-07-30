@@ -85,11 +85,9 @@ export class AuthController {
         role: user.role as "user" | "admin" | "company",
       });
       res.cookie("access_token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none", // or 'lax' depending on your needs
-        maxAge: 15 * 24 * 60 * 60 * 1000,
+        maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       });
+      
 
       res.status(200).json({ status: true, user, role: user.role, token });
     } catch (error) {
@@ -149,11 +147,9 @@ export class AuthController {
       const token = generateToken({ id: String(user._id), role: user.role });
       await OtpSchema.deleteOne({ email: user.email });
       res.cookie("access_token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none", // or 'lax' depending on your needs
-        maxAge: 15 * 24 * 60 * 60 * 1000,
+        maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       });
+      
 
       res
         .status(200)
@@ -338,11 +334,9 @@ export class AuthController {
       const token = generateToken({ id: String(user._id), role: user.role });
       await OtpSchema.deleteOne({ email: user.email });
       res.cookie("access_token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none", // or 'lax' depending on your needs
-        maxAge: 15 * 24 * 60 * 60 * 1000,
+        maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       });
+      
       res
         .status(200)
         .json({ status: true, user: user, message: "User signup successfull" });

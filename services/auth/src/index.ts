@@ -14,7 +14,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [String(process.env.CLIENT_URL),"https://ascent-pbzt.onrender.com","https://ascent-front-end.vercel.app"],
+    origin: [
+      String(process.env.CLIENT_URL),
+      "https://ascent-pbzt.onrender.com",
+      "https://ascent-front-end.vercel.app",
+    ],
     credentials: true,
   })
 );
@@ -26,8 +30,6 @@ app.use(
   });
 })();
 
-
-
 app.use("/api/auth-service", authRouter);
 app.use("/api/auth-service/otp", otpRouter);
 app.use(errorHandler);
@@ -36,4 +38,3 @@ app.listen(process.env.AUTH_SERVICE_PORT, async () => {
     ` Authentication service started ${process.env.AUTH_SERVICE_PORT} `
   );
 });
-
