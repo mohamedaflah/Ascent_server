@@ -78,13 +78,8 @@ export class AuthController {
               });
             }
           } catch (error: any) {
-            console.error(
-              "🚀 ~ AuthController ~ signup ~ axios error:",
-              error.message
-            );
-            return res
-              .status(500)
-              .json({ status: false, message: "Error sending OTP" });
+            console.log("🚀 ~ AuthController ~ signup ~ error:", error)
+            throw error;
           }
         }
       } else {
@@ -97,9 +92,7 @@ export class AuthController {
             "🚀 ~ AuthController ~ signup ~ signupProducer error:",
             error.message
           );
-          return res
-            .status(500)
-            .json({ status: false, message: "Error in signupProducer" });
+          throw new Error("Error in signupProducer");
         }
       }
 
