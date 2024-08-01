@@ -12,4 +12,4 @@ import './infra/socket/index'
   });
 })();
 
-// communication
+// communication service

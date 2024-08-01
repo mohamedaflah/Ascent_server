@@ -92,7 +92,7 @@ export class AuthController {
         try {
           await signupProducer(verificationLink);
           console.log("last console - after signupProducer");
-        } catch (error:any) {
+        } catch (error: any) {
           console.error(
             "🚀 ~ AuthController ~ signup ~ signupProducer error:",
             error.message
@@ -206,6 +206,7 @@ export class AuthController {
   }
   checkRole(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log("Rached here");
       console.log(req.cookies, "  **(");
 
       const token = req.cookies.access_token;

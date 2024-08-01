@@ -15,8 +15,8 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: [
-      String(process.env.CLIENT_URL),
-      "https://ascent-pbzt.onrender.com",
+      // String(process.env.CLIENT_URL),
+      "http://localhost:5173",
       "https://ascent-front-end.vercel.app",
     ],
     credentials: true,
@@ -38,3 +38,4 @@ app.listen(process.env.AUTH_SERVICE_PORT, async () => {
     ` Authentication service started ${process.env.AUTH_SERVICE_PORT} `
   );
 });
+// authernication service

@@ -40,3 +40,4 @@ app.listen(process.env.USER_SERVICE_PORT, () =>
     `(user service) started on  port  ${process.env.USER_SERVICE_PORT}`
   )
 );
+// uer service
