@@ -58,11 +58,11 @@ export class AuthController {
           );
 
           if (!otpSent) {
+            console.log("Pushed in console 😀😀😀🥴🥴🥴🥴🥴🥴🥴🥴🥴🥴🥴");
             await otpProducer({
               tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
               email: req.body.email,
             });
-            console.log("Pushed in console");
           }
         }
       } else {
