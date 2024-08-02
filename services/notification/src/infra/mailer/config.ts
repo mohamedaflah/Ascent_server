@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 export const transporter = nodemailer.createTransport({
-  service: "smtp.gmail.com",
+  service: "gmail",
   port: 465,
   secure: true,
   auth: {
@@ -9,6 +9,6 @@ export const transporter = nodemailer.createTransport({
     pass: String(process.env.ASCENT_SECRET_PASS),
   },
   tls: {
-    rejectUnauthorized: false,
+    rejectUnauthorized: true,
   },
 });
