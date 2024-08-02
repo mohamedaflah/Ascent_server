@@ -17,6 +17,7 @@ import { sendForgotMailLink } from "../../infra/message/kafka/producers/sendForg
 import { updatePassProducer } from "../../infra/message/kafka/producers/updatePasswordProducer";
 import { generateOTP } from "../../utils/lib/generateOtp";
 import { otpProducer } from "../../infra/message/kafka/producers/otpProducer";
+import { sendOtp, sendOtpWithRetries } from "../../utils/otpSender";
 export class AuthController {
   private interactor: IAuthInteractor;
   constructor(authInteractor: IAuthInteractor) {
@@ -40,7 +41,6 @@ export class AuthController {
       console.log("🚀 ~ AuthController ~ signup ~BEFORE 1:");
 
       if (req.body && req.body.type === "otp") {
-        console.log("🚀 ~ AuthController ~ signup ~BEFORE 2:");
         const otp = generateOTP();
         const otpExist = await OtpSchema.findOne({ email: req.body.email });
 
@@ -51,35 +51,17 @@ export class AuthController {
             link: "",
           }).save();
 
-          console.log("🚀 ~ AuthController ~ signup ~BEFORE:");
+          const otpSent = await sendOtpWithRetries(
+            sendOtp,
+            req.body.email,
+            otp
+          );
 
-          try {
-            const response = await axios.post(
-              "https://ascent-notification-3m4p.onrender.com/api/auth-service/send-otp",
-              {
-                data: {
-                  tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
-                  email: req.body.email,
-                },
-              }
-            );
-
-            console.log(
-              "🚀 ~ AuthController ~ signup ~ response.data:",
-              response.data
-            );
-
-            if (!response.data.status) {
-              console.log("Reach here");
-
-              await otpProducer({
-                tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
-                email: req.body.email,
-              });
-            }
-          } catch (error: any) {
-            console.log("🚀 ~ AuthController ~ signup ~ error:", error);
-            throw error;
+          if (!otpSent) {
+            await otpProducer({
+              tag: `<h1 style="color:blue;font-weight:800">${otp}</h1>`,
+              email: req.body.email,
+            });
           }
         }
       } else {
