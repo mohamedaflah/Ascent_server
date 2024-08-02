@@ -78,7 +78,7 @@ export class AuthController {
               });
             }
           } catch (error: any) {
-            console.log("🚀 ~ AuthController ~ signup ~ error:", error)
+            console.log("🚀 ~ AuthController ~ signup ~ error:", error);
             throw error;
           }
         }
@@ -126,6 +126,9 @@ export class AuthController {
       });
       res.cookie("access_token", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
       });
 
       res.status(200).json({ status: true, user, role: user.role, token });
@@ -187,6 +190,9 @@ export class AuthController {
       await OtpSchema.deleteOne({ email: user.email });
       res.cookie("access_token", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
       });
 
       res
@@ -374,6 +380,9 @@ export class AuthController {
       await OtpSchema.deleteOne({ email: user.email });
       res.cookie("access_token", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+        secure: true,
+        sameSite: "none",
+        httpOnly: true,
       });
 
       res
