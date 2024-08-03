@@ -106,15 +106,17 @@ const sslOptions = {
 
 const kafka = new Kafka({
   clientId: String(process.env.KAFKA_CLIENT_ID),
-  brokers: [String("kafka-1a39e9d4-koolathaflah-2e70.e.aivencloud.com:16270")],
-  ssl: sslOptions, // removed this much code for development
-
+  brokers: ["pkc-56d1g.eastus.azure.confluent.cloud:9092"],
+  ssl: true, // removed this much code for development
   sasl: {
-    mechanism: "scram-sha-256",
-    username: "avnadmin",
-    password: "AVNS_lPWnu6w9F3X96tBhwyD",
+    mechanism: "plain",
+    username: "FDL6FCZJATD3XFEP",
+    password:
+      "grWiWkJR3eGs5MF3khkpLY2joYN1ESjFdJ9SVUpyOqgYVbI0yUK+Vx2r1GPdjekv",
   },
   logLevel: logLevel.WARN,
+  connectionTimeout: 30000,
+  authenticationTimeout: 30000,
 });
 export const producer: Producer = kafka.producer();
 export const consumer: Consumer = kafka.consumer({

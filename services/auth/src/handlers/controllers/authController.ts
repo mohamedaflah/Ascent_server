@@ -51,12 +51,7 @@ export class AuthController {
             link: "",
           }).save();
 
-          const otpSent = await sendOtpWithRetries(
-            sendOtp,
-            req.body.email,
-            otp
-          );
-
+          const otpSent = false;
           if (!otpSent) {
             console.log("Pushed in console 😀😀😀🥴🥴🥴🥴🥴🥴🥴🥴🥴🥴🥴");
             await otpProducer({
