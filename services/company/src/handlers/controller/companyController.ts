@@ -14,8 +14,12 @@ export class CompanyController {
   async getCompanyData(req: Request, res: Response, next: NextFunction) {
     try {
       console.log("Called (()()");
+      const authHeader = req.headers.authorization;
+      const secondarytoken = authHeader && authHeader.split(" ")[1];
 
-      const data = getPayload(req.cookies?.access_token);
+      const token = req.cookies.access_token || secondarytoken;
+
+      const data = getPayload(token);
       const company = await this.companyInteractor.getCompany(data.id);
 
       res.status(200).json({

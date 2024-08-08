@@ -6,8 +6,10 @@ export const checkAuth = async (
   next: NextFunction
 ) => {
   console.log("🚀 ~ checkAuthentication in company ~ req:", req.cookies);
+  const authHeader = req.headers.authorization;
+  const secondarytoken = authHeader && authHeader.split(" ")[1];
 
-  const token = req.cookies.access_token;
+  const token = req.cookies.access_token || secondarytoken;
   if (!token) {
     return res
       .status(400)
@@ -17,7 +19,6 @@ export const checkAuth = async (
     token,
     String(process.env.JWT_KEY),
     (err: Error | any, decoded: any) => {
-     
       if (err) throw err;
       if (decoded) {
         if (decoded?.role == "company") {
