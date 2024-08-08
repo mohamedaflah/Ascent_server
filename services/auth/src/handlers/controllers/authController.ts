@@ -357,6 +357,17 @@ export class AuthController {
           message: "Invalid user role",
         });
       }
+      if (user.role == "company") {
+        user = {
+          ...user,
+          approvelStatus: {
+            status: "Pending",
+            description: "Waiting for approval",
+          },
+          profileCompleted: false,
+          profileCompletionStatus: "1%",
+        };
+      }
       const token = generateToken({ id: String(user._id), role: user.role });
       await OtpSchema.deleteOne({ email: user.email });
       res.cookie("access_token", token, {
