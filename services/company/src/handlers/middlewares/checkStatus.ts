@@ -8,7 +8,10 @@ export const checkStatus = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.cookies.access_token;
+    const authHeader = req.headers.authorization;
+    const secondarytoken = authHeader && authHeader.split(" ")[1];
+
+    const token = req.cookies.access_token || secondarytoken;
     if (!token) {
       throw new Error("token not found");
     }
@@ -23,8 +26,8 @@ export const checkStatus = async (
           status: true,
           role: "company",
           message: " Your request not responed admin wait ",
-          approvelStatus:"Pending",
-          user:companyData
+          approvelStatus: "Pending",
+          user: companyData,
         });
       }
       if (companyData.approvelStatus?.status === "Rejected") {
@@ -32,7 +35,7 @@ export const checkStatus = async (
           status: true,
           role: "company",
           message: " Your request has been rejected admin ",
-          user:companyData
+          user: companyData,
         });
       }
       next();
