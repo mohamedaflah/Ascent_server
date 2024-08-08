@@ -37,4 +37,5 @@ companyRoute.get(
   "/get-allcompanies",
   companyController.getAllcompanies.bind(companyController)
 );
+companyRoute.get("/get-company")
 export default companyRoute;

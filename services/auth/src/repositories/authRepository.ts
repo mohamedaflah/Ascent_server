@@ -18,6 +18,8 @@ export class AuthRepository implements IAuthRepository {
       );
     }
     let newUser;
+    console.log(body.role,' +>       ROle');
+    
     if (body.role == "user" || body.role == "admin") {
       newUser = new AuthSchema({
         firstname: body.firstname,
@@ -27,7 +29,10 @@ export class AuthRepository implements IAuthRepository {
         role: body.role,
       });
     } else {
+      console.log("Name => ",body.name);
+      
       const nameExist = await AuthSchema.findOne({ name: body.name });
+      console.log("🚀 ~ AuthRepository ~ signup ~ nameExist:", nameExist)
       if (nameExist)
         throw new Error(" Company Already Registered with this name");
       newUser = new AuthSchema({

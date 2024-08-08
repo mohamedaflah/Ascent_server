@@ -135,7 +135,7 @@ export class AuthController {
       if (!linkExpiry) {
         return res.status(400).json({
           status: false,
-          message: "Your verification link is Expired",
+          message: "Your Otp is Expired",
         });
       }
 
@@ -335,7 +335,9 @@ export class AuthController {
         throw new Error("Invalid Otp Please check again");
       }
 
-      const userData = req.body.userData;
+      let userData = req.body.userData;
+      console.log(userData, " ()");
+
       let user;
       user = await this.interactor.signup({
         email: userData.email,
@@ -343,6 +345,7 @@ export class AuthController {
         lastname: userData.lastname,
         password: userData.password,
         role: userData.role,
+        name: userData.name,
       });
       if (userData.role === "user" || userData.role === "admin") {
         await userAddProducer(user);
